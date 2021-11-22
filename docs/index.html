@@ -888,6 +888,25 @@ function generateBonusActionsArray_(dragon) {
       affected_span.innerHTML = affected_span.getAttribute("data-they");
     }
   }
+
+// make page look like it would if you were printing
+if (urlParams.has("printpreview")) {
+  var all_links = document.getElementsByTagName('a');
+  for (let i = 0; i < all_links.length; i++) {
+    let link_i = all_links[i];
+    link_i.style.color = 'black';
+    link_i.style.textDecoration = 'none !important';
+  }
+  var all_monsters = document.getElementsByClassName('monster');
+  for (let i = 0; i < all_monsters.length; i++) {
+    let monster_i = all_monsters[i];
+    monster_i.style.borderWidth = '2px';
+    monster_i.style.borderTopWidth = '5px';
+    monster_i.style.borderBottomWidth = '5px';
+    monster_i.style.width = '100%';
+  }
+  document.getElementsByClassName("customization-menu")[0].style.display = "none";
+}
 </script>
 
 <style>
