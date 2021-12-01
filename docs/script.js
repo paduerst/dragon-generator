@@ -1,6 +1,7 @@
 // imported data
 var dragons;
 var templates;
+var crs;
 // end of imported data
 
 // non-imported consts
@@ -120,6 +121,39 @@ function setMonsterColor(monster, r_val, g_val, b_val) {
 // end of css customization library
 
 // main library
+// copied from https://www.codegrepper.com/code-examples/javascript/convert+number+to+string+with+commas+javascript
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// copied from https://sebhastian.com/javascript-csv-to-array/
+function csvToArray(str, delimiter = ",") {
+  // slice from start of text to the first \n index
+  // use split to create an array from string by delimiter
+  const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
+
+  // slice from \n index + 1 to the end of the text
+  // use split to create an array of each csv value row
+  const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+
+  // Map the rows
+  // split values from each row into an array
+  // use headers.reduce to create an object
+  // object properties derived from headers:values
+  // the object passed as an element of the array
+  const arr = rows.map(function (row) {
+    const values = row.split(delimiter);
+    const el = headers.reduce(function (object, header, index) {
+      object[header.trim()] = values[index].trim();
+      return object;
+    }, {});
+    return el;
+  });
+
+  // return the array
+  return arr;
+}
+
 // Normalizes a string, by removing all non-alphanumeric characters and using mixed case to separate words. The output will always start with a lower case letter.
 function normalizeHeader_(header) {
   var key = "";
@@ -322,6 +356,17 @@ function addBackendCalculatedValues(dragon) {
     pb = 1 + Math.ceil(dragon.cr/4);
   }
   dragon.proficiencyBonus = pb;
+
+  // XP
+  for (let i = 0; i < crs.length; i++) {
+    if (dragon.cr == crs[i].CR) {
+      dragon.xp = numberWithCommas(crs[i].XP);
+      break;
+    }
+  }
+
+  // Immunities
+  dragon.immunities = dragon.immunity + dragon.additionalImmunities;
 
   // Ability Score Modifiers
   dragon.str = Math.floor((dragon.strength-10)/2);
@@ -765,6 +810,19 @@ function importTemplates() {
     if ( request.readyState === 4 && request.status === 200 ) {
       templates = JSON.parse(request.responseText);
       console.log(templates);
+      importCrs();
+    }
+  }
+}
+
+function importCrs() {
+  var request = new XMLHttpRequest();
+  request.open("GET", "data/cr_table.csv", true);
+  request.send(null);
+  request.onreadystatechange = function() {
+    if ( request.readyState === 4 && request.status === 200 ) {
+      crs = csvToArray(request.responseText);
+      console.log(crs);
       generateDragon();
     }
   }
