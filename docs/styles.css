@@ -1,0 +1,244 @@
+body {
+  background-color: #282a36;
+}
+.breath-break {
+  line-height: 1.9em;
+}
+.nowrap {
+    white-space: nowrap;
+}
+.monster + .monster {
+  margin-top: 1em;
+}
+.monster {
+  border-style: solid;
+  border-width: 0px;
+  border-color: rgba(154, 21, 21, 1.0);
+  font-size: 0.875rem;
+  position: relative;
+  width: 28.6em;
+  box-shadow: 0px 5px 10px 0px #50576240;
+  display: flex;
+  flex-direction: column; }
+.monster > :first-child {
+  margin-top: 0; }
+.monster > :last-child {
+  margin-bottom: 0; }
+.monster .monster-contents {
+  width: 100%; }
+  .monster .monster-contents .monster-contents-body {
+    padding: 1.42em;
+    background: white; }
+.monster .monster-header {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-end; }
+  .monster .monster-header h4 {
+    font-weight: bold;
+    color: rgba(154, 21, 21, 1.0);
+    margin: 0;
+    line-height: 1;
+    font-size: 2em;
+    font-family: "Alegreya Sans SC", sans-serif;
+    margin-top: -0.1em; }
+  .monster .monster-header p {
+    margin: 0; }
+  .monster .monster-header .monster-description {
+    font-style: italic;
+    font-size: 0.8em; }
+    .monster .monster-header .monster-description span:first-of-type {
+      display: inline-block; }
+      .monster .monster-header .monster-description span:first-of-type::first-letter {
+        text-transform: uppercase; }
+    .monster .monster-header .monster-description span + span::before {
+      content: " "; }
+    .monster .monster-header .monster-description * + .alignment::before {
+      content: ", "; }
+.monster .discrete-element {
+  display:inline-block; }
+.monster .monster-ac,
+.monster .monster-hp,
+.monster .monster-speed,
+.monster .monster-saves,
+.monster .monster-skills,
+.monster .monster-languages,
+.monster .monster-senses,
+.monster .monster-immunities,
+.monster .monster-vulnerabilities,
+.monster .monster-resistances,
+.monster .monster-conditions,
+.monster .monster-challenge {
+  display: flex;
+  flex-wrap: wrap; }
+.monster h5 {
+  font-weight: bold;
+  color: rgba(154, 21, 21, 1.0);
+  font-family: "Alegreya Sans SC", sans-serif;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 0;
+  font-size: 1.45em;
+  margin-top: 0.36em !important; }
+  .monster h5 + * {
+    margin-top: 0.52em; }
+.monster hr {
+  margin: 0.285em 0 0;
+  width: 100%;
+  min-height: 1px;
+  height: 0.143em;
+  border: 0;
+  background: linear-gradient(to right, rgba(154, 21, 21, 0.75), rgba(154, 21, 21, 0));
+  -webkit-column-break-inside: avoid;
+  -webkit-print-color-adjust: exact;
+  page-break-inside: avoid;
+  break-inside: avoid; }
+  .monster hr:first-of-type, .monster hr:last-of-type {
+    height: 0.2143em;
+    background: linear-gradient(to right, rgba(154, 21, 21, 1.0), rgba(154, 21, 21, 0)); }
+  .monster hr + * {
+    margin-top: 0.285em; }
+  .monster hr:last-of-type + * {
+    margin-top: 0.57em; }
+.monster .label {
+  font-weight: bold; }
+.monster .monster-abilities {
+  display: inline-grid;
+  width: 100%;
+  grid-template-columns: repeat(6, 1fr);
+  text-align: center;
+  line-height: 1.4; }
+  .monster .monster-abilities .label {
+    color: rgba(154, 21, 21, 1.0);
+    display: block;
+    text-transform: uppercase; }
+.monster ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0; }
+  .monster ul .label {
+    color: rgba(154, 21, 21, 1.0); }
+  .monster ul li > p {
+    margin: 0; }
+.monster p {
+  margin-bottom: 0; }
+  .monster p + * {
+    margin-top: 0.57em; }
+.monster .monster-trait + *,
+.monster .monster-spells + *:not(.monster-spells),
+.monster .discrete-element + *,
+.monster .monster-action + *,
+.monster .monster-reaction + *,
+.monster .monster-legendary-action + *:not(.monster-legendary-action),
+.monster .monster-lair-action + * {
+  margin-top: 0.57em; }
+.monster .monster-list p,
+.monster .monster-stats li p,
+.monster .monster-legendary-action p {
+  text-indent: -1em; 
+  padding-left: 1em; }
+.monster .monster-trait p + *,
+.monster .monster-action p + *,
+.monster .monster-reaction p + *,
+.monster .monster-legendary-action p + *,
+.monster .monster-lair-action p + * {
+  margin-top: 0.57em; }
+.monster .monster-trait .name,
+.monster .monster-action .name,
+.monster .monster-reaction .name,
+.monster .monster-legendary-action .name,
+.monster .monster-lair-action .name {
+  font-weight: bold;
+  font-style: italic; }
+.monster .monster-trait > :last-child,
+.monster .monster-action > :last-child,
+.monster .monster-reaction > :last-child,
+.monster .monster-legendary-action > :last-child,
+.monster .monster-lair-action > :last-child {
+  margin-bottom: 0; }
+.monster .lair-initiative,
+.monster .legendary-per-round,
+.monster .paragon-actions {
+  font-size: 0.8em;
+  font-style: italic; }
+.monster .monster-notes + * {
+  margin-top: 0.57em; }
+.monster hr + .h5-border {
+  display: none; }
+.monster .monster-footer {
+  font-style: italic;
+  opacity: 0.5;
+  font-size: 0.8em; }
+.monster .line-break {
+  display: block;
+  height: 0.57em; }
+.monster .h5-border {
+  min-height: 1px;
+  height: 0.0714em;
+  background: linear-gradient(to right, rgba(154, 21, 21, 0.75), rgba(154, 21, 21, 0));
+  display: block;
+  -webkit-print-color-adjust: exact;
+  margin-top: 0;
+  margin-bottom: 0.52em; }
+  .monster .h5-border.notes {
+    margin-top: 0.52em;
+    height: 0.2143em; }
+.customization-menu .card-body {
+    background-color: #eeeeee; }
+@media print {
+  a { 
+    color: black;
+    text-decoration: none !important; }
+  .monster {
+    border-width: 2px;
+    border-top-width: 5px;
+    border-bottom-width: 5px;
+  }
+  .customization-menu {
+    display: none; } }
+@media screen and (max-width: 459px) {
+  .monster.columns-1 {
+    font-size: 0.75rem; } }
+@media print {
+    .monster.columns-1 {
+      font-size: 1em; } }
+.monster.columns-2 {
+  width: 70%;
+  font-size: .9em; }
+@media print {
+  .monster.columns-2 {
+    width: 100%;
+    font-size: 0.9em; } }
+@media screen and (max-width: 1200px) {
+  .monster.columns-2 {
+    width: 75% } }
+@media screen and (max-width: 1095px) {
+  .monster.columns-2 {
+    width: 80% } }
+@media screen and (max-width: 980px) {
+  .monster.columns-2 {
+    width: 85%; } }
+@media screen and (max-width: 880px) {
+  .monster.columns-2 {
+    width: 95%; } }
+@media screen and (max-width: 800px) {
+  .monster.columns-2 {
+    width: 100%; } }
+@media screen and (max-width: 720px) {
+  .monster.columns-2 {
+    font-size: 0.8rem; } }
+@media screen and (max-width: 620px) {
+  .monster.columns-2 {
+    font-size: 0.7rem; } }
+@media screen and (max-width: 535px) {
+  .monster.columns-2 {
+    font-size: 0.6rem; } }
+.monster.columns-2 .monster-contents-body {
+  column-count: 2;
+  column-gap: 1.42em; }
+.monster .h5-traits {
+  display: none; }
+  .monster .h5-traits + .h5-border {
+    display: none; }
+    .monster .h5-traits + .h5-border + .monster-trait {
+      margin-top: 0.57em; }
