@@ -359,8 +359,8 @@ function addBackendCalculatedValues(dragon) {
 
   // XP
   for (let i = 0; i < crs.length; i++) {
-    if (dragon.cr == crs[i].CR) {
-      dragon.xp = numberWithCommas(crs[i].XP);
+    if (dragon.cr == crs[i].cr) {
+      dragon.xp = numberWithCommas(crs[i].xp);
       break;
     }
   }

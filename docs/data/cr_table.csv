@@ -1,4 +1,4 @@
-ID,CR,Prof,XP,AC,HP Min,HP Max,Atk,Dmg Min,Dmg Max,DC
+id,cr,prof,xp,ac,hpMin,hpMax,atk,dmgMin,dmgMax,dc
 id0000,0,2,10,13,1,6,3,0,1,13
 id0125,1/8,2,25,13,7,35,3,2,3,13
 id0250,1/4,2,50,13,36,49,3,4,5,13
