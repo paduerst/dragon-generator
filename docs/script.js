@@ -716,6 +716,32 @@ return out_arr;
 }
 // end of main library
 
+function returnDragon(dragon_key, override_vals={}) {
+  var dragon = dragons[dragon_key];
+  for (const key in override_vals) {
+    dragon[key] = override_vals[key];
+  }
+
+  // add the other dragon values needed
+  dragon = addUserSpecifiedValues(dragon);
+  dragon = addBackendCalculatedValues(dragon);
+  dragon = addGeneralDragonStatistics(dragon);
+  dragon = addCaseVariants(dragon);
+  return dragon;
+}
+
+function returnOverrideVals() {
+  var override_vals = {};
+  if (urlParams.has("spellsoverride")) {
+    let spells_override = urlParams.get("spellsoverride");
+    if (spells_override.length > 0) {
+      override_vals.rawSpells = spells_override;
+      document.getElementById("spellsoverride").value = spells_override;
+    }
+  }
+  return override_vals;
+}
+
 function generateDragon() {
   // specify type of dragon
   var dragon_color = "Red";
@@ -741,14 +767,14 @@ function generateDragon() {
   document.getElementById("age").value = dragon_age.toLowerCase();
 
   // generate the dragon statblock
-  var dragon_key = normalizeHeader_(dragon_color + " " + dragon_age);
-  var dragon = dragons[dragon_key];
+  const dragon_key = normalizeHeader_(dragon_color + " " + dragon_age);
+  var dragon = returnDragon(dragon_key);
+  const default_dragon = dragon;
 
-  // add the other dragon values needed
-  dragon = addUserSpecifiedValues(dragon);
-  dragon = addBackendCalculatedValues(dragon);
-  dragon = addGeneralDragonStatistics(dragon);
-  dragon = addCaseVariants(dragon);
+  const override_vals = returnOverrideVals();
+  if (!jQuery.isEmptyObject(override_vals)) {
+    dragon = returnDragon(dragon_key, override_vals);
+  }
 
   // start constructing the output array of strings of HTML
   var out_arr = [];

@@ -96,7 +96,7 @@
             </div>
 
             <div class="form-group row">
-                <legend class="col-form-label col-md-2 float-sm-left pt-0">Advanced Customization</legend>
+                <legend class="col-form-label col-md-2 float-sm-left pt-0">Feature Customization</legend>
                 <div class="col-md-10">
 
                   <div class="custom-control custom-switch">
@@ -134,22 +134,36 @@
                     <label class="custom-control-label" for="enableadvanced">Enable Advanced Options</label>
                   </div>
 
-                  <div class="custom-control custom-switch advanced-option-div">
+                </div>
+              </div>
+
+              <div class="form-group row advanced-option-div">
+                <legend class="col-form-label col-md-2 float-sm-left pt-0">Formatting</legend>
+                <div class="col-md-10">
+
+                  <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input advanced-option" id="usestandardtheme" name="usestandardtheme">
                     <label class="custom-control-label" for="usestandardtheme">Force Standard Stat Block Theme</label>
                   </div>
 
-                  <div class="custom-control custom-switch advanced-option-div">
+                  <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input advanced-option" id="printcropped" name="printcropped">
                     <label class="custom-control-label" for="printcropped">Crop to Statblock (Except Bottom) for Printing</label>
                   </div>
 
-                  <div class="custom-control custom-switch advanced-option-div">
+                  <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input advanced-option" id="printpreview" name="printpreview">
                     <label class="custom-control-label" for="printpreview">Display Like Print Preview (Removes This Menu)</label>
                   </div>
 
                 </div>
+              </div>
+
+              <div class="form-group row advanced-option-div">
+                  <label for="spellsoverride" class="col-md-2 col-form-label">Spells Override</label>
+                  <div class="col-md-10">
+                      <input class="form-control advanced-option" type="text" placeholder='Defaults to typical spells' id="spellsoverride" name="spellsoverride">
+                  </div>
               </div>
 
             <div class="form-group row">
