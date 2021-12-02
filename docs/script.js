@@ -39,6 +39,29 @@ function toggleAdvanced() {
   }
 }
 
+// copied from https://stackoverflow.com/a/6364985
+function pageShown(evt){
+  if (evt.persisted) {
+      // alert("pageshow event handler called.  The page was just restored from the Page Cache (eg. From the Back button.");
+      $( "form" ).find( ":input" ).prop( "disabled", false );
+  } else {
+      // alert("pageshow event handler called for the initial load.  This is the same as the load event.");
+  }
+  return;
+}
+
+function pageHidden(evt){
+  if (evt.persisted) {
+      // alert("pagehide event handler called.  The page was suspended and placed into the Page Cache.");
+  } else {
+      // alert("pagehide event handler called for page destruction.  This is the same as the unload event.");
+  }
+  return;
+}
+
+window.addEventListener("pageshow", pageShown, false);
+window.addEventListener("pagehide", pageHidden, false);
+
 // imported data
 var dragons;
 var templates;
