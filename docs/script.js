@@ -1,3 +1,44 @@
+const urlParams = new URLSearchParams(window.location.search);
+
+jQuery(document).ready(function($){
+  
+  // Remove empty fields from GET forms
+  // Author: Bill Erickson
+  // URL: http://www.billerickson.net/code/hide-empty-fields-get-form/
+  
+    // Change 'form' to class or ID of your specific form
+  $("form").submit(function() {
+    $(this).find(":input").filter(function(){ return (!this.value || this.value == "default"); }).attr("disabled", "disabled");
+    $(this).find(":input").filter(function(){ return (this.value == "on"); }).attr("value", "1");
+    return true; // ensure form still submits
+  });
+  
+  // Un-disable form fields when page loads, in case they click back after submission
+  // PD Note: This doesn't work as intended. jQuery doesn't run after back button
+  $( "form" ).find( ":input" ).prop( "disabled", false );
+
+  // disable advanced options unless otherwise specified
+  if (urlParams.has("enableadvanced")) {
+    document.getElementById("enableadvanced").checked=true;
+  } else {
+    $( "form" ).find( ".advanced-option" ).prop( "disabled", true );
+    $( ".advanced-option-div" ).hide();
+  }
+});
+
+function toggleAdvanced() {
+  // Get the checkbox
+  var checkBox = document.getElementById("enableadvanced");
+
+  if (checkBox.checked == true){
+    $( "form" ).find( ".advanced-option" ).prop( "disabled", false );
+    $('.advanced-option-div').show();
+  } else {
+    $('.advanced-option-div').hide();
+    $( "form" ).find( ".advanced-option" ).prop( "disabled", true );
+  }
+}
+
 // imported data
 var dragons;
 var templates;
@@ -5,8 +46,6 @@ var crs;
 // end of imported data
 
 // non-imported consts
-const urlParams = new URLSearchParams(window.location.search);
-
 const supported_ages = [
   "wyrmling",
   "young",
@@ -315,7 +354,7 @@ function addUserSpecifiedValues(dragon) {
     dragon.ither = "her";
     dragon.itsher = "her";
     // populate form with pronouns
-    document.getElementById("pronouns").value = "feminine";
+    document.getElementById("pronouns").value = "default";
   } else if (pronouns == "masculine") {
     // No known prismatic dragons use these pronouns
     dragon.itshe = "he";

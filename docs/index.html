@@ -87,7 +87,7 @@
               <div class="col-md-10">
                   <select class="form-control" id="pronouns" name="pronouns">
                       <option value="neutral">It/It/Its</option>
-                      <option selected value="feminine">She/Her/Her</option>
+                      <option selected value="default">She/Her/Her</option>
                       <option value="masculine">He/Him/His</option>
                       <option value="singularthey">They/Them/Their</option>
                       <option value="spivak">Ey/Em/Eir</option>
@@ -130,13 +130,23 @@
                   </div>
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="usestandardtheme" name="usestandardtheme">
+                    <input type="checkbox" class="custom-control-input" id="enableadvanced" name="enableadvanced" onclick="toggleAdvanced()">
+                    <label class="custom-control-label" for="enableadvanced">Enable Advanced Options</label>
+                  </div>
+
+                  <div class="custom-control custom-switch advanced-option-div">
+                    <input type="checkbox" class="custom-control-input advanced-option" id="usestandardtheme" name="usestandardtheme">
                     <label class="custom-control-label" for="usestandardtheme">Force Standard Stat Block Theme</label>
                   </div>
 
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="printcropped" name="printcropped">
+                  <div class="custom-control custom-switch advanced-option-div">
+                    <input type="checkbox" class="custom-control-input advanced-option" id="printcropped" name="printcropped">
                     <label class="custom-control-label" for="printcropped">Crop to Statblock (Except Bottom) for Printing</label>
+                  </div>
+
+                  <div class="custom-control custom-switch advanced-option-div">
+                    <input type="checkbox" class="custom-control-input advanced-option" id="printpreview" name="printpreview">
+                    <label class="custom-control-label" for="printpreview">Display Like Print Preview (Removes This Menu)</label>
                   </div>
 
                 </div>
