@@ -123,12 +123,6 @@
                     <input type="checkbox" class="custom-control-input" id="usealtvulnerability" name="usealtvulnerability">
                     <label class="custom-control-label" for="usealtvulnerability">Use Alternative Vulnerability</label>
                   </div>
-
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="forcesinglecolumn" name="forcesinglecolumn">
-                    <label class="custom-control-label" for="forcesinglecolumn">Force Single-Column Stat Block</label>
-                  </div>
-
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="enableadvanced" name="enableadvanced" onclick="toggleAdvanced()">
                     <label class="custom-control-label" for="enableadvanced">Enable Advanced Options</label>
@@ -140,6 +134,11 @@
               <div class="form-group row advanced-option-div">
                 <legend class="col-form-label col-md-2 float-sm-left pt-0">Formatting</legend>
                 <div class="col-md-10">
+
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input advanced-option" id="forcesinglecolumn" name="forcesinglecolumn">
+                    <label class="custom-control-label" for="forcesinglecolumn">Force Single-Column Stat Block</label>
+                  </div>
 
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input advanced-option" id="usestandardtheme" name="usestandardtheme">

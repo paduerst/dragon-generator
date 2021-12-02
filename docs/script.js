@@ -550,7 +550,8 @@ function addGeneralDragonStatistics(dragon) {
   dragon.cantrip = spell_prefix + dragon.rawCantrip + spell_suffix;
 
   // Spells
-  let spells_arr = dragon.rawSpells.split(",");
+  // copied from https://stackoverflow.com/a/9030062
+  let spells_arr = dragon.rawSpells.split(/,(?![^(]*\))/g);
   var spell_arr;
   var spell;
   var parenthetical;
