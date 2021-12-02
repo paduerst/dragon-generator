@@ -648,7 +648,11 @@ if (dragon.age == "Wyrmling") {
 } else {
   out_arr.push(insertVariablesToTemplate_(templates.multiattackAdult, dragon));
 }
-out_arr.push(insertVariablesToTemplate_(templates.bite, dragon));
+if (dragon.biteElementExpectedDamage > 0) {
+  out_arr.push(insertVariablesToTemplate_(templates.bite, dragon));
+} else {
+  out_arr.push(insertVariablesToTemplate_(templates.biteNoElement, dragon));
+}
 if (dragon.clawReach > 0) {
   out_arr.push(insertVariablesToTemplate_(templates.claw, dragon));
 }
