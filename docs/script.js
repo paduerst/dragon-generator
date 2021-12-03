@@ -18,7 +18,7 @@ jQuery(document).ready(function($){
   $( "form" ).find( ":input" ).prop( "disabled", false );
 
   // disable advanced options unless otherwise specified
-  if (urlParams.has("enableadvanced")) {
+  if (urlParams.has("enableadvanced") || document.getElementById("enableadvanced").checked == true) {
     document.getElementById("enableadvanced").checked=true;
   } else {
     $( "form" ).find( ".advanced-option" ).prop( "disabled", true );
