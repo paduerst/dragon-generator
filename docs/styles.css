@@ -4,6 +4,16 @@ body {
 .breath-break {
   line-height: 1.9em;
 }
+.breath-option p {
+  text-indent: 1em;
+}
+.blue-breath-option {
+  text-indent: 1em;
+  padding-left: 1em;
+}
+.blue-breath-option + .blue-breath-option {
+  margin-top: 0 !important;
+}
 .nowrap {
     white-space: nowrap;
 }
