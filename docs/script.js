@@ -599,17 +599,96 @@ function generateFeaturesArray_(dragon) {
   }
 
   // Innate Spellcasting
-  if (dragon.age == "Wyrmling" || urlParams.has("noleveledspells")) {
-    out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingDescriptionWyrmling, dragon));
-    out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingCantrip, dragon));
-    if (urlParams.has("noleveledspells")) {
-      // populate form
-      document.getElementById("noleveledspells").checked = true;
+  var default_description = true;
+  if (urlParams.has("spelldescription")) {
+    if (urlParams.get("spelldescription") == "attack") {
+      default_description = false;
+      dragon.cantripDcString = " (+" + dragon.proficiencyCha + " to hit with spell attacks)";
+      dragon.spellsDcString = dragon.cantripDcString;
+      document.getElementById("spelldescription").value = "attack";
+    } else if (urlParams.get("spelldescription") == "dc") {
+      default_description = false;
+      dragon.cantripDcString = " (spell save DC " + dragon.saveDcCha + ")";
+      dragon.spellsDcString = dragon.cantripDcString;
+      document.getElementById("spelldescription").value = "dc";
+    } else if (urlParams.get("spelldescription") == "both") {
+      default_description = false;
+      dragon.cantripDcString = " (spell save DC " + dragon.saveDcCha + ", +" + dragon.proficiencyCha + " to hit with spell attacks)";
+      dragon.spellsDcString = dragon.cantripDcString;
+      document.getElementById("spelldescription").value = "both";
     }
-  } else {
-    out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingDescriptionAdult, dragon));
-    out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingCantrip, dragon));
-    out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingSpells, dragon));
+  }
+  if (default_description) {
+    var include_atk = false;
+    var include_dc = false;
+    if (dragon.atWillSpellsHaveAttack > 0) {
+      include_atk = true;
+    }
+    if (dragon.atWillSpellsHaveSave > 0) {
+      include_dc = true;
+    }
+    var desc_string = "";
+    if (include_atk || include_dc) {
+      desc_string = desc_string + " (";
+    }
+    if (include_dc) {
+      desc_string = desc_string + "spell save DC " + dragon.saveDcCha;
+    }
+    if (include_atk && include_dc) {
+      desc_string = desc_string + ", ";
+    }
+    if (include_atk) {
+      desc_string = desc_string + "+" + dragon.proficiencyCha + " to hit with spell attacks";
+    }
+    if (include_atk || include_dc) {
+      desc_string = desc_string + ")";
+    }
+    dragon.cantripDcString = desc_string;
+
+    if (include_atk || dragon.oncePerDaySpellsHaveAttack > 0) {
+      include_atk = true;
+    }
+    if (include_dc || dragon.oncePerDaySpellsHaveSave > 0) {
+      include_dc = true;
+    }
+    desc_string = "";
+    if (include_atk || include_dc) {
+      desc_string = desc_string + " (";
+    }
+    if (include_dc) {
+      desc_string = desc_string + "spell save DC " + dragon.saveDcCha;
+    }
+    if (include_atk && include_dc) {
+      desc_string = desc_string + ", ";
+    }
+    if (include_atk) {
+      desc_string = desc_string + "+" + dragon.proficiencyCha + " to hit with spell attacks";
+    }
+    if (include_atk || include_dc) {
+      desc_string = desc_string + ")";
+    }
+    dragon.spellsDcString = desc_string;
+  }
+  var disable_leveled_spells = false;
+  var disable_all_spellcasting = false;
+  if (urlParams.has("spellstate")) {
+    if (urlParams.get("spellstate") == "onlyatwill") {
+      disable_leveled_spells = true;
+      document.getElementById("spellstate").value = "onlyatwill";
+    } else if (urlParams.get("spellstate") == "off") {
+      disable_all_spellcasting = true;
+      document.getElementById("spellstate").value = "off";
+    }
+  }
+  if (!disable_all_spellcasting) {
+    if (dragon.age == "Wyrmling" || disable_leveled_spells) {
+      out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingDescriptionWyrmling, dragon));
+      out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingCantrip, dragon));
+    } else {
+      out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingDescriptionAdult, dragon));
+      out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingCantrip, dragon));
+      out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingSpells, dragon));
+    }
   }
 
   if (dragon.legendaryResistances > 0) {
@@ -733,6 +812,15 @@ function returnDragon(dragon_key, override_vals={}) {
 
 function returnOverrideVals() {
   var override_vals = {};
+
+  if (urlParams.has("cantripoverride")) {
+    let cantrip_override = urlParams.get("cantripoverride");
+    if (cantrip_override.length > 0) {
+      override_vals.rawCantrip = cantrip_override;
+      document.getElementById("cantripoverride").value = cantrip_override;
+    }
+  }
+
   if (urlParams.has("spellsoverride")) {
     let spells_override = urlParams.get("spellsoverride");
     if (spells_override.length > 0) {
@@ -740,6 +828,7 @@ function returnOverrideVals() {
       document.getElementById("spellsoverride").value = spells_override;
     }
   }
+
   return override_vals;
 }
 

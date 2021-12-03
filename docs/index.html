@@ -115,11 +115,6 @@
                   </div>
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="noleveledspells" name="noleveledspells">
-                    <label class="custom-control-label" for="noleveledspells">No leveled spells from Innate Spellcasting</label>
-                  </div>
-
-                  <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="usealtvulnerability" name="usealtvulnerability">
                     <label class="custom-control-label" for="usealtvulnerability">Use Alternative Vulnerability</label>
                   </div>
@@ -158,11 +153,39 @@
                 </div>
               </div>
 
+            <div class="form-group row advanced-option-div">
+              <label for="spellstate" class="col-md-2 col-form-label">Innate Spellcasting</label>
+              <div class="col-md-10">
+                  <select class="form-control advanced-option" id="spellstate" name="spellstate">
+                      <option selected value="default">Default</option>
+                      <option value="onlyatwill">No 1/Day Spells</option>
+                      <option value="off">No Innate Spellcasting</option>
+                  </select>
+              </div>
+            </div>
+
               <div class="form-group row advanced-option-div">
-                  <label for="spellsoverride" class="col-md-2 col-form-label">Spells Override</label>
+                  <label for="cantripoverride" class="col-md-2 col-form-label">At-Will Spell(s)</label>
+                  <div class="col-md-10">
+                      <input class="form-control advanced-option" type="text" placeholder='Defaults to typical cantrip' id="cantripoverride" name="cantripoverride">
+                  </div>
+
+                  <label for="spellsoverride" class="col-md-2 col-form-label">1/Day Spells</label>
                   <div class="col-md-10">
                       <input class="form-control advanced-option" type="text" placeholder='Defaults to typical spells' id="spellsoverride" name="spellsoverride">
                   </div>
+              </div>
+
+              <div class="form-group row advanced-option-div">
+                <label for="spelldescription" class="col-md-2 col-form-label">Spellcasting Attack and DC</label>
+                <div class="col-md-10">
+                    <select class="form-control advanced-option" id="spelldescription" name="spelldescription">
+                        <option selected value="default">Default</option>
+                        <option value="attack">Display Attack Bonus</option>
+                        <option value="dc">Display Save DC</option>
+                        <option value="both">Display Both</option>
+                    </select>
+                </div>
               </div>
 
             <div class="form-group row">
