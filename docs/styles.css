@@ -11,7 +11,7 @@ body {
   text-indent: 1em;
   padding-left: 1em;
 }
-.blue-breath-option + .blue-breath-option {
+.blue-breath-option {
   margin-top: 0 !important;
 }
 .nowrap {
