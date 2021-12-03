@@ -544,28 +544,53 @@ function addGeneralDragonStatistics(dragon) {
   }
   dragon.skills = skills_arr.join(", ");
 
-  // Cantrip
+  // Cantrip(s)
   const spell_prefix = "<i>[spell]";
   const spell_suffix = "[/spell]</i>";
-  dragon.cantrip = spell_prefix + dragon.rawCantrip + spell_suffix;
-
-  // Spells
-  // copied from https://stackoverflow.com/a/9030062
-  let spells_arr = dragon.rawSpells.split(/,(?![^(]*\))/g);
-  var spell_arr;
-  var spell;
-  var parenthetical;
-  for (let i = 0; i < spells_arr.length; i++) {
-    spell_arr = spells_arr[i].split("(");
-    spell = spell_arr[0].trim();
-    if (spell_arr.length > 1) {
-      parenthetical = " (" + spell_arr[1].trim();
-    } else {
-      parenthetical = "";
+  if (dragon.rawCantrip.length > 0) {
+    // copied from https://stackoverflow.com/a/9030062
+    let cantrips_arr = dragon.rawCantrip.split(/,(?![^(]*\))/g);
+    dragon.numberOfAtWillSpells = cantrips_arr.length;
+    var cantrip_arr;
+    var cantrip;
+    var parenthetical;
+    for (let i = 0; i < cantrips_arr.length; i++) {
+      cantrip_arr = cantrips_arr[i].split("(");
+      cantrip = cantrip_arr[0].trim();
+      if (cantrip_arr.length > 1) {
+        parenthetical = " (" + cantrip_arr[1].trim();
+      } else {
+        parenthetical = "";
+      }
+      cantrips_arr[i] = spell_prefix + cantrip + spell_suffix + parenthetical;
     }
-    spells_arr[i] = spell_prefix + spell + spell_suffix + parenthetical;
+    dragon.cantrip = cantrips_arr.sort().join(", ");
+  } else {
+    dragon.numberOfAtWillSpells = 0;
+    dragon.cantrip = "";
   }
-  dragon.spells = spells_arr.sort().join(", ");
+
+  // Spell(s)
+  if (dragon.rawSpells.length > 0) {
+    let spells_arr = dragon.rawSpells.split(/,(?![^(]*\))/g);
+    dragon.numberOfOncePerDaySpells = spells_arr.length;
+    var spell_arr;
+    var spell;
+    for (let i = 0; i < spells_arr.length; i++) {
+      spell_arr = spells_arr[i].split("(");
+      spell = spell_arr[0].trim();
+      if (spell_arr.length > 1) {
+        parenthetical = " (" + spell_arr[1].trim();
+      } else {
+        parenthetical = "";
+      }
+      spells_arr[i] = spell_prefix + spell + spell_suffix + parenthetical;
+    }
+    dragon.spells = spells_arr.sort().join(", ");
+  } else {
+    dragon.numberOfOncePerDaySpells = 0;
+    dragon.spells = "";
+  }
 
   return dragon;
 }
@@ -599,6 +624,30 @@ function generateFeaturesArray_(dragon) {
   }
 
   // Innate Spellcasting
+  var disable_leveled_spells = false;
+  var disable_cantrip = false;
+  var disable_all_spellcasting = false;
+  if (urlParams.has("spellstate")) {
+    if (urlParams.get("spellstate") == "onlyatwill") {
+      disable_leveled_spells = true;
+      document.getElementById("spellstate").value = "onlyatwill";
+    } else if (urlParams.get("spellstate") == "noatwill") {
+      disable_cantrip = true;
+      document.getElementById("spellstate").value = "noatwill";
+    } else if (urlParams.get("spellstate") == "off") {
+      disable_all_spellcasting = true;
+      document.getElementById("spellstate").value = "off";
+    }
+  }
+  if (dragon.numberOfAtWillSpells === 0) {
+    disable_cantrip = true;
+  }
+  if (dragon.numberOfOncePerDaySpells === 0) {
+    disable_leveled_spells = true;
+  }
+  if (disable_cantrip && disable_leveled_spells) {
+    disable_all_spellcasting = true;
+  }
   var default_description = true;
   if (urlParams.has("spelldescription")) {
     if (urlParams.get("spelldescription") == "attack") {
@@ -621,10 +670,16 @@ function generateFeaturesArray_(dragon) {
   if (default_description) {
     var include_atk = false;
     var include_dc = false;
-    if (dragon.atWillSpellsHaveAttack > 0) {
+    if (!disable_cantrip && dragon.atWillSpellsHaveAttack > 0) {
       include_atk = true;
     }
-    if (dragon.atWillSpellsHaveSave > 0) {
+    if (!disable_cantrip && dragon.atWillSpellsHaveSave > 0) {
+      include_dc = true;
+    }
+    if (!disable_leveled_spells && dragon.oncePerDaySpellsHaveAttack > 0) {
+      include_atk = true;
+    }
+    if (!disable_leveled_spells && dragon.oncePerDaySpellsHaveSave > 0) {
       include_dc = true;
     }
     var desc_string = "";
@@ -643,50 +698,31 @@ function generateFeaturesArray_(dragon) {
     if (include_atk || include_dc) {
       desc_string = desc_string + ")";
     }
-    dragon.cantripDcString = desc_string;
-
-    if (include_atk || dragon.oncePerDaySpellsHaveAttack > 0) {
-      include_atk = true;
-    }
-    if (include_dc || dragon.oncePerDaySpellsHaveSave > 0) {
-      include_dc = true;
-    }
-    desc_string = "";
-    if (include_atk || include_dc) {
-      desc_string = desc_string + " (";
-    }
-    if (include_dc) {
-      desc_string = desc_string + "spell save DC " + dragon.saveDcCha;
-    }
-    if (include_atk && include_dc) {
-      desc_string = desc_string + ", ";
-    }
-    if (include_atk) {
-      desc_string = desc_string + "+" + dragon.proficiencyCha + " to hit with spell attacks";
-    }
-    if (include_atk || include_dc) {
-      desc_string = desc_string + ")";
-    }
     dragon.spellsDcString = desc_string;
   }
-  var disable_leveled_spells = false;
-  var disable_all_spellcasting = false;
-  if (urlParams.has("spellstate")) {
-    if (urlParams.get("spellstate") == "onlyatwill") {
-      disable_leveled_spells = true;
-      document.getElementById("spellstate").value = "onlyatwill";
-    } else if (urlParams.get("spellstate") == "off") {
-      disable_all_spellcasting = true;
-      document.getElementById("spellstate").value = "off";
-    }
-  }
   if (!disable_all_spellcasting) {
-    if (dragon.age == "Wyrmling" || disable_leveled_spells) {
-      out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingDescriptionWyrmling, dragon));
-      out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingCantrip, dragon));
+    var number_of_spells = 0;
+    if (!disable_cantrip) {
+      number_of_spells = number_of_spells + dragon.numberOfAtWillSpells;
+    }
+    if (!disable_leveled_spells) {
+      number_of_spells = number_of_spells + dragon.numberOfOncePerDaySpells;
+      if (dragon.numberOfOncePerDaySpells > 1) {
+        dragon.onceEach = " each";
+      } else {
+        dragon.onceEach = "";
+      }
+    }
+    if (number_of_spells > 1) {
+      dragon.spellOrSpells = "s";
     } else {
-      out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingDescriptionAdult, dragon));
+      dragon.spellOrSpells = "";
+    }
+    out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingDescriptionAdult, dragon));
+    if (!disable_cantrip) {
       out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingCantrip, dragon));
+    }
+    if (!disable_leveled_spells) {
       out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingSpells, dragon));
     }
   }
