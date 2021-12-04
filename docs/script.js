@@ -650,7 +650,12 @@ function generateFeaturesArray_(dragon) {
   }
   var default_description = true;
   if (urlParams.has("spelldescription")) {
-    if (urlParams.get("spelldescription") == "attack") {
+    if (urlParams.get("spelldescription") == "neither") {
+      default_description = false;
+      dragon.cantripDcString = "";
+      dragon.spellsDcString = dragon.cantripDcString;
+      document.getElementById("spelldescription").value = "neither";
+    } else if (urlParams.get("spelldescription") == "attack") {
       default_description = false;
       dragon.cantripDcString = " (+" + dragon.proficiencyCha + " to hit with spell attacks)";
       dragon.spellsDcString = dragon.cantripDcString;
