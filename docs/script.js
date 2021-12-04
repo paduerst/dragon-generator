@@ -9,7 +9,6 @@ jQuery(document).ready(function($){
     // Change 'form' to class or ID of your specific form
   $("form").submit(function() {
     $(this).find(":input").filter(function(){ return (!this.value || this.value == "default"); }).attr("disabled", "disabled");
-    $(this).find(":input").filter(function(){ return (this.value == "on"); }).attr("value", "1");
     return true; // ensure form still submits
   });
   
@@ -289,6 +288,9 @@ function convertTagsToLinks_(strIn) {
       if (firstBrack == "spell") {
         contentsInURL = contents.toLowerCase().replace(/[ \/]/g, "-").replace(/[’']/, "");
         link = link + 'spells/';
+      } else if (firstBrack == "monster") {
+        contentsInURL = contents.toLowerCase();
+        link = link + 'monsters/';
       } else if (firstBrack == "skill") {
         contentsInURL = contents.charAt(0).toUpperCase() + contents.substring(1);
         link = link + 'sources/basic-rules/using-ability-scores#';
@@ -786,12 +788,24 @@ if (dragon.age == "Adult" || dragon.age == "Ancient") {
 
 // Breath Weapons
 let breathColor = "breath" + dragon.colorUpper;
-if (urlParams.has("nosecondbreath")) {
-  out_arr.push(insertVariablesToTemplate_(templates[breathColor + "Wyrmling"], dragon));
-  // populate form to reflect no second breath
-  document.getElementById("nosecondbreath").checked=true;
-} else {
-  // out_arr.push(insertVariablesToTemplate_(templates.breathPrefix, dragon));
+let has_second_breath = true;
+if (dragon.age == "Wyrmling") {
+  has_second_breath = false; // disabled for Wyrmlings by default
+}
+if (urlParams.has("secondbreath")) {
+  if (urlParams.get("secondbreath") == "on") {
+    has_second_breath = true;
+    document.getElementById("secondbreath").value = "on";
+  } else if (urlParams.get("secondbreath") == "off") {
+    has_second_breath = false;
+    document.getElementById("secondbreath").value = "off";
+  }
+}
+// if (urlParams.has("nosecondbreath")) {
+//   has_second_breath = false;
+//   document.getElementById("nosecondbreath").checked=true;
+// }
+if (has_second_breath) {
   out_arr.push(insertVariablesToTemplate_(templates[breathColor + "1"], dragon));
   if (dragon.color != "Violet") {
     out_arr.push(insertVariablesToTemplate_(templates[breathColor + "2"], dragon));
@@ -805,6 +819,8 @@ if (urlParams.has("nosecondbreath")) {
     }
     out_arr.push(breathStart + breathEnd);
   }
+} else {
+  out_arr.push(insertVariablesToTemplate_(templates[breathColor + "Wyrmling"], dragon));
 }
 
 // Wall of Prismatic Color

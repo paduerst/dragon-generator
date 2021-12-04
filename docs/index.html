@@ -99,24 +99,25 @@
                 <legend class="col-form-label col-md-2 float-sm-left pt-0">Feature Customization</legend>
                 <div class="col-md-10">
 
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="nosecondbreath" name="nosecondbreath">
-                    <label class="custom-control-label" for="nosecondbreath">No Secondary Breath Weapon</label>
-                  </div>
+                  <select class="form-control" id="secondbreath" name="secondbreath">
+                    <option selected value="default">Default Secondary Breath (On for all but wyrmlings)</option>
+                    <option value="on">Force Secondary Breath on for all ages</option>
+                    <option value="off">No Secondary Breath</option>
+                  </select>
 
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="nochangeshape" name="nochangeshape">
-                    <label class="custom-control-label" for="nochangeshape">No Shape Change</label>
+                    <label class="custom-control-label" for="nochangeshape">No Shape Change <i>(Otherwise on for adults and ancients)</i></label>
                   </div>
 
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="nowallofcolor" name="nowallofcolor">
-                    <label class="custom-control-label" for="nowallofcolor">No Wall of Prismatic Color</label>
+                    <label class="custom-control-label" for="nowallofcolor">No Wall of Prismatic Color <i>(Otherwise on for adults and ancients)</i></label>
                   </div>
 
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="usealtvulnerability" name="usealtvulnerability">
-                    <label class="custom-control-label" for="usealtvulnerability">Use Alternative Vulnerability</label>
+                    <label class="custom-control-label" for="usealtvulnerability">Use Prismatic Weakness <i>(Replaces damage vulnerability)</i></label>
                   </div>
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="enableadvanced" name="enableadvanced" onclick="toggleAdvanced()">

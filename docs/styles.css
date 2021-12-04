@@ -1,6 +1,9 @@
 body {
   background-color: #282a36;
 }
+.form-control + .custom-control {
+  margin-top: 0.5em;
+}
 .breath-break {
   line-height: 1.9em;
 }
