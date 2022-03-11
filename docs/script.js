@@ -936,11 +936,13 @@ function generateDragon() {
   if (!urlParams.has("usealtvulnerability")) {
     out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatVulnerabilities, dragon));
   }
-  if (dragon.age == "Adult")
-  {
+  if (dragon.age == "Adult") {
     out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatResistances, dragon));
   }
   out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatImmunities, dragon));
+  if (dragon.conditionImmunities.length > 0) {
+    out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatConditionImmunities, dragon));
+  }
   out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatSenses, dragon));
   out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatLanguages, dragon));
   out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatChallenge, dragon));
