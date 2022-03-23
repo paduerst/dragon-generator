@@ -84,7 +84,8 @@ const supported_colors = [
   "indigo",
   "violet",
   "magenta",
-  "white"
+  "white",
+  "black"
 ];
 
 const css_color_themes = {
@@ -96,7 +97,8 @@ const css_color_themes = {
   "Indigo": [31, 0, 156],
   "Violet": [118, 43, 158],
   "Magenta": [173, 12, 117],
-  "White": [127, 128, 119]
+  "White": [127, 128, 119],
+  "Black": [0, 0, 0]
 };
 
 const global_skills = [
@@ -828,7 +830,7 @@ if (urlParams.has("nowallofcolor")) {
   // no wall of color
   // populate form to reflect no wall of color
   document.getElementById("nowallofcolor").checked=true;
-} else if ((dragon.age == "Adult" || dragon.age == "Ancient") && dragon.color != "White") {
+} else if ((dragon.age == "Adult" || dragon.age == "Ancient") && dragon.color != "White" && dragon.color != "Black") {
   out_arr.push(insertVariablesToTemplate_(templates.wallOfPrismaticColorNew, dragon));
 }
 
@@ -847,7 +849,12 @@ if (urlParams.has("nochangeshape")) {
   out_arr.push(insertVariablesToTemplate_(templates.changeShape, dragon));
 }
 
-out_arr.push(insertVariablesToTemplate_(templates.prismaticRadiance, dragon));
+if (dragon.color == "Black") {
+  out_arr.push(insertVariablesToTemplate_(templates.shadowBlend, dragon));
+} else {
+  out_arr.push(insertVariablesToTemplate_(templates.prismaticRadiance, dragon));
+}
+
 
 return out_arr;
 }
