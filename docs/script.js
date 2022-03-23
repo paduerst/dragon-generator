@@ -850,7 +850,7 @@ if (urlParams.has("nochangeshape")) {
 }
 
 if (dragon.color == "Black") {
-  out_arr.push(insertVariablesToTemplate_(templates.shadowBlend, dragon));
+  out_arr.push(insertVariablesToTemplate_(templates.diminishLight, dragon));
 } else {
   out_arr.push(insertVariablesToTemplate_(templates.prismaticRadiance, dragon));
 }
