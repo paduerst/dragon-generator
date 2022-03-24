@@ -748,8 +748,12 @@ function generateFeaturesArray_(dragon) {
 
   if (urlParams.has("usealtvulnerability")) {
     let features_lost = "Innate Spellcasting, Magic Resistance, ";
-    if (urlParams.has("nowallofcolor") || !((dragon.age == "Adult" || dragon.age == "Ancient") && dragon.color != "White")) {
-      features_lost = features_lost + "and Variable Radiance";
+    if (urlParams.has("nowallofcolor") || !((dragon.age == "Adult" || dragon.age == "Ancient") && dragon.color != "White" && dragon.color != "Black")) {
+      if (dragon.color == "Black") {
+        features_lost = features_lost + "and Diminish Light";
+      } else {
+        features_lost = features_lost + "and Variable Radiance";
+      }
     } else {
       features_lost = features_lost + "Variable Radiance, and Wall of Prismatic " + dragon.colorUpper;
     }
