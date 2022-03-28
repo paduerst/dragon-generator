@@ -189,6 +189,22 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function numberWithSign(x) {
+  if (x < 0) {
+    return x.toString();
+  } else {
+    return "+"+x.toString();
+  }
+}
+
+function numberOrMin(x, min) {
+  if (x < min) {
+    return min;
+  } else {
+    return x;
+  }
+}
+
 // copied from https://sebhastian.com/javascript-csv-to-array/
 function csvToArray(str, delimiter = ",") {
   // slice from start of text to the first \n index
@@ -264,7 +280,7 @@ function insertVariablesToTemplate_(template, values) {
   var templateVars = template.match(/\$\{\"[^\"]+\"\}/g); // Search for all the variables to be replaced, for instance ${"Column name"}
   if (templateVars !== null) { // If there are no variable markers, just return the input template.
     for (var i = 0; i < templateVars.length; ++i) { // Replace variables with values from the data array.
-      var variableData = values[normalizeHeader_(templateVars[i])]; // Returns the value from the object of the desired ID.
+      var variableData = values[normalizeHeader_(templateVars[i])].toString(); // Returns the value from the object of the desired ID.
       template = template.replace(templateVars[i], variableData || ""); // If no value is available, replace with the empty string.
     }
   }
@@ -444,12 +460,15 @@ function addBackendCalculatedValues(dragon) {
   var Mod;
   for (let mod of ["str", "dex", "con", "int", "wis", "cha"]) {
     if (dragon[mod] < 0) {
-      dragon[mod + "WithSign"] = "-" + dragon[mod];
+      dragon[mod + "Sign"] = "-";
     } else {
-      dragon[mod + "WithSign"] = "+" + dragon[mod];
+      dragon[mod + "Sign"] = "+";
     }
+    dragon[mod + "WithSign"] = numberWithSign(dragon[mod]);
     Mod = capitalizeFirstLetter(mod);
+    dragon["abs"+Mod] = Math.abs(dragon[mod]);
     dragon["proficiency"+Mod] = dragon.proficiencyBonus + dragon[mod];
+    dragon["proficiency"+Mod+"WithSign"] = numberWithSign(dragon["proficiency"+Mod]);
     dragon["saveDc"+Mod] = 8 + dragon.proficiencyBonus + dragon[mod];
   }
 
@@ -470,7 +489,14 @@ function addBackendCalculatedValues(dragon) {
 
   // Hit Points
   dragon.expectedHitPoints = Math.floor(dragon.numberOfHitDice*(0.5 + dragon.hitDie/2 + dragon.con));
+  dragon.expectedHitPoints = numberOrMin(dragon.expectedHitPoints, 1);
   dragon.hpConMod = dragon.numberOfHitDice*dragon.con;
+  if (dragon.hpConMod < 0) {
+    dragon.hpConModSign = "-";
+  } else {
+    dragon.hpConModSign = "+";
+  }
+  dragon.absHpConMod = Math.abs(dragon.hpConMod);
 
   // Passive Skills
   dragon.passiveInsight = 10 + dragon.wis + dragon.skillInsight*dragon.proficiencyBonus;
@@ -479,11 +505,17 @@ function addBackendCalculatedValues(dragon) {
 
   // Expected Damages
   dragon.biteExpectedDamage = Math.floor(dragon.biteDiceCount*(0.5+dragon.biteDiceType/2) + dragon.str);
+  dragon.biteExpectedDamage = numberOrMin(dragon.biteExpectedDamage, 1);
   dragon.biteElementExpectedDamage = Math.floor(dragon.biteElementDiceCount*(0.5+dragon.biteElementDiceType/2));
+  dragon.biteElementExpectedDamage = numberOrMin(dragon.biteElementExpectedDamage, 1);
   dragon.clawExpectedDamage = Math.floor(dragon.clawDiceCount*(0.5+dragon.clawDiceType/2) + dragon.str);
+  dragon.clawExpectedDamage = numberOrMin(dragon.clawExpectedDamage, 1);
   dragon.tailExpectedDamage = Math.floor(dragon.tailDiceCount*(0.5+dragon.tailDiceType/2) + dragon.str);
+  dragon.tailExpectedDamage = numberOrMin(dragon.tailExpectedDamage, 1);
   dragon.breath1ExpectedDamage = Math.floor(dragon.breath1DiceCount*(0.5+dragon.breath1DiceType/2));
+  dragon.breath1ExpectedDamage = numberOrMin(dragon.breath1ExpectedDamage, 1);
   dragon.wingAttackExpectedDamage = Math.floor(dragon.wingAttackDiceCount*(0.5+dragon.wingAttackDiceType/2) + dragon.str);
+  dragon.wingAttackExpectedDamage = numberOrMin(dragon.wingAttackExpectedDamage, 1);
 
   return dragon;
 }
@@ -517,11 +549,10 @@ function addGeneralDragonStatistics(dragon) {
 
   // Saving Throws
   // all prismatic dragons have proficiency in DEX, CON, WIS, and CHA saves
-  // assume none of the saving throw mods (with proficiency) are negative
-  dragon.savingThrows = "DEX +" + dragon.proficiencyDex +
-                        ", CON +" + dragon.proficiencyCon +
-                        ", WIS +" + dragon.proficiencyWis +
-                        ", CHA +" + dragon.proficiencyCha;
+  dragon.savingThrows = "DEX " + numberWithSign(dragon.proficiencyDex) +
+                        ", CON " + numberWithSign(dragon.proficiencyCon) +
+                        ", WIS " + numberWithSign(dragon.proficiencyWis) +
+                        ", CHA " + numberWithSign(dragon.proficiencyCha);
 
   // Skills
   let skills_arr = [];
@@ -540,7 +571,7 @@ function addGeneralDragonStatistics(dragon) {
       } else {
         skill_sign = "+";
       }
-      skills_arr.push(global_skills[i].skill + " " + skill_sign + skill_mod);
+      skills_arr.push(global_skills[i].skill + " " + numberWithSign(skill_mod));
     }
   }
   for (let i = 0; i < skills_arr.length; i++) {
@@ -661,7 +692,7 @@ function generateFeaturesArray_(dragon) {
       document.getElementById("spelldescription").value = "neither";
     } else if (urlParams.get("spelldescription") == "attack") {
       default_description = false;
-      dragon.cantripDcString = " (+" + dragon.proficiencyCha + " to hit with spell attacks)";
+      dragon.cantripDcString = " (" + numberWithSign(dragon.proficiencyCha) + " to hit with spell attacks)";
       dragon.spellsDcString = dragon.cantripDcString;
       document.getElementById("spelldescription").value = "attack";
     } else if (urlParams.get("spelldescription") == "dc") {
@@ -671,7 +702,7 @@ function generateFeaturesArray_(dragon) {
       document.getElementById("spelldescription").value = "dc";
     } else if (urlParams.get("spelldescription") == "both") {
       default_description = false;
-      dragon.cantripDcString = " (spell save DC " + dragon.saveDcCha + ", +" + dragon.proficiencyCha + " to hit with spell attacks)";
+      dragon.cantripDcString = " (spell save DC " + dragon.saveDcCha + ", " + numberWithSign(dragon.proficiencyCha) + " to hit with spell attacks)";
       dragon.spellsDcString = dragon.cantripDcString;
       document.getElementById("spelldescription").value = "both";
     }
@@ -702,7 +733,7 @@ function generateFeaturesArray_(dragon) {
       desc_string = desc_string + ", ";
     }
     if (include_atk) {
-      desc_string = desc_string + "+" + dragon.proficiencyCha + " to hit with spell attacks";
+      desc_string = desc_string + numberWithSign(dragon.proficiencyCha) + " to hit with spell attacks";
     }
     if (include_atk || include_dc) {
       desc_string = desc_string + ")";
@@ -880,6 +911,49 @@ function returnDragon(dragon_key, override_vals={}) {
 
 function returnOverrideVals() {
   var override_vals = {};
+
+  if (urlParams.has("strength")) {
+    let ability_override = urlParams.get("strength");
+    if (ability_override >= 1 && ability_override <= 30) {
+      override_vals.strength = Math.round(ability_override);
+      document.getElementById("strength").value = ability_override;
+    }
+  }
+  if (urlParams.has("dexterity")) {
+    let ability_override = urlParams.get("dexterity");
+    if (ability_override >= 1 && ability_override <= 30) {
+      override_vals.dexterity = Math.round(ability_override);
+      document.getElementById("dexterity").value = ability_override;
+    }
+  }
+  if (urlParams.has("constitution")) {
+    let ability_override = urlParams.get("constitution");
+    if (ability_override >= 1 && ability_override <= 30) {
+      override_vals.constitution = Math.round(ability_override);
+      document.getElementById("constitution").value = ability_override;
+    }
+  }
+  if (urlParams.has("intelligence")) {
+    let ability_override = urlParams.get("intelligence");
+    if (ability_override >= 1 && ability_override <= 30) {
+      override_vals.intelligence = Math.round(ability_override);
+      document.getElementById("intelligence").value = ability_override;
+    }
+  }
+  if (urlParams.has("wisdom")) {
+    let ability_override = urlParams.get("wisdom");
+    if (ability_override >= 1 && ability_override <= 30) {
+      override_vals.wisdom = Math.round(ability_override);
+      document.getElementById("wisdom").value = ability_override;
+    }
+  }
+  if (urlParams.has("charisma")) {
+    let ability_override = urlParams.get("charisma");
+    if (ability_override >= 1 && ability_override <= 30) {
+      override_vals.charisma = Math.round(ability_override);
+      document.getElementById("charisma").value = ability_override;
+    }
+  }
 
   if (urlParams.has("cantripoverride")) {
     let cantrip_override = urlParams.get("cantripoverride");
