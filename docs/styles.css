@@ -143,23 +143,27 @@ body {
 .monster .monster-action + *,
 .monster .monster-reaction + *,
 .monster .monster-legendary-action + *:not(.monster-legendary-action),
+.monster .monster-mythic-action + *:not(.monster-mythic-action),
 .monster .monster-lair-action + * {
   margin-top: 0.57em; }
 .monster .monster-list p,
 .monster .monster-stats li p,
-.monster .monster-legendary-action p {
+.monster .monster-legendary-action p,
+.monster .monster-mythic-action p {
   text-indent: -1em; 
   padding-left: 1em; }
 .monster .monster-trait p + *,
 .monster .monster-action p + *,
 .monster .monster-reaction p + *,
 .monster .monster-legendary-action p + *,
+.monster .monster-mythic-action p + *,
 .monster .monster-lair-action p + * {
   margin-top: 0.57em; }
 .monster .monster-trait .name,
 .monster .monster-action .name,
 .monster .monster-reaction .name,
 .monster .monster-legendary-action .name,
+.monster .monster-mythic-action .name,
 .monster .monster-lair-action .name {
   font-weight: bold;
   font-style: italic; }
@@ -167,6 +171,7 @@ body {
 .monster .monster-action > :last-child,
 .monster .monster-reaction > :last-child,
 .monster .monster-legendary-action > :last-child,
+.monster .monster-mythic-action > :last-child,
 .monster .monster-lair-action > :last-child {
   margin-bottom: 0; }
 .monster .lair-initiative,

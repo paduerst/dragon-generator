@@ -72,7 +72,8 @@ const supported_ages = [
   "wyrmling",
   "young",
   "adult",
-  "ancient"
+  "ancient",
+  "greatwyrm"
 ];
 
 const supported_colors = [
@@ -280,7 +281,7 @@ function insertVariablesToTemplate_(template, values) {
   var templateVars = template.match(/\$\{\"[^\"]+\"\}/g); // Search for all the variables to be replaced, for instance ${"Column name"}
   if (templateVars !== null) { // If there are no variable markers, just return the input template.
     for (var i = 0; i < templateVars.length; ++i) { // Replace variables with values from the data array.
-      var variableData = values[normalizeHeader_(templateVars[i])].toString(); // Returns the value from the object of the desired ID.
+      var variableData = values[normalizeHeader_(templateVars[i])]; // Returns the value from the object of the desired ID.
       template = template.replace(templateVars[i], variableData || ""); // If no value is available, replace with the empty string.
     }
   }
@@ -323,6 +324,70 @@ function convertTagsToLinks_(strIn) {
   }
 }
 
+function updateAncientToGreatwyrm(dragon) {
+  // basics
+  dragon.age = "Greatwyrm";
+  dragon.cr = 28;
+  dragon.numberOfHitDice = 30;
+  dragon.strength = 30;
+  dragon.constitution = 30;
+  dragon.ac = 22;
+  dragon.legendaryResistances = 4;
+
+  // speeds
+  dragon.walkingSpeed = 60;
+  dragon.flyingSpeed = 120;
+  for (let speed of ["burrowSpeed", "climbSpeed", "swimSpeed"]) {
+    if (dragon[speed] > 0) {
+      dragon[speed] = dragon.walkingSpeed;
+    }
+  }
+
+  // condition immunities
+  var conditions_arr = []
+  if (dragon.conditionImmunities.length > 0) {
+    conditions_arr = dragon.conditionImmunities.split(",");
+  }
+  for (let i = 0; i < conditions_arr.length; i++) {
+    conditions_arr[i] = conditions_arr[i].trim().toLowerCase();
+  }
+  for (let condition of ["charmed", "frightened"]) {
+    if (!conditions_arr.includes(condition)) {
+      conditions_arr.push(condition);
+    }
+  }
+  dragon.conditionImmunities = conditions_arr.sort().join(", ");
+
+  // senses
+  dragon.darkvision = 120; // should already be 120
+  dragon.blindsight = dragon.darkvision;
+  dragon.truesight = dragon.darkvision;
+
+  // attacks
+  dragon.biteDiceCount = 3;
+  dragon.biteDiceType = 10; // should already be 10
+  dragon.biteElementDiceCount = 4;
+  dragon.biteElementDiceType = 6; // should already be 6
+  dragon.clawDiceCount = 2; // should already be 2
+  dragon.clawDiceType = 8;
+  // tail rider effect added later
+
+  // breath weapon(s)
+  dragon.breathConeSize = 300;
+  dragon.breathLineLength = dragon.breathConeSize;
+  dragon.breathLineWidth = 15;
+  dragon.breath1DiceCount = 36;
+  dragon.breath1DiceType = 6; // should already be 6
+
+  // legendary actions
+  // (Tail Attack) becoming (Claw or Tail Attack) handled later
+  dragon.wingAttackRadius = 30;
+  dragon.wingAttackDiceCount = 3;
+  dragon.wingAttackDiceType = 6; // should already be 6
+
+  return dragon;
+}
+
 function addUserSpecifiedValues(dragon) {
   // DM vs GM
   let dmgm = "DM";
@@ -355,8 +420,13 @@ function addUserSpecifiedValues(dragon) {
 
   // The dragon vs Name
   let dragon_name = "the dragon";
+  if (dragon.age == "Greatwyrm") {
+    dragon_name = "the greatwyrm";
+  }
+  dragon.usingDefaultName = true;
   if (urlParams.has("name") && urlParams.get("name")!="") {
     dragon_name = urlParams.get("name");
+    dragon.usingDefaultName = false;
     // populate form
     document.getElementById("name").value = dragon_name;
   }
@@ -443,6 +513,7 @@ function addBackendCalculatedValues(dragon) {
   for (let i = 0; i < crs.length; i++) {
     if (dragon.cr == crs[i].cr) {
       dragon.xp = numberWithCommas(crs[i].xp);
+      dragon.doubleXp = numberWithCommas(2 * crs[i].xp);
       break;
     }
   }
@@ -465,6 +536,7 @@ function addBackendCalculatedValues(dragon) {
       dragon[mod + "Sign"] = "+";
     }
     dragon[mod + "WithSign"] = numberWithSign(dragon[mod]);
+    dragon[mod + "PlusTen"] = 10 + dragon[mod];
     Mod = capitalizeFirstLetter(mod);
     dragon["abs"+Mod] = Math.abs(dragon[mod]);
     dragon["proficiency"+Mod] = dragon.proficiencyBonus + dragon[mod];
@@ -524,11 +596,13 @@ function addGeneralDragonStatistics(dragon) {
   // Dragon Title
   if (dragon.age == "Wyrmling") {
     dragon.dragonTitle = "" + dragon.color + " Dragon " + dragon.age;
+  } else if (dragon.age == "Greatwyrm") {
+    dragon.dragonTitle = "" + dragon.color + " " + dragon.age;
   } else {
     dragon.dragonTitle = "" + dragon.age + " " + dragon.color + " Dragon";
   }
-  if (dragon.theDragonName != "the dragon") {
-    dragon.dragonTitle = dragon.theDragonName + " (" + dragon.dragonTitle + ")";
+  if (!dragon.usingDefaultName) {
+    dragon.dragonTitle = dragon.theDragonNameUpper + " (" + dragon.dragonTitle + ")";
   }
 
   // Speeds
@@ -654,10 +728,6 @@ function generateFeaturesArray_(dragon) {
     out_arr.push(insertVariablesToTemplate_(templates.amphibious, dragon));
   }
 
-  if (dragon.iceWalk > 0) {
-    out_arr.push(insertVariablesToTemplate_(templates.iceWalk, dragon));
-  }
-
   // Innate Spellcasting
   var disable_leveled_spells = false;
   var disable_cantrip = false;
@@ -777,9 +847,13 @@ function generateFeaturesArray_(dragon) {
     out_arr.push(insertVariablesToTemplate_(templates.magicWeapons, dragon));
   }
 
+  if (dragon.age == "Greatwyrm") {
+    out_arr.push(insertVariablesToTemplate_(templates.prismaticAwakening, dragon));
+  }
+
   if (urlParams.has("usealtvulnerability")) {
     let features_lost = "Innate Spellcasting, Magic Resistance, ";
-    if (urlParams.has("nowallofcolor") || !((dragon.age == "Adult" || dragon.age == "Ancient") && dragon.color != "White" && dragon.color != "Black")) {
+    if (urlParams.has("nowallofcolor") || !((dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") && dragon.color != "White" && dragon.color != "Black")) {
       if (dragon.color == "Black") {
         features_lost = features_lost + "and Diminish Light";
       } else {
@@ -792,6 +866,10 @@ function generateFeaturesArray_(dragon) {
     out_arr.push(insertVariablesToTemplate_(templates["altVulnerability" + dragon.color], dragon));
     // populate form
     document.getElementById("usealtvulnerability").checked = true;
+  }
+
+  if (dragon.age == "Greatwyrm") {
+    out_arr.push(insertVariablesToTemplate_(templates.unusualNature, dragon));
   }
 
   return out_arr;
@@ -814,12 +892,18 @@ if (dragon.biteElementExpectedDamage > 0) {
   out_arr.push(insertVariablesToTemplate_(templates.biteNoElement, dragon));
 }
 if (dragon.clawReach > 0) {
+  if (dragon.age == "Greatwyrm") {
+    dragon.clawRider = insertVariablesToTemplate_(templates.clawRiderForGreatwyrm, dragon);
+  }
   out_arr.push(insertVariablesToTemplate_(templates.claw, dragon));
 }
 if (dragon.tailReach > 0) {
+  if (dragon.age == "Greatwyrm") {
+    dragon.tailRider = insertVariablesToTemplate_(templates.tailRiderForGreatwyrm, dragon);
+  }
   out_arr.push(insertVariablesToTemplate_(templates.tail, dragon));
 }
-if (dragon.age == "Adult" || dragon.age == "Ancient") {
+if (dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") {
   out_arr.push(insertVariablesToTemplate_(templates.frightfulPresence, dragon));
 }
 
@@ -849,7 +933,7 @@ if (has_second_breath) {
   } else {
     let breathStart = insertVariablesToTemplate_(templates[breathColor + "2"], dragon);
     let breathEnd;
-    if (dragon.age == "Adult" || dragon.age == "Ancient") {
+    if (dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") {
       breathEnd = insertVariablesToTemplate_(templates[breathColor + "2EndAdult"], dragon)
     } else {
       breathEnd = insertVariablesToTemplate_(templates[breathColor + "2EndYoung"], dragon)
@@ -865,7 +949,7 @@ if (urlParams.has("nowallofcolor")) {
   // no wall of color
   // populate form to reflect no wall of color
   document.getElementById("nowallofcolor").checked=true;
-} else if ((dragon.age == "Adult" || dragon.age == "Ancient") && dragon.color != "White" && dragon.color != "Black") {
+} else if ((dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") && dragon.color != "White" && dragon.color != "Black") {
   out_arr.push(insertVariablesToTemplate_(templates.wallOfPrismaticColorNew, dragon));
 }
 
@@ -880,7 +964,7 @@ if (urlParams.has("nochangeshape")) {
   // no change shape
   // populate form to reflect no change shape
   document.getElementById("nochangeshape").checked=true;
-} else if (dragon.age == "Adult" || dragon.age == "Ancient") {
+} else if (dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") {
   out_arr.push(insertVariablesToTemplate_(templates.changeShape, dragon));
 }
 
@@ -895,8 +979,21 @@ return out_arr;
 }
 // end of main library
 
-function returnDragon(dragon_key, override_vals={}) {
+function returnDragon(dragon_color, dragon_age, override_vals={}) {
+  // find base dragon values for this color and age
+  var dragon_key = normalizeHeader_(dragon_color + " " + dragon_age);
+  if (dragon_age == "Greatwyrm") {
+    // greatwyrms are based on the ancient values
+    dragon_key = normalizeHeader_(dragon_color + " Ancient");
+  }
   var dragon = dragons[dragon_key];
+
+  if (dragon_age == "Greatwyrm") {
+    // update ancient values to greatwyrm values
+    dragon = updateAncientToGreatwyrm(dragon);
+  }
+
+  // override with provided values
   for (const key in override_vals) {
     dragon[key] = override_vals[key];
   }
@@ -999,13 +1096,12 @@ function generateDragon() {
   document.getElementById("age").value = dragon_age.toLowerCase();
 
   // generate the dragon statblock
-  const dragon_key = normalizeHeader_(dragon_color + " " + dragon_age);
-  var dragon = returnDragon(dragon_key);
+  var dragon = returnDragon(dragon_color, dragon_age);
   const default_dragon = dragon;
 
   const override_vals = returnOverrideVals();
   if (!jQuery.isEmptyObject(override_vals)) {
-    dragon = returnDragon(dragon_key, override_vals);
+    dragon = returnDragon(dragon_color, dragon_age, override_vals);
   }
 
   // start constructing the output array of strings of HTML
@@ -1027,6 +1123,9 @@ function generateDragon() {
   out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatImmunities, dragon));
   if (dragon.conditionImmunities.length > 0) {
     out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatConditionImmunities, dragon));
+  }
+  if (dragon.truesight > 0) {
+    dragon.htmlTruesight = insertVariablesToTemplate_(templates["htmlMonsterTruesight"], dragon);
   }
   out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatSenses, dragon));
   out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterStatLanguages, dragon));
@@ -1058,8 +1157,23 @@ function generateDragon() {
     out_arr.push(insertVariablesToTemplate_(templates.htmlTitleLegendaryActions, dragon));
     out_arr.push(insertVariablesToTemplate_(templates.legendaryDescription, dragon));
     out_arr.push(insertVariablesToTemplate_(templates.legendaryDetect, dragon));
-    out_arr.push(insertVariablesToTemplate_(templates.legendaryTailAttack, dragon));
+    if (dragon.age == "Greatwyrm") {
+      out_arr.push(insertVariablesToTemplate_(templates.legendaryGreatwyrmAttack, dragon));
+    } else {
+      out_arr.push(insertVariablesToTemplate_(templates.legendaryTailAttack, dragon));
+    }
     out_arr.push(insertVariablesToTemplate_(templates.legendaryWingAttack, dragon));
+  }
+
+  if (dragon.age == "Greatwyrm") {
+    out_arr.push(insertVariablesToTemplate_(templates.htmlTitleMythicActions, dragon));
+    out_arr.push(insertVariablesToTemplate_(templates.mythicDescription, dragon));
+    out_arr.push(insertVariablesToTemplate_(templates.mythicBite, dragon));
+    if (dragon.color == "Black") {
+      out_arr.push(insertVariablesToTemplate_(templates.mythicNovaBlack, dragon));
+    } else {
+      out_arr.push(insertVariablesToTemplate_(templates.mythicNova, dragon));
+    }
   }
 
   out_arr.push(insertVariablesToTemplate_(templates.htmlMonsterEnd, dragon));
@@ -1122,7 +1236,7 @@ function importDragons() {
   request.onreadystatechange = function() {
     if ( request.readyState === 4 && request.status === 200 ) {
       dragons = JSON.parse(request.responseText);
-      console.log(dragons);
+      // console.log(dragons);
       importTemplates();
     }
   }
@@ -1135,7 +1249,7 @@ function importTemplates() {
   request.onreadystatechange = function() {
     if ( request.readyState === 4 && request.status === 200 ) {
       templates = JSON.parse(request.responseText);
-      console.log(templates);
+      // console.log(templates);
       importCrs();
     }
   }
@@ -1148,7 +1262,7 @@ function importCrs() {
   request.onreadystatechange = function() {
     if ( request.readyState === 4 && request.status === 200 ) {
       crs = csvToArray(request.responseText);
-      console.log(crs);
+      // console.log(crs);
       generateDragon();
     }
   }
