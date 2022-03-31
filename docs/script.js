@@ -370,6 +370,8 @@ function updateAncientToGreatwyrm(dragon) {
   dragon.biteElementDiceType = 6; // should already be 6
   dragon.clawDiceCount = 2; // should already be 2
   dragon.clawDiceType = 8;
+  dragon.tailDiceCount = 2; // should already be 2
+  dragon.tailDiceType = 10;
   // tail rider effect added later
 
   // breath weapon(s)
@@ -378,6 +380,9 @@ function updateAncientToGreatwyrm(dragon) {
   dragon.breathLineWidth = 15;
   dragon.breath1DiceCount = 36;
   dragon.breath1DiceType = 6; // should already be 6
+
+  // bonus actions
+  dragon.prismaticRadianceRadius = 90;
 
   // legendary actions
   // (Tail Attack) becoming (Claw or Tail Attack) handled later
