@@ -17,12 +17,9 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script></head>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
 </head>
 
 <body>
-
-  <noscript>It appears that your browser does not support JavaScript, which is necessary for this page to work! You may have a browser extension which disables JavaScript.</noscript>
 
   <div class='customization-menu'>
     <div class="accordion" id="accordionExample">
@@ -227,11 +224,26 @@
   </div>
 
   <div id="dragon-destination">
-    <p>Loading...</p>
-    <p>If this doesn't load after a couple of seconds, something is wrong.</p>
+    <div class="text-light d-flex flex-column justify-content-center align-items-center" style="height: 80vh; width: 100vw; text-align: center;">
+      <h2>Loading Dragon</h2>
+      <noscript>It appears that your browser does not support JavaScript, which is necessary for the dragon generator to work! You may have a browser extension which disables JavaScript.</noscript>
+      <div class="loadingio-spinner-bars-segxihspibr">
+        <!-- Based on code from https://loading.io/ -->
+        <div class="ldio-ios8miac3yb">
+          <div></div> <!-- Red -->
+          <div></div> <!-- Orange -->
+          <div></div> <!-- Yellow -->
+          <div></div> <!-- Green -->
+          <div></div> <!-- Blue -->
+          <div></div> <!-- Indigo -->
+          <div></div> <!-- Violet -->
+        </div>
+      </div>
+    </div>
   </div>
 
   <style type="text/css" media="print" id="print-cropped-style"></style>
+  <script src="script.js"></script>
 </body>
 
 </html>

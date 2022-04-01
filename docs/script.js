@@ -599,16 +599,24 @@ function addBackendCalculatedValues(dragon) {
 
 function addGeneralDragonStatistics(dragon) {
   // Dragon Title
+  let dragon_descriptive_title = "";
   if (dragon.age == "Wyrmling") {
-    dragon.dragonTitle = "" + dragon.color + " Dragon " + dragon.age;
+    dragon_descriptive_title = "" + dragon.color + " Dragon " + dragon.age;
   } else if (dragon.age == "Greatwyrm") {
-    dragon.dragonTitle = "" + dragon.color + " " + dragon.age;
+    dragon_descriptive_title = "" + dragon.color + " " + dragon.age;
   } else {
-    dragon.dragonTitle = "" + dragon.age + " " + dragon.color + " Dragon";
+    dragon_descriptive_title = "" + dragon.age + " " + dragon.color + " Dragon";
   }
-  if (!dragon.usingDefaultName) {
-    dragon.dragonTitle = dragon.theDragonNameUpper + " (" + dragon.dragonTitle + ")";
+  var title_for_screen_arr = [];
+  if (dragon.usingDefaultName) {
+    dragon.dragonTitle = dragon_descriptive_title;
+  } else {
+    dragon.dragonTitle = dragon.theDragonNameUpper + " (" + dragon_descriptive_title + ")";
+    title_for_screen_arr.push(dragon.theDragonNameUpper);
   }
+  title_for_screen_arr.push(dragon_descriptive_title);
+  title_for_screen_arr.push("Prismatic Dragon Generator");
+  dragon.dragonTitleForScreen = title_for_screen_arr.join(" - ");
 
   // Speeds
   let speeds = "" + dragon.walkingSpeed + " ft.";
@@ -1086,7 +1094,7 @@ function generateDragon() {
       dragon_color = capitalizeFirstLetter(input_color);
     }
   }
-  var dragon_age = "Young";
+  var dragon_age = "Wyrmling";
   var input_age;
   if (urlParams.has("age")) {
     input_age = urlParams.get("age").trim().toLowerCase();
@@ -1108,6 +1116,9 @@ function generateDragon() {
   if (!jQuery.isEmptyObject(override_vals)) {
     dragon = returnDragon(dragon_color, dragon_age, override_vals);
   }
+
+  // update the page title
+  document.title = dragon.dragonTitleForScreen;
 
   // start constructing the output array of strings of HTML
   var out_arr = [];
@@ -1274,4 +1285,11 @@ function importCrs() {
 }
 
 // import values then generate the dragon
-importDragons();
+if (urlParams.has("color") || urlParams.has("age")) {
+  importDragons();
+} else if (urlParams.has("loadendlessly")) {
+  // pass, just load endlessly
+} else {
+  // show the home page help text
+  document.getElementById("dragon-destination").innerHTML = "<div class=\"text-light d-flex flex-column justify-content-center align-items-center\" style=\"height: 80vh; width: 100vw; text-align: center;\"><h2>Welcome to the Prismatic Dragon Generator</h2><p>Please use the Dragon Options Menu at the top of the page to choose the dragon's age and color, along with a plethora of other customization options!</p></div>";
+}
