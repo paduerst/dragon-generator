@@ -1284,12 +1284,24 @@ function importCrs() {
   }
 }
 
+function importHome() {
+  var request = new XMLHttpRequest();
+  request.open("GET", "home_insert.html", true);
+  request.send(null);
+  request.onreadystatechange = function() {
+    if ( request.readyState === 4 && request.status === 200 ) {
+      var parser = new DOMParser();
+      var home_insert = parser.parseFromString(request.responseText, 'text/html');
+      document.getElementById("dragon-destination").innerHTML = home_insert.getElementById("help-text-to-insert").innerHTML;
+    }
+  }
+}
+
 // import values then generate the dragon
 if (urlParams.has("color") || urlParams.has("age")) {
-  importDragons();
+  importDragons(); // import then generate the dragon
 } else if (urlParams.has("loadendlessly")) {
   // pass, just load endlessly
 } else {
-  // show the home page help text
-  document.getElementById("dragon-destination").innerHTML = "<div class=\"text-light d-flex flex-column justify-content-center align-items-center\" style=\"height: 60vh; width: 100vw; text-align: center;\"><h2>Welcome to the Prismatic Dragon Generator</h2><p>Use the <b>Dragon Options Menu</b> at the top of the page to choose the dragon's age and color!</p></div>";
+  importHome(); // show the home page help text
 }
