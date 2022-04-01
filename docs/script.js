@@ -1291,5 +1291,5 @@ if (urlParams.has("color") || urlParams.has("age")) {
   // pass, just load endlessly
 } else {
   // show the home page help text
-  document.getElementById("dragon-destination").innerHTML = "<div class=\"text-light d-flex flex-column justify-content-center align-items-center\" style=\"height: 80vh; width: 100vw; text-align: center;\"><h2>Welcome to the Prismatic Dragon Generator</h2><p>Please use the Dragon Options Menu at the top of the page to choose the dragon's age and color, along with a plethora of other customization options!</p></div>";
+  document.getElementById("dragon-destination").innerHTML = "<div class=\"text-light d-flex flex-column justify-content-center align-items-center\" style=\"height: 60vh; width: 100vw; text-align: center;\"><h2>Welcome to the Prismatic Dragon Generator</h2><p>Use the <b>Dragon Options Menu</b> at the top of the page to choose the dragon's age and color!</p></div>";
 }

@@ -271,8 +271,8 @@ body {
   position: absolute;
   width: 20px;
   height: 80px;
-  top: 30px;
-  animation: ldio-ios8miac3yb 1.2s cubic-bezier(0.5,0,0.5,1) infinite;
+  top: 20px;
+  animation: ldio-ios8miac3yb 1.75s cubic-bezier(0.5,0,0.5,1) infinite;
 }.ldio-ios8miac3yb div:nth-child(1) {
   transform: translate(0px,0);
   background: #e94e59;
@@ -280,31 +280,31 @@ body {
 }.ldio-ios8miac3yb div:nth-child(2) {
   transform: translate(40px,0);
   background: #e97945;
-  animation-delay: 0.2s;
+  animation-delay: 0.25s;
 }.ldio-ios8miac3yb div:nth-child(3) {
   transform: translate(80px,0);
   background: #e0d252;
-  animation-delay: 0.4s;
+  animation-delay: 0.5s;
 }.ldio-ios8miac3yb div:nth-child(4) {
   transform: translate(120px,0);
   background: #43c263;
-  animation-delay: 0.6s;
+  animation-delay: 0.75s;
 }.ldio-ios8miac3yb div:nth-child(5) {
   transform: translate(160px,0);
-  background: #28b8c2;
-  animation-delay: 0.8s;
+  background: #2891c2;
+  animation-delay: 1.0s;
 }.ldio-ios8miac3yb div:nth-child(6) {
   transform: translate(200px,0);
-  background: #2f27a7;
-  animation-delay: 1.0s;
+  background: #3a27a7;
+  animation-delay: 1.25s;
 }.ldio-ios8miac3yb div:nth-child(7) {
   transform: translate(240px,0);
   background: #8430bd;
-  animation-delay: 1.2s;
+  animation-delay: 1.5s;
 }
 .loadingio-spinner-bars-segxihspibr {
   width: 260px;
-  height: 260px;
+  height: 100px;
   display: inline-block;
   overflow: hidden;
   background: none;
