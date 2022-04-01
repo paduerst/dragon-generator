@@ -123,59 +123,83 @@
                     <label class="custom-control-label" for="usealtvulnerability">Use Prismatic Weakness <i>(Replaces damage vulnerability)</i></label>
                   </div>
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="enableadvanced" name="enableadvanced" onclick="toggleAdvanced()">
-                    <label class="custom-control-label" for="enableadvanced">Enable Advanced Options</label>
+                    <input type="checkbox" class="custom-control-input toggles-others" id="advanced-options" name="advanced-options" onclick="toggleOthers('advanced-options')">
+                    <label class="custom-control-label" for="advanced-options">Enable Advanced Options</label>
                   </div>
 
                 </div>
               </div>
 
-              <div class="form-group row advanced-option-div">
+              <div class="form-group row toggled-div-advanced-options">
                 <legend class="col-form-label col-md-2 float-sm-left pt-0">Formatting</legend>
                 <div class="col-md-10">
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input advanced-option" id="forcesinglecolumn" name="forcesinglecolumn">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="forcesinglecolumn" name="forcesinglecolumn">
                     <label class="custom-control-label" for="forcesinglecolumn">Force Single-Column Stat Block</label>
                   </div>
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input advanced-option" id="usestandardtheme" name="usestandardtheme">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="usestandardtheme" name="usestandardtheme">
                     <label class="custom-control-label" for="usestandardtheme">Force Standard Stat Block Theme</label>
                   </div>
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input advanced-option" id="printcropped" name="printcropped">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="printcropped" name="printcropped">
                     <label class="custom-control-label" for="printcropped">Crop to Statblock (Except Bottom) for Printing</label>
                   </div>
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input advanced-option" id="printpreview" name="printpreview">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="printpreview" name="printpreview">
                     <label class="custom-control-label" for="printpreview">Display Like Print Preview (Removes This Menu)</label>
                   </div>
 
                 </div>
               </div>
 
-            <div class="form-group row advanced-option-div">
+              <div class="form-group row toggled-div-advanced-options">
+                <legend class="col-form-label col-md-2 float-sm-left pt-0">Ability Scores</legend>
+                <div class="col-md-10">
+
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-abil-scores" name="custom-abil-scores" onclick="toggleOthers('custom-abil-scores')">
+                    <label class="custom-control-label" for="custom-abil-scores">Customize ability scores</label>
+                  </div>
+
+                </div>
+              </div>
+
+            <div class="form-group row toggled-div-custom-abil-scores">
               <label for="strength" class="col-md-1 col-form-label" style="text-align: right;">STR:</label>
-              <input id="strength" name="strength" type="number" class="form-control col-md-1 advanced-option" min="1" max="30" step="1">
+              <input id="strength" name="strength" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
               <label for="dexterity" class="col-md-1 col-form-label" style="text-align: right;">DEX:</label>
-              <input id="dexterity" name="dexterity" type="number" class="form-control col-md-1 advanced-option" min="1" max="30" step="1">
+              <input id="dexterity" name="dexterity" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
               <label for="constitution" class="col-md-1 col-form-label" style="text-align: right;">CON:</label>
-              <input id="constitution" name="constitution" type="number" class="form-control col-md-1 advanced-option" min="1" max="30" step="1">
+              <input id="constitution" name="constitution" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
               <label for="intelligence" class="col-md-1 col-form-label" style="text-align: right;">INT:</label>
-              <input id="intelligence" name="intelligence" type="number" class="form-control col-md-1 advanced-option" min="1" max="30" step="1">
+              <input id="intelligence" name="intelligence" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
               <label for="wisdom" class="col-md-1 col-form-label" style="text-align: right;">WIS:</label>
-              <input id="wisdom" name="wisdom" type="number" class="form-control col-md-1 advanced-option" min="1" max="30" step="1">
+              <input id="wisdom" name="wisdom" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
               <label for="charisma" class="col-md-1 col-form-label" style="text-align: right;">CHA:</label>
-              <input id="charisma" name="charisma" type="number" class="form-control col-md-1 advanced-option" min="1" max="30" step="1">
+              <input id="charisma" name="charisma" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
             </div>
 
-            <div class="form-group row advanced-option-div">
-              <label for="spellstate" class="col-md-2 col-form-label">Innate Spellcasting</label>
+            <div class="form-group row toggled-div-advanced-options">
+              <legend class="col-form-label col-md-2 float-sm-left pt-0">Spellcasting</legend>
               <div class="col-md-10">
-                  <select class="form-control advanced-option" id="spellstate" name="spellstate">
+
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-spellcasting" name="custom-spellcasting" onclick="toggleOthers('custom-spellcasting')">
+                  <label class="custom-control-label" for="custom-spellcasting">Customize Innate Spellcasting</label>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="form-group row toggled-div-custom-spellcasting">
+              <label for="spellstate" class="col-md-2 col-form-label">Available Spells</label>
+              <div class="col-md-10">
+                  <select class="form-control toggled-input-custom-spellcasting" id="spellstate" name="spellstate">
                       <option selected value="default">Default</option>
                       <option value="noatwill">No At-Will Spells</option>
                       <option value="onlyatwill">No 1/Day Spells</option>
@@ -184,22 +208,22 @@
               </div>
             </div>
 
-              <div class="form-group row advanced-option-div">
+              <div class="form-group row toggled-div-custom-spellcasting">
                   <label for="cantripoverride" class="col-md-2 col-form-label">At-Will Spell(s)</label>
                   <div class="col-md-10">
-                      <input class="form-control advanced-option" type="text" placeholder='Defaults to typical cantrip' id="cantripoverride" name="cantripoverride">
+                      <input class="form-control toggled-input-custom-spellcasting" type="text" placeholder='Defaults to typical cantrip' id="cantripoverride" name="cantripoverride">
                   </div>
 
                   <label for="spellsoverride" class="col-md-2 col-form-label">1/Day Spell(s)</label>
                   <div class="col-md-10">
-                      <input class="form-control advanced-option" type="text" placeholder='Defaults to typical spells' id="spellsoverride" name="spellsoverride">
+                      <input class="form-control toggled-input-custom-spellcasting" type="text" placeholder='Defaults to typical spells' id="spellsoverride" name="spellsoverride">
                   </div>
               </div>
 
-              <div class="form-group row advanced-option-div">
+              <div class="form-group row toggled-div-custom-spellcasting">
                 <label for="spelldescription" class="col-md-2 col-form-label">Spellcasting Attack and DC</label>
                 <div class="col-md-10">
-                    <select class="form-control advanced-option" id="spelldescription" name="spelldescription">
+                    <select class="form-control toggled-input-custom-spellcasting" id="spelldescription" name="spelldescription">
                         <option selected value="default">Default</option>
                         <option value="neither">Display Neither</option>
                         <option value="attack">Display Attack Bonus</option>

@@ -16,25 +16,43 @@ jQuery(document).ready(function($){
   // PD Note: This doesn't work as intended. jQuery doesn't run after back button
   $( "form" ).find( ":input" ).prop( "disabled", false );
 
-  // disable advanced options unless otherwise specified
-  if (urlParams.has("enableadvanced") || document.getElementById("enableadvanced").checked == true) {
-    document.getElementById("enableadvanced").checked=true;
-  } else {
-    $( "form" ).find( ".advanced-option" ).prop( "disabled", true );
-    $( ".advanced-option-div" ).hide();
+  var togglers = document.getElementsByClassName("toggles-others");
+  var toggler_id;
+  for (let i = 0; i < togglers.length; i++) {
+    toggler_id = togglers[i].id;
+    if (urlParams.has(toggler_id) || document.getElementById(toggler_id).checked == true) {
+      document.getElementById(toggler_id).checked=true;
+    } else {
+      document.getElementById(toggler_id).checked=false;
+    }
+    toggleOthers(toggler_id);
   }
 });
 
-function toggleAdvanced() {
+function toggleOthers(toggler_id, toggled_ids=[]) {
   // Get the checkbox
-  var checkBox = document.getElementById("enableadvanced");
+  var checkBox = document.getElementById(toggler_id);
+  const div_class = ".toggled-div-" + toggler_id;
+  const input_class = ".toggled-input-" + toggler_id;
 
-  if (checkBox.checked == true){
-    $( "form" ).find( ".advanced-option" ).prop( "disabled", false );
-    $('.advanced-option-div').show();
+  if (checkBox.checked == true && checkBox.disabled == false){
+    $( "form" ).find(input_class).prop( "disabled", false );
+    $(div_class).show();
   } else {
-    $('.advanced-option-div').hide();
-    $( "form" ).find( ".advanced-option" ).prop( "disabled", true );
+    $(div_class).hide();
+    $( "form" ).find(input_class).prop( "disabled", true );
+  }
+
+  // now recurse on inputs which are themselves togglers
+  // avoid an infinite loop by adding this id to list of checked ones
+  toggled_ids.push(toggler_id);
+  var togglers = document.querySelectorAll(input_class+'.toggles-others');
+  var toggler_id;
+  for (let i = 0; i < togglers.length; i++) {
+    toggler_id = togglers[i].id;
+    if (!toggled_ids.includes(toggler_id)) {
+      toggleOthers(toggler_id, toggled_ids);
+    }
   }
 }
 
