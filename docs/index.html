@@ -98,60 +98,13 @@
               </div>
             </div>
 
-            <div class="form-group row">
-                <legend class="col-form-label col-md-2 float-sm-left pt-0">Feature Customization</legend>
+              <div class="form-group row">
+                <legend class="col-form-label col-md-2 float-sm-left pt-0">Other Customization</legend>
                 <div class="col-md-10">
 
-                  <select class="form-control" id="secondbreath" name="secondbreath">
-                    <option selected value="default">Default Secondary Breath (On for all but wyrmlings)</option>
-                    <option value="on">Force Secondary Breath on for all ages</option>
-                    <option value="off">No Secondary Breath</option>
-                  </select>
-
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="nochangeshape" name="nochangeshape">
-                    <label class="custom-control-label" for="nochangeshape">No Shape Change <i>(Otherwise on for adults and older)</i></label>
-                  </div>
-
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="nowallofcolor" name="nowallofcolor">
-                    <label class="custom-control-label" for="nowallofcolor">No Wall of Prismatic Color <i>(Otherwise on for adults and older)</i></label>
-                  </div>
-
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="usealtvulnerability" name="usealtvulnerability">
-                    <label class="custom-control-label" for="usealtvulnerability">Use Prismatic Weakness <i>(Replaces damage vulnerability)</i></label>
-                  </div>
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input toggles-others" id="advanced-options" name="advanced-options" onclick="toggleOthers('advanced-options')">
                     <label class="custom-control-label" for="advanced-options">Enable Advanced Options</label>
-                  </div>
-
-                </div>
-              </div>
-
-              <div class="form-group row toggled-div-advanced-options">
-                <legend class="col-form-label col-md-2 float-sm-left pt-0">Formatting</legend>
-                <div class="col-md-10">
-
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="forcesinglecolumn" name="forcesinglecolumn">
-                    <label class="custom-control-label" for="forcesinglecolumn">Force Single-Column Stat Block</label>
-                  </div>
-
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="usestandardtheme" name="usestandardtheme">
-                    <label class="custom-control-label" for="usestandardtheme">Force Standard Stat Block Theme</label>
-                  </div>
-
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="printcropped" name="printcropped">
-                    <label class="custom-control-label" for="printcropped">Crop to Statblock (Except Bottom) for Printing</label>
-                  </div>
-
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="printpreview" name="printpreview">
-                    <label class="custom-control-label" for="printpreview">Display Like Print Preview (Removes This Menu)</label>
                   </div>
 
                 </div>
@@ -163,7 +116,7 @@
 
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-abil-scores" name="custom-abil-scores" onclick="toggleOthers('custom-abil-scores')">
-                    <label class="custom-control-label" for="custom-abil-scores">Customize ability scores</label>
+                    <label class="custom-control-label" for="custom-abil-scores">Customize Ability Scores</label>
                   </div>
 
                 </div>
@@ -230,6 +183,69 @@
                         <option value="dc">Display Save DC</option>
                         <option value="both">Display Both</option>
                     </select>
+                </div>
+              </div>
+
+            <div class="form-group row toggled-div-advanced-options">
+              <legend class="col-form-label col-md-2 float-sm-left pt-0">Secondary Breath</legend>
+              <div class="col-md-10">
+
+                <select class="form-control toggled-input-advanced-options" id="secondbreath" name="secondbreath">
+                  <option selected value="default">Default Secondary Breath (On for all but wyrmlings)</option>
+                  <option value="on">Force Secondary Breath on for all ages</option>
+                  <option value="off">No Secondary Breath</option>
+                </select>
+
+              </div>
+            </div>
+
+
+            <div class="form-group row toggled-div-advanced-options">
+              <legend class="col-form-label col-md-2 float-sm-left pt-0">Misc Features</legend>
+              <div class="col-md-10">
+
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="nochangeshape" name="nochangeshape">
+                  <label class="custom-control-label" for="nochangeshape">No Shape Change <i>(Otherwise on for adults and older)</i></label>
+                </div>
+
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="nowallofcolor" name="nowallofcolor">
+                  <label class="custom-control-label" for="nowallofcolor">No Wall of Prismatic Color <i>(Otherwise on for adults and older)</i></label>
+                </div>
+
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="usealtvulnerability" name="usealtvulnerability">
+                  <label class="custom-control-label" for="usealtvulnerability">Use Prismatic Weakness <i>(Replaces damage vulnerability)</i></label>
+                </div>
+
+              </div>
+            </div>
+
+              <div class="form-group row toggled-div-advanced-options">
+                <legend class="col-form-label col-md-2 float-sm-left pt-0">Formatting</legend>
+                <div class="col-md-10">
+
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="forcesinglecolumn" name="forcesinglecolumn">
+                    <label class="custom-control-label" for="forcesinglecolumn">Force Single-Column Stat Block</label>
+                  </div>
+
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="usestandardtheme" name="usestandardtheme">
+                    <label class="custom-control-label" for="usestandardtheme">Force Standard Stat Block Theme</label>
+                  </div>
+
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="printcropped" name="printcropped">
+                    <label class="custom-control-label" for="printcropped">Crop to Statblock (Except Bottom) for Printing</label>
+                  </div>
+
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="printpreview" name="printpreview">
+                    <label class="custom-control-label" for="printpreview">Display Like Print Preview (Removes This Menu)</label>
+                  </div>
+
                 </div>
               </div>
 
