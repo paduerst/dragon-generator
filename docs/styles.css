@@ -1,6 +1,10 @@
 body {
   background-color: #282a36;
 }
+#loading-animation-div,
+#dragon-destination {
+  transition: opacity 1s;
+}
 .form-control + .custom-control {
   margin-top: 0.5em;
 }
@@ -264,7 +268,7 @@ body {
 /* Start of Loading Animation styles */
 @keyframes ldio-ios8miac3yb {
   0% { opacity: 1 }
-  50% { opacity: .5 }
+  50% { opacity: .3 }
   100% { opacity: 1 }
 }
 .ldio-ios8miac3yb div {
@@ -276,31 +280,31 @@ body {
 }.ldio-ios8miac3yb div:nth-child(1) {
   transform: translate(0px,0);
   background: #e94e59;
-  animation-delay: 0.0s;
+  animation-delay: -1.75s;
 }.ldio-ios8miac3yb div:nth-child(2) {
   transform: translate(40px,0);
   background: #e97945;
-  animation-delay: 0.25s;
+  animation-delay: -1.50s;
 }.ldio-ios8miac3yb div:nth-child(3) {
   transform: translate(80px,0);
   background: #e0d252;
-  animation-delay: 0.5s;
+  animation-delay: -1.25s;
 }.ldio-ios8miac3yb div:nth-child(4) {
   transform: translate(120px,0);
   background: #43c263;
-  animation-delay: 0.75s;
+  animation-delay: -1.00s;
 }.ldio-ios8miac3yb div:nth-child(5) {
   transform: translate(160px,0);
   background: #2891c2;
-  animation-delay: 1.0s;
+  animation-delay: -0.75s;
 }.ldio-ios8miac3yb div:nth-child(6) {
   transform: translate(200px,0);
   background: #273aa7;
-  animation-delay: 1.25s;
+  animation-delay: -0.50s;
 }.ldio-ios8miac3yb div:nth-child(7) {
   transform: translate(240px,0);
   background: #6630bd;
-  animation-delay: 1.5s;
+  animation-delay: -0.25s;
 }
 .loadingio-spinner-bars-segxihspibr {
   width: 260px;

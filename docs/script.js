@@ -1102,6 +1102,24 @@ function returnOverrideVals() {
   return override_vals;
 }
 
+async function transitionFromLoadingToDragon(open_menu=false) {
+  // smoothly transition from loading to dragon stat block
+  const loading_animation = document.getElementById("loading-animation-div")
+  const dragon_div = document.getElementById("dragon-destination");
+  dragon_div.style.opacity = '0';
+  loading_animation.style.opacity = '0';
+  loading_animation.addEventListener('transitionend', () => {
+    loading_animation.remove();
+    document.getElementById("release-the-dragon").click();
+    dragon_div.style.opacity = '1';
+    if (open_menu) {
+      dragon_div.addEventListener('transitionend', () => {
+        document.getElementById("dragon-menu-btn").click();
+      });
+    }
+  });
+}
+
 function generateDragon() {
   // specify type of dragon
   var dragon_color = "Red";
@@ -1234,6 +1252,8 @@ function generateDragon() {
     }
   }
 
+  transitionFromLoadingToDragon(false);
+
   // make page look like it would if you were printing
   if (urlParams.has("printpreview")) {
     var all_links = document.getElementsByTagName('a');
@@ -1306,21 +1326,39 @@ function importHome() {
   var request = new XMLHttpRequest();
   request.open("GET", "home_insert.html", true);
   request.send(null);
-  request.onreadystatechange = function() {
+  request.onreadystatechange = async function() {
     if ( request.readyState === 4 && request.status === 200 ) {
       var parser = new DOMParser();
       var home_insert = parser.parseFromString(request.responseText, 'text/html');
       document.getElementById("dragon-destination").innerHTML = home_insert.getElementById("help-text-to-insert").innerHTML;
-      document.getElementById("dragon-menu-btn").click();
+      await transitionFromLoadingToDragon(true);
     }
   }
 }
 
-// import values then generate the dragon
-if (urlParams.has("color") || urlParams.has("age")) {
-  importDragons(); // import then generate the dragon
-} else if (urlParams.has("loadendlessly")) {
-  // pass, just load endlessly
-} else {
-  importHome(); // show the home page help text
+function decideLoadPath() {
+  if (urlParams.has("color") || urlParams.has("age")) {
+    importDragons(); // import then generate the dragon
+  } else if (urlParams.has("loadendlessly")) {
+    // pass, just load endlessly
+  } else {
+    importHome(); // show the home page help text
+  }
 }
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function rollDie(sides = 6) {
+  return (1 + Math.floor(Math.random() * sides));
+}
+
+async function delayLoad() {
+  const d20_result = rollDie(20);
+  console.log(d20_result);
+  await sleep(d20_result * 50);
+  decideLoadPath();
+}
+
+delayLoad();
