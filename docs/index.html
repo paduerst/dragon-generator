@@ -25,8 +25,10 @@
     <div class="accordion" id="accordionExample">
 
       <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-light" type="button" data-toggle="collapse" data-target="#dragonMenu" aria-expanded="true" aria-controls="dragonMenu">
+        <button class="btn btn-link btn-block" type="button" data-toggle="collapse" data-target="#dragonMenu" aria-expanded="true" aria-controls="dragonMenu" id="dragon-menu-btn">
+          <div class="btn dropdown-toggle text-light" style="background-color:rgb(64, 64, 64);">
             <b>Dragon Options Menu</b>
+          </div>
         </button>
       </h2>
 
@@ -89,11 +91,11 @@
               <label for="pronouns" class="col-md-2 col-form-label">Pronouns</label>
               <div class="col-md-10">
                   <select class="form-control" id="pronouns" name="pronouns">
-                      <option value="neutral">It/It/Its</option>
-                      <option selected value="default">She/Her/Her</option>
-                      <option value="masculine">He/Him/His</option>
-                      <option value="singularthey">They/Them/Their</option>
-                      <option value="spivak">Ey/Em/Eir</option>
+                      <option value="neutral">It/Its</option>
+                      <option selected value="default">She/Her</option>
+                      <option value="masculine">He/Him</option>
+                      <option value="singularthey">They/Them</option>
+                      <option value="spivak">Ey/Em</option>
                   </select>
               </div>
             </div>

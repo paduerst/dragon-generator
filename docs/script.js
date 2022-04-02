@@ -1311,6 +1311,7 @@ function importHome() {
       var parser = new DOMParser();
       var home_insert = parser.parseFromString(request.responseText, 'text/html');
       document.getElementById("dragon-destination").innerHTML = home_insert.getElementById("help-text-to-insert").innerHTML;
+      document.getElementById("dragon-menu-btn").click();
     }
   }
 }
