@@ -20,26 +20,21 @@ jQuery(document).ready(function($){
   var toggler_id;
   for (let i = 0; i < togglers.length; i++) {
     toggler_id = togglers[i].id;
-    if (urlParams.has(toggler_id) || document.getElementById(toggler_id).checked == true) {
-      document.getElementById(toggler_id).checked=true;
-    } else {
-      document.getElementById(toggler_id).checked=false;
+    if (urlParams.has(toggler_id)) {
+      document.getElementById(toggler_id).click();
     }
     toggleOthers(toggler_id);
   }
 });
 
-function toggleOthers(toggler_id, toggled_ids=[]) {
+async function toggleOthers(toggler_id, toggled_ids=[]) {
   // Get the checkbox
   var checkBox = document.getElementById(toggler_id);
-  const div_class = ".toggled-div-" + toggler_id;
   const input_class = ".toggled-input-" + toggler_id;
 
   if (checkBox.checked == true && checkBox.disabled == false){
     $( "form" ).find(input_class).prop( "disabled", false );
-    $(div_class).show();
   } else {
-    $(div_class).hide();
     $( "form" ).find(input_class).prop( "disabled", true );
   }
 
@@ -1102,17 +1097,27 @@ function returnOverrideVals() {
   return override_vals;
 }
 
-async function transitionFromLoadingToDragon(open_menu=false) {
+async function transitionFromLoadingToDragon(transition_mode=0) {
   // smoothly transition from loading to dragon stat block
+  // mode 0 = default behavior, nothing special
+  // mode 1 = open the menu after everything else has transitioned
+  // mode 2 = remove the menu as part of this transition
   const loading_animation = document.getElementById("loading-animation-div")
+  const menu_div = document.getElementById("dragon-options-menu-div");
   const dragon_div = document.getElementById("dragon-destination");
   dragon_div.style.opacity = '0';
+  if (transition_mode == 2) {
+    menu_div.style.opacity = '0';
+  }
   loading_animation.style.opacity = '0';
   loading_animation.addEventListener('transitionend', () => {
     loading_animation.remove();
+    if (transition_mode == 2) {
+      menu_div.style.display = 'none';
+    }
     document.getElementById("release-the-dragon").click();
     dragon_div.style.opacity = '1';
-    if (open_menu) {
+    if (transition_mode == 1) {
       dragon_div.addEventListener('transitionend', () => {
         document.getElementById("dragon-menu-btn").click();
       });
@@ -1252,8 +1257,7 @@ function generateDragon() {
     }
   }
 
-  transitionFromLoadingToDragon(false);
-
+  let transition_mode = 0;
   // make page look like it would if you were printing
   if (urlParams.has("printpreview")) {
     var all_links = document.getElementsByTagName('a');
@@ -1270,8 +1274,9 @@ function generateDragon() {
       monster_i.style.borderBottomWidth = '5px';
       monster_i.style.width = '100%';
     }
-    document.getElementsByClassName("customization-menu")[0].style.display = "none";
+    transition_mode = 2;
   }
+  transitionFromLoadingToDragon(transition_mode);
 
   // update style so it prints just the statblock
   if (urlParams.has("printcropped")) {
@@ -1331,7 +1336,7 @@ function importHome() {
       var parser = new DOMParser();
       var home_insert = parser.parseFromString(request.responseText, 'text/html');
       document.getElementById("dragon-destination").innerHTML = home_insert.getElementById("help-text-to-insert").innerHTML;
-      await transitionFromLoadingToDragon(true);
+      await transitionFromLoadingToDragon(1);
     }
   }
 }

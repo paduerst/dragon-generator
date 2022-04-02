@@ -21,7 +21,7 @@
 
 <body>
 
-  <div class='customization-menu'>
+  <div class='customization-menu' id="dragon-options-menu-div">
     <div class="accordion" id="accordionExample">
 
       <h2 class="mb-0">
@@ -105,65 +105,69 @@
                 <div class="col-md-10">
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggles-others" id="advanced-options" name="advanced-options" onclick="toggleOthers('advanced-options')">
+                    <input type="checkbox" class="custom-control-input toggles-others" id="advanced-options" name="advanced-options" onclick="toggleOthers('advanced-options')" data-toggle="collapse" data-target="#dropdown-for-advanced-options" aria-expanded="true" aria-controls="dropdown-for-advanced-options">
                     <label class="custom-control-label" for="advanced-options">Enable Advanced Options</label>
                   </div>
 
                 </div>
               </div>
 
-              <div class="form-group row toggled-div-advanced-options">
+              <div id="dropdown-for-advanced-options" class="collapse">
+              <div class="form-group row">
                 <legend class="col-form-label col-md-2 float-sm-left pt-0">Ability Scores</legend>
                 <div class="col-md-10">
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-abil-scores" name="custom-abil-scores" onclick="toggleOthers('custom-abil-scores')">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-abil-scores" name="custom-abil-scores" onclick="toggleOthers('custom-abil-scores')" data-toggle="collapse" data-target="#dropdown-for-custom-abil-scores" aria-expanded="true" aria-controls="dropdown-for-custom-abil-scores">
                     <label class="custom-control-label" for="custom-abil-scores">Customize Ability Scores</label>
                   </div>
 
                 </div>
               </div>
 
-            <div class="form-group row toggled-div-custom-abil-scores">
-              <label for="strength" class="col-md-1 col-form-label" style="text-align: right;">STR:</label>
-              <input id="strength" name="strength" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
-              <label for="dexterity" class="col-md-1 col-form-label" style="text-align: right;">DEX:</label>
-              <input id="dexterity" name="dexterity" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
-              <label for="constitution" class="col-md-1 col-form-label" style="text-align: right;">CON:</label>
-              <input id="constitution" name="constitution" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
-              <label for="intelligence" class="col-md-1 col-form-label" style="text-align: right;">INT:</label>
-              <input id="intelligence" name="intelligence" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
-              <label for="wisdom" class="col-md-1 col-form-label" style="text-align: right;">WIS:</label>
-              <input id="wisdom" name="wisdom" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
-              <label for="charisma" class="col-md-1 col-form-label" style="text-align: right;">CHA:</label>
-              <input id="charisma" name="charisma" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+            <div id="dropdown-for-custom-abil-scores" class="collapse">
+              <div class="form-group row">
+                <label for="strength" class="col-md-1 col-form-label" style="text-align: right;">STR:</label>
+                <input id="strength" name="strength" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <label for="dexterity" class="col-md-1 col-form-label" style="text-align: right;">DEX:</label>
+                <input id="dexterity" name="dexterity" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <label for="constitution" class="col-md-1 col-form-label" style="text-align: right;">CON:</label>
+                <input id="constitution" name="constitution" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <label for="intelligence" class="col-md-1 col-form-label" style="text-align: right;">INT:</label>
+                <input id="intelligence" name="intelligence" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <label for="wisdom" class="col-md-1 col-form-label" style="text-align: right;">WIS:</label>
+                <input id="wisdom" name="wisdom" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <label for="charisma" class="col-md-1 col-form-label" style="text-align: right;">CHA:</label>
+                <input id="charisma" name="charisma" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+              </div>
             </div>
 
-            <div class="form-group row toggled-div-advanced-options">
+            <div class="form-group row">
               <legend class="col-form-label col-md-2 float-sm-left pt-0">Spellcasting</legend>
               <div class="col-md-10">
 
                 <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-spellcasting" name="custom-spellcasting" onclick="toggleOthers('custom-spellcasting')">
+                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-spellcasting" name="custom-spellcasting" onclick="toggleOthers('custom-spellcasting')" data-toggle="collapse" data-target="#dropdown-for-custom-spellcasting" aria-expanded="true" aria-controls="dropdown-for-custom-spellcasting">
                   <label class="custom-control-label" for="custom-spellcasting">Customize Innate Spellcasting</label>
                 </div>
 
               </div>
             </div>
 
-            <div class="form-group row toggled-div-custom-spellcasting">
-              <label for="spellstate" class="col-md-2 col-form-label">Available Spells</label>
-              <div class="col-md-10">
-                  <select class="form-control toggled-input-custom-spellcasting" id="spellstate" name="spellstate">
-                      <option selected value="default">Default</option>
-                      <option value="noatwill">No At-Will Spells</option>
-                      <option value="onlyatwill">No 1/Day Spells</option>
-                      <option value="off">No Innate Spellcasting</option>
-                  </select>
+            <div id="dropdown-for-custom-spellcasting" class="collapse">
+              <div class="form-group row">
+                <label for="spellstate" class="col-md-2 col-form-label">Available Spells</label>
+                <div class="col-md-10">
+                    <select class="form-control toggled-input-custom-spellcasting" id="spellstate" name="spellstate">
+                        <option selected value="default">Default</option>
+                        <option value="noatwill">No At-Will Spells</option>
+                        <option value="onlyatwill">No 1/Day Spells</option>
+                        <option value="off">No Innate Spellcasting</option>
+                    </select>
+                </div>
               </div>
-            </div>
 
-              <div class="form-group row toggled-div-custom-spellcasting">
+              <div class="form-group row">
                   <label for="cantripoverride" class="col-md-2 col-form-label">At-Will Spell(s)</label>
                   <div class="col-md-10">
                       <input class="form-control toggled-input-custom-spellcasting" type="text" placeholder='Defaults to typical cantrip' id="cantripoverride" name="cantripoverride">
@@ -175,7 +179,7 @@
                   </div>
               </div>
 
-              <div class="form-group row toggled-div-custom-spellcasting">
+              <div class="form-group row">
                 <label for="spelldescription" class="col-md-2 col-form-label">Spellcasting Attack and DC</label>
                 <div class="col-md-10">
                     <select class="form-control toggled-input-custom-spellcasting" id="spelldescription" name="spelldescription">
@@ -187,8 +191,9 @@
                     </select>
                 </div>
               </div>
+            </div>
 
-            <div class="form-group row toggled-div-advanced-options">
+            <div class="form-group row ">
               <legend class="col-form-label col-md-2 float-sm-left pt-0">Secondary Breath</legend>
               <div class="col-md-10">
 
@@ -202,7 +207,7 @@
             </div>
 
 
-            <div class="form-group row toggled-div-advanced-options">
+            <div class="form-group row">
               <legend class="col-form-label col-md-2 float-sm-left pt-0">Misc Features</legend>
               <div class="col-md-10">
 
@@ -224,7 +229,7 @@
               </div>
             </div>
 
-              <div class="form-group row toggled-div-advanced-options">
+              <div class="form-group row">
                 <legend class="col-form-label col-md-2 float-sm-left pt-0">Formatting</legend>
                 <div class="col-md-10">
 
@@ -234,7 +239,7 @@
                   </div>
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="usestandardtheme" name="usestandardtheme">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="usestandardtheme" name="usestandardtheme">
                     <label class="custom-control-label" for="usestandardtheme">Force Standard Stat Block Theme</label>
                   </div>
 
@@ -250,6 +255,7 @@
 
                 </div>
               </div>
+            </div>
 
             <div class="form-group row">
                 <div class="col-md-10">

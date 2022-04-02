@@ -2,6 +2,7 @@ body {
   background-color: #282a36;
 }
 #loading-animation-div,
+#dragon-options-menu-div,
 #dragon-destination {
   transition: opacity 1s;
 }
