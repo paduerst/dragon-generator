@@ -135,6 +135,11 @@ const global_skills = [
   {"skill": "Stealth", "ability": "dex"},
   {"skill": "Survival", "ability": "wis"}
 ];
+
+const index_of_cr_1 = 4; // prior to 1 are: 0, 1/8, 1/4, 1/2
+const index_of_cr_30 = (30 - 1) + index_of_cr_1;
+const max_cr = 50; // cr_table.csv extrapolates up to this hypothetical CR
+const index_of_max_cr = (max_cr - 1) + index_of_cr_1;
 // end of non-imported consts
 
 // library for css customization
@@ -198,6 +203,7 @@ function setMonsterColor(monster, r_val, g_val, b_val) {
 // end of css customization library
 
 // main library
+// start of utilities
 // copied from https://www.codegrepper.com/code-examples/javascript/convert+number+to+string+with+commas+javascript
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -336,6 +342,223 @@ function convertTagsToLinks_(strIn) {
     return strIn;
   }
 }
+// end of utilities
+
+// start of challenge rating calculation
+function calculateDragonCr(dragon, verbose=false) {
+  dragon.defensiveCr = calculateDragonDefensiveCr(dragon, verbose);
+  dragon.offensiveCr = calculateDragonOffensiveCr(dragon, verbose);
+  dragon.calculatedCr = averageCrs(dragon.defensiveCr, dragon.offensiveCr);
+  if (verbose) { console.log("Calculated CR = " + dragon.calculatedCr); }
+  return dragon;
+}
+
+function calculateDragonDefensiveCr(dragon, verbose=false) {
+  let cr_out = -1;
+
+  // Effective Armor Class
+  let effective_ac = dragon.ac; // initialize as AC
+
+  // Magic Resistance
+  // Assume the dragon has Magic Resistance
+  effective_ac += 2;
+
+  // Saving Throw Proficiencies
+  // Assume the dragon has 4 saving throw proficiencies
+  effective_ac += 2; // 3-4 saving throw proficiencies (+4 if 5-6)
+
+  if (effective_ac < 1) { effective_ac = 1; }
+  if (verbose) { console.log("effective_ac = " + effective_ac); }
+  //////////// Done calculating effective AC
+
+  // Effective Hit Points
+  let effective_hp = dragon.expectedHitPoints;
+
+  // Frightful Presence: Increase the monster’s effective hit points by 25% if
+  // the monster is meant to face characters of 10th level or lower.
+  // Assume Nominal CR 17 is the max CR for characters of 10th level or lower.
+  // Assume having Legendary Resistances means having Frightful Presence
+  if (dragon.legendaryResistances > 0 && dragon.cr <= 17) {
+    effective_hp += 0.25 * dragon.expectedHitPoints;
+  }
+
+  // Legendary Resistances
+  // Each per-day use of this trait increases the monster’s effective
+  // hit points based on the expected challenge rating:
+  // 1–4, 10 hp; 5–10, 20 hp; 11 or higher, 30 hp.
+  if (dragon.legendaryResistances > 0) {
+    let hp_per_leg_resist = 30;
+    if (dragon.cr <= 4) {
+      hp_per_leg_resist = 10;
+    } else if (dragon.cr <= 10) {
+      hp_per_leg_resist = 20
+    }
+    effective_hp += hp_per_leg_resist * dragon.legendaryResistances;
+  }
+
+  if (effective_hp < 1) { effective_hp = 1; }
+  if (verbose) { console.log("effective_hp = " + effective_hp); }
+  //////////// Done calculating effective HP
+
+  // Expected CR and AC from Effective HP
+  const index_from_hp = crs.findIndex(object => {
+    return (object.hpMin <= effective_hp && (object.hpMax + 1) > effective_hp);
+  });
+  console.log("index_from_hp = " + index_from_hp);
+  if (index_from_hp >= 0 && index_from_hp <= index_of_max_cr) {
+    const cr_from_hp = crs[index_from_hp].cr;
+    const ac_from_hp = crs[index_from_hp].ac;
+    let cr_adjustment_from_ac = (effective_ac - ac_from_hp) / 2;
+    if (cr_adjustment_from_ac > 0) {
+      cr_adjustment_from_ac = Math.floor(cr_adjustment_from_ac);
+    } else {
+      cr_adjustment_from_ac = Math.ceil(cr_adjustment_from_ac);
+    }
+    cr_out = shiftCr(cr_from_hp, cr_adjustment_from_ac);
+  }
+
+  if (verbose) { console.log("defensive_cr = " + cr_out); }
+  return cr_out;
+}
+
+function calculateDragonOffensiveCr(dragon, verbose=false) {
+  let cr_out = -1;
+
+  // Calculate expected damage per round
+  // Breath Weapon: For the purpose of determining effective damage output,
+  // assume the breath weapon hits two targets, and that each target fails
+  // its saving throw.
+  // If a monster’s damage output varies from round to round, calculate its
+  // damage output each round for the first three rounds of combat, and take
+  // the average. For example, a young white dragon has a multiattack routine
+  // (one bite attack and two claw attacks) that deals an average of 37 damage
+  // each round, as well as a breath weapon that deals 45 damage, or 90 if it
+  // hits two targets (and it probably will). In the first three rounds of
+  // combat, the dragon will probably get to use its breath weapon once and its
+  // multiattack routine twice, so its average damage output for the first
+  // three rounds would be (90 + 37 + 37) ÷ 3, or 54 damage (rounded down).
+  let dmg_round1 = 2 * dragon.breath1ExpectedDamage;
+
+  // Multiattack on rounds 2 and 3
+  let dmg_round2 = dragon.biteExpectedDamage + dragon.biteElementExpectedDamage;
+  if (dragon.age != "Wyrmling") {
+    dmg_round2 += 2 * dragon.clawExpectedDamage;
+  }
+  let dmg_round3 = dmg_round2;
+
+  // Legendary Action Damage
+  let dmg_additional_atk = 0;
+  let dmg_additional_dc = 0;
+  // Assume having Legendary Resistances means having Legendary Actions
+  if (dragon.legendaryResistances > 0) {
+    dmg_additional_atk = dragon.tailExpectedDamage; // 1 Tail Attack
+    dmg_additional_dc = dragon.wingAttackExpectedDamage; // 1 tgt failed save
+  }
+
+  let dmg_avg_round = (dmg_round1 + dmg_round2 + dmg_round3) / 3;
+  dmg_avg_round += dmg_additional_atk + dmg_additional_dc;
+  if (dmg_avg_round < 0) { dmg_avg_round = 0; }
+  if (verbose) { console.log("dmg_avg_round = " + dmg_avg_round); }
+  //////////// Done calculating average damage per round
+
+  // Expected CR, Atk Bonus, and DC from damage
+  const index_from_dmg = crs.findIndex(object => {
+    return (object.dmgMin <= dmg_avg_round && (object.dmgMax + 1) > dmg_avg_round);
+  });
+  if (index_from_dmg >= 0 && index_from_dmg <= index_of_max_cr) {
+    const cr_from_dmg = crs[index_from_dmg].cr;
+    const atk_from_dmg = crs[index_from_dmg].atk;
+    const dc_from_dmg = crs[index_from_dmg].dc;
+    
+    let dmg_from_dc = (dmg_round1 / 3) + dmg_additional_dc;
+    let dmg_from_atk = (dmg_round2 / 3) + (dmg_round3 / 3) + dmg_additional_atk;
+    let overall_dc = ((dmg_round1 / 3) * dragon.saveDcCon + dmg_additional_dc * dragon.saveDcStr) / dmg_from_dc;
+    let overall_atk = dragon.proficiencyStr;
+
+    let cr_adjustment_from_dc = (overall_dc - dc_from_dmg) / 2;
+    let cr_adjustment_from_atk = (overall_atk - atk_from_dmg) / 2;
+    let cr_adjustment = (cr_adjustment_from_dc * dmg_from_dc + cr_adjustment_from_atk * dmg_from_atk) / (dmg_avg_round);
+    cr_adjustment = Math.round(cr_adjustment);
+    cr_out = shiftCr(cr_from_dmg, cr_adjustment);
+  }
+
+  if (verbose) { console.log("offensive_cr = " + cr_out); }
+  return cr_out;
+}
+
+function averageCrs(cr_1, cr_2) {
+  let cr_out = -1;
+
+  // if either input is -1, our output should be -1 as well
+  if (cr_1 >= 0 && cr_2 >= 0) {
+    let index_1 = indexOfCr(cr_1);
+    let index_2 = indexOfCr(cr_2);
+    if (index_1 >= 0 && index_2 >= 0) {
+      let mid_index = (index_1 + index_2) / 2;
+      let half_shift = mid_index - Math.ceil(mid_index); // Should always be -0.5 or 0.0
+      mid_index = Math.ceil(mid_index);
+      cr_out = crByIndex(mid_index);
+      if (cr_out <= 1 && half_shift < 0) {
+        half_shift = -1 * cr_out / 4;
+      }
+      cr_out += half_shift;
+    }
+  }
+
+  return cr_out;
+}
+
+function indexOfCr(cr) {
+  let index_out = -1;
+
+  if (cr >= 0 && cr <= max_cr) {
+    if (cr > 0.9) {
+      index_out = (cr - 1) + index_of_cr_1;
+    } else if (cr > 0.4) {
+      index_out = 3; // cr == 1/2
+    } else if (cr > 0.2) {
+      index_out = 2; // cr == 1/4
+    } else if (cr > 0.1) {
+      index_out = 1; // cr == 1/8
+    } else {
+      index_out = 0; // cr == 0
+    }
+  }
+
+  return index_out;
+}
+
+function crByIndex(index) {
+  let cr_out = -1;
+
+  if (index >= 0 && index <= index_of_max_cr) {
+    if (index >= index_of_cr_1) {
+      cr_out = 1 + index - index_of_cr_1;
+    } else if (index > 0) {
+      cr_out = 1 / (2 ** (4 - index));
+    } else {
+      cr_out = 0; // index == 0
+    }
+  }
+
+  return cr_out;
+}
+
+function shiftCr(cr, shift) {
+  let cr_out = -1;
+
+  console.log("cr = " + cr);
+  let cr_index = indexOfCr(cr);
+  console.log("cr_index = " + cr_index);
+  console.log("shift = " + shift);
+  if (cr_index >= 0) {
+    cr_index += shift;
+    cr_out = crByIndex(cr);
+  }
+
+  return cr_out;
+}
+// end of challenge rating calculation
 
 function updateAncientToGreatwyrm(dragon) {
   // basics
@@ -1029,6 +1252,7 @@ function returnDragon(dragon_color, dragon_age, override_vals={}) {
   dragon = addBackendCalculatedValues(dragon);
   dragon = addGeneralDragonStatistics(dragon);
   dragon = addCaseVariants(dragon);
+  dragon = calculateDragonCr(dragon, true);
   return dragon;
 }
 
