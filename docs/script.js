@@ -243,7 +243,11 @@ function csvToArray(str, delimiter = ",") {
   const arr = rows.map(function (row) {
     const values = row.split(delimiter);
     const el = headers.reduce(function (object, header, index) {
-      object[header.trim()] = values[index].trim();
+      if (header == "id" || header == "cr") {
+        object[header.trim()] = values[index].trim();
+      } else {
+        object[header.trim()] = parseFloat(values[index]);
+      }
       return object;
     }, {});
     return el;
@@ -404,9 +408,8 @@ function calculateDragonDefensiveCr(dragon, verbose=false) {
   const index_from_hp = crs.findIndex(object => {
     return (object.hpMin <= effective_hp && (object.hpMax + 1) > effective_hp);
   });
-  console.log("index_from_hp = " + index_from_hp);
   if (index_from_hp >= 0 && index_from_hp <= index_of_max_cr) {
-    const cr_from_hp = crs[index_from_hp].cr;
+    const cr_from_hp = crs[index_from_hp].crNum;
     const ac_from_hp = crs[index_from_hp].ac;
     let cr_adjustment_from_ac = (effective_ac - ac_from_hp) / 2;
     if (cr_adjustment_from_ac > 0) {
@@ -466,7 +469,7 @@ function calculateDragonOffensiveCr(dragon, verbose=false) {
     return (object.dmgMin <= dmg_avg_round && (object.dmgMax + 1) > dmg_avg_round);
   });
   if (index_from_dmg >= 0 && index_from_dmg <= index_of_max_cr) {
-    const cr_from_dmg = crs[index_from_dmg].cr;
+    const cr_from_dmg = crs[index_from_dmg].crNum;
     const atk_from_dmg = crs[index_from_dmg].atk;
     const dc_from_dmg = crs[index_from_dmg].dc;
     
@@ -547,13 +550,10 @@ function crByIndex(index) {
 function shiftCr(cr, shift) {
   let cr_out = -1;
 
-  console.log("cr = " + cr);
   let cr_index = indexOfCr(cr);
-  console.log("cr_index = " + cr_index);
-  console.log("shift = " + shift);
   if (cr_index >= 0) {
     cr_index += shift;
-    cr_out = crByIndex(cr);
+    cr_out = crByIndex(cr_index);
   }
 
   return cr_out;
@@ -1541,6 +1541,7 @@ function importTemplates() {
 function importCrs() {
   var request = new XMLHttpRequest();
   request.open("GET", "data/cr_table.csv", true);
+  // request.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
   request.send(null);
   request.onreadystatechange = function() {
     if ( request.readyState === 4 && request.status === 200 ) {
