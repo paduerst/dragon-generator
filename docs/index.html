@@ -129,20 +129,86 @@
             <div id="dropdown-for-custom-abil-scores" class="collapse">
               <div class="form-group row" style="margin-bottom: 0;">
                 <label for="strength" class="col-md-1 col-form-label" style="text-align: right;">STR:</label>
-                <input id="strength" name="strength" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <div class="col-md-1">
+                <input id="strength" name="strength" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                </div>
                 <label for="dexterity" class="col-md-1 col-form-label" style="text-align: right;">DEX:</label>
-                <input id="dexterity" name="dexterity" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <div class="col-md-1">
+                <input id="dexterity" name="dexterity" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                </div>
                 <label for="constitution" class="col-md-1 col-form-label" style="text-align: right;">CON:</label>
-                <input id="constitution" name="constitution" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <div class="col-md-1">
+                <input id="constitution" name="constitution" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                </div>
                 <label for="intelligence" class="col-md-1 col-form-label" style="text-align: right;">INT:</label>
-                <input id="intelligence" name="intelligence" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <div class="col-md-1">
+                <input id="intelligence" name="intelligence" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                </div>
                 <label for="wisdom" class="col-md-1 col-form-label" style="text-align: right;">WIS:</label>
-                <input id="wisdom" name="wisdom" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <div class="col-md-1">
+                <input id="wisdom" name="wisdom" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                </div>
                 <label for="charisma" class="col-md-1 col-form-label" style="text-align: right;">CHA:</label>
-                <input id="charisma" name="charisma" type="number" class="form-control col-md-1 toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                <div class="col-md-1">
+                <input id="charisma" name="charisma" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="30" step="1">
+                </div>
               </div>
             </div>
             <hr/>
+
+            <div class="form-group row" style="margin-bottom: 0;">
+              <legend class="col-form-label col-md-2 float-sm-left pt-0">Challenge Rating</legend>
+              <div class="col-md-10">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-cr" name="custom-cr" onclick="toggleOthers('custom-cr')" data-toggle="collapse" data-target="#dropdown-for-custom-cr" aria-expanded="false" aria-controls="dropdown-for-custom-cr">
+                  <label class="custom-control-label" for="custom-cr">Analyze (and Override) Challenge Rating</label>
+                </div>
+              </div>
+            </div>
+
+          <div id="dropdown-for-custom-cr" class="collapse">
+            <div class="form-group row">
+              <label for="cr-override" class="col-md-2 col-form-label">Override Nominal CR</label>
+              <div class="col-md-10">
+                <input id="cr-override" name="cr-override" type="number" class="form-control toggled-input-custom-cr" min="1" max="30" step="1">
+              </div>
+            </div>
+
+            <div class="form-group row" style="margin-bottom: 0;">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table table-bordered align-middle" style="text-align: center;">
+                    <thead>
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Nominal CR</th>
+                        <th scope="col">Calculated CR</th>
+                        <th scope="col">Offensive CR</th>
+                        <th scope="col">Defensive CR</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Typical Dragon</th>
+                        <td><span id="cr-default-nominal">?</span></td>
+                        <td><span id="cr-default-calculated">?</span></td>
+                        <td><span id="cr-default-offensive">?</span></td>
+                        <td><span id="cr-default-defensive">?</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">This Dragon</th>
+                        <td><span id="cr-customized-nominal">-</span></td>
+                        <td><span id="cr-customized-calculated">-</span></td>
+                        <td><span id="cr-customized-offensive">-</span></td>
+                        <td><span id="cr-customized-defensive">-</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr/>
 
             <div class="form-group row" style="margin-bottom: 0;">
               <legend class="col-form-label col-md-2 float-sm-left pt-0">Spellcasting</legend>

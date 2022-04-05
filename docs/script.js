@@ -558,6 +558,15 @@ function shiftCr(cr, shift) {
 
   return cr_out;
 }
+
+function populateCrTable(row_name, dragon) {
+  if (row_name == "default" || row_name == "customized") {
+    document.getElementById("cr-" + row_name + "-nominal").innerHTML = "" + dragon.cr;
+    document.getElementById("cr-" + row_name + "-calculated").innerHTML = "" + dragon.calculatedCr;
+    document.getElementById("cr-" + row_name + "-offensive").innerHTML = "" + dragon.offensiveCr;
+    document.getElementById("cr-" + row_name + "-defensive").innerHTML = "" + dragon.defensiveCr;
+  }
+}
 // end of challenge rating calculation
 
 function updateAncientToGreatwyrm(dragon) {
@@ -1252,7 +1261,7 @@ function returnDragon(dragon_color, dragon_age, override_vals={}) {
   dragon = addBackendCalculatedValues(dragon);
   dragon = addGeneralDragonStatistics(dragon);
   dragon = addCaseVariants(dragon);
-  dragon = calculateDragonCr(dragon, true);
+  dragon = calculateDragonCr(dragon, false);
   return dragon;
 }
 
@@ -1299,6 +1308,14 @@ function returnOverrideVals() {
     if (ability_override >= 1 && ability_override <= 30) {
       override_vals.charisma = Math.round(ability_override);
       document.getElementById("charisma").value = ability_override;
+    }
+  }
+
+  if (urlParams.has("cr-override")) {
+    let cr_override = urlParams.get("cr-override");
+    if (cr_override >= 1 && cr_override <= 30) {
+      override_vals.cr = cr_override;
+      document.getElementById("cr-override").value = cr_override;
     }
   }
 
@@ -1376,10 +1393,12 @@ function generateDragon() {
   // generate the dragon statblock
   var dragon = returnDragon(dragon_color, dragon_age);
   const default_dragon = dragon;
+  populateCrTable("default", default_dragon);
 
   const override_vals = returnOverrideVals();
   if (!jQuery.isEmptyObject(override_vals)) {
     dragon = returnDragon(dragon_color, dragon_age, override_vals);
+    populateCrTable("customized", dragon);
   }
 
   // update the page title
