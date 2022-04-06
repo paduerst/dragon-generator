@@ -1319,6 +1319,23 @@ function returnOverrideVals() {
     }
   }
 
+  if (urlParams.has("breath1dCount")) {
+    let breath1dCount = urlParams.get("breath1dCount");
+    if (breath1dCount >= 1 && breath1dCount <= 64) {
+      override_vals.breath1DiceCount = Math.round(breath1dCount);
+      document.getElementById("breath1dCount").value = breath1dCount;
+    }
+  }
+
+  if (urlParams.has("breath1dType")) {
+    let breath1dType = urlParams.get("breath1dType");
+    // default == 6
+    if (breath1dType == 4 || breath1dType == 8 || breath1dType == 10 || breath1dType == 12 || breath1dType == 20) {
+      override_vals.breath1DiceType = parseInt(breath1dType);
+      document.getElementById("breath1dType").value = breath1dType;
+    }
+  }
+
   if (urlParams.has("cantripoverride")) {
     let cantrip_override = urlParams.get("cantripoverride");
     if (cantrip_override.length > 0) {
