@@ -318,11 +318,6 @@
                   </div>
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="usestandardtheme" name="usestandardtheme">
-                    <label class="custom-control-label" for="usestandardtheme">Force Standard Stat Block Theme</label>
-                  </div>
-
-                  <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="printcropped" name="printcropped">
                     <label class="custom-control-label" for="printcropped">Crop to Statblock when Printing <i>(Doesn't crop bottom)</i></label>
                   </div>
@@ -332,6 +327,27 @@
                     <label class="custom-control-label" for="printpreview">Display Like Print Preview <i>(Removes this menu)</i></label>
                   </div>
 
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="usecustomtheme" name="usecustomtheme" onclick="toggleOthers('usecustomtheme')" data-toggle="collapse" data-target="#dropdown-for-usecustomtheme" aria-expanded="false" aria-controls="dropdown-for-usecustomtheme">
+                    <label class="custom-control-label" for="usecustomtheme">Use Custom Stat Block Color</label>
+                  </div>
+                </div>
+              </div>
+
+              <div id="dropdown-for-usecustomtheme" class="collapse">
+                <div class="form-group row" style="margin-bottom: 0;">
+                  <label for="theme-r" class="col-md-2 col-form-label" style="text-align: right;">Red:</label>
+                  <div class="col-md-1">
+                  <input id="theme-r" name="theme-r" type="number" class="form-control toggled-input-usecustomtheme" min="0" max="255" step="1" value="154">
+                  </div>
+                  <label for="theme-g" class="col-md-1 col-form-label" style="text-align: right;">Green:</label>
+                  <div class="col-md-1">
+                  <input id="theme-g" name="theme-g" type="number" class="form-control toggled-input-usecustomtheme" min="0" max="255" step="1" value="21">
+                  </div>
+                  <label for="theme-b" class="col-md-1 col-form-label" style="text-align: right;">Blue:</label>
+                  <div class="col-md-1">
+                  <input id="theme-b" name="theme-b" type="number" class="form-control toggled-input-usecustomtheme" min="0" max="255" step="1" value="21">
+                  </div>
                 </div>
               </div>
             </div>

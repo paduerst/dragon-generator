@@ -1314,7 +1314,7 @@ function returnOverrideVals() {
   if (urlParams.has("cr-override")) {
     let cr_override = urlParams.get("cr-override");
     if (cr_override >= 1 && cr_override <= 30) {
-      override_vals.cr = cr_override;
+      override_vals.cr = Math.round(cr_override);
       document.getElementById("cr-override").value = cr_override;
     }
   }
@@ -1483,14 +1483,27 @@ function generateDragon() {
   document.getElementById("dragon-destination").innerHTML = output;
   // end of dragon statblock generation
 
-  // change stat block colors to match dragon color
-  if (urlParams.has("usestandardtheme")) {
-    // use standard theme
-    document.getElementById("usestandardtheme").checked=true;
-  } else {
-    let new_theme = css_color_themes[dragon_color];
-    setMonstersColor(new_theme[0], new_theme[1], new_theme[2]);
+  // change stat block colors to match dragon color (or custom input)
+  let new_theme = css_color_themes[dragon_color];
+  if (urlParams.has("usecustomtheme")) {
+    document.getElementById("usecustomtheme").checked=true;
+    if (urlParams.has("theme-r") && urlParams.has("theme-g") && urlParams.has("theme-b")) {
+      let thm_in_r = urlParams.get("theme-r");
+      let thm_in_g = urlParams.get("theme-g");
+      let thm_in_b = urlParams.get("theme-b");
+      if ((thm_in_r >= 0 && thm_in_r <= 255) &&
+          (thm_in_g >= 0 && thm_in_g <= 255) &&
+          (thm_in_b >= 0 && thm_in_b <= 255)) {
+        new_theme[0] = parseInt(thm_in_r);
+        new_theme[1] = parseInt(thm_in_g);
+        new_theme[2] = parseInt(thm_in_b);
+      }
+    }
   }
+  setMonstersColor(new_theme[0], new_theme[1], new_theme[2]);
+  document.getElementById("theme-r").value = new_theme[0];
+  document.getElementById("theme-g").value = new_theme[1];
+  document.getElementById("theme-b").value = new_theme[2];
 
   // modify grammatical tense for singular they
   if (dragon.itshe == "they") {
