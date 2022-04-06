@@ -1535,6 +1535,9 @@ function generateDragon() {
 function importDragons() {
   var request = new XMLHttpRequest();
   request.open("GET", "data/dragon_vals.json", true);
+  if (urlParams.has("ignorecache")) {
+    request.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
+  }
   request.send(null);
   request.onreadystatechange = function() {
     if ( request.readyState === 4 && request.status === 200 ) {
@@ -1548,6 +1551,9 @@ function importDragons() {
 function importTemplates() {
   var request = new XMLHttpRequest();
   request.open("GET", "data/feature_templates.json", true);
+  if (urlParams.has("ignorecache")) {
+    request.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
+  }
   request.send(null);
   request.onreadystatechange = function() {
     if ( request.readyState === 4 && request.status === 200 ) {
@@ -1561,7 +1567,9 @@ function importTemplates() {
 function importCrs() {
   var request = new XMLHttpRequest();
   request.open("GET", "data/cr_table.csv", true);
-  // request.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
+  if (urlParams.has("ignorecache")) {
+    request.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
+  }
   request.send(null);
   request.onreadystatechange = function() {
     if ( request.readyState === 4 && request.status === 200 ) {
@@ -1575,6 +1583,9 @@ function importCrs() {
 function importHome() {
   var request = new XMLHttpRequest();
   request.open("GET", "home_insert.html", true);
+  if (urlParams.has("ignorecache")) {
+    request.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
+  }
   request.send(null);
   request.onreadystatechange = async function() {
     if ( request.readyState === 4 && request.status === 200 ) {
