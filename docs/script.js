@@ -1394,6 +1394,7 @@ function generateDragon() {
   var dragon = returnDragon(dragon_color, dragon_age);
   const default_dragon = dragon;
   populateCrTable("default", default_dragon);
+  populateCrTable("customized", default_dragon);
 
   const override_vals = returnOverrideVals();
   if (!jQuery.isEmptyObject(override_vals)) {

@@ -37,7 +37,7 @@
           <p>
             <em>Adjust the dragon traits using the options below, then press Update to view the new stat block. You can save stat blocks by copying the link or by printing the page to a PDF.</em>
             <br>
-            <em>More info on the prismatic dragons can be found at <a target="_blank" href="https://www.palladiumturtle.com/dragons">palladiumturtle.com/dragons</a></em>
+            <em>More info on the prismatic dragons can be found at <a target="_blank" href="https://www.palladiumturtle.com/dragons">www.palladiumturtle.com/dragons</a></em>
           </p>
             
           <form autocomplete="off">
@@ -76,7 +76,7 @@
             <div class="form-group row">
                 <label for="name" class="col-md-2 col-form-label">Name</label>
                 <div class="col-md-10">
-                    <input class="form-control" type="text" placeholder='Referred to as "the dragon" by default' id="name" name="name">
+                    <input class="form-control" type="text" placeholder='Referred to as "the dragon" or "the greatwyrm" by default' id="name" name="name">
                 </div>
             </div>
 
@@ -174,6 +174,16 @@
               </div>
             </div>
 
+            <p>
+              <em>This table describes the CR of a <b>typical dragon</b> of this age and color and compares it to the CR of <b>this dragon</b>. This table is populated when the page loads, so any changes you make in this form won't be reflected here until you press Update. You can learn more about how their CR is calculated at <a target="_blank" href="https://www.palladiumturtle.com/dragons/cr">www.palladiumturtle.com/dragons/cr</a></em>
+              <ul>
+                <li><em><b>Nominal CR</b> is the CR listed in the stat block. It determines XP and Proficiency Bonus.</em></li>
+                <li><em><b>Calculated CR</b> is the average of the dragon's Offensive and Defensive CRs.</em></li>
+                <li><em><b>Offensive CR</b> measures the expected damage output of the dragon.</em></li>
+                <li><em><b>Defensive CR</b> measures how durable the dragon is.</em></li>
+              </ul>
+            </p>
+
             <div class="form-group row" style="margin-bottom: 0;">
               <div class="col-md-12">
                 <div class="table-responsive">
@@ -227,7 +237,7 @@
                 <label for="spellstate" class="col-md-2 col-form-label">Available Spells</label>
                 <div class="col-md-10">
                     <select class="form-control toggled-input-custom-spellcasting" id="spellstate" name="spellstate">
-                        <option selected value="default">Default</option>
+                        <option selected value="default">Default Availability of At-Will and 1/Day Spells</option>
                         <option value="noatwill">No At-Will Spells</option>
                         <option value="onlyatwill">No 1/Day Spells</option>
                         <option value="off">No Innate Spellcasting</option>
@@ -248,10 +258,10 @@
               </div>
 
               <div class="form-group row" style="margin-bottom: 0;">
-                <label for="spelldescription" class="col-md-2 col-form-label">Spellcasting Attack and DC</label>
+                <label for="spelldescription" class="col-md-2 col-form-label">Spell Attack and DC Display</label>
                 <div class="col-md-10">
                     <select class="form-control toggled-input-custom-spellcasting" id="spelldescription" name="spelldescription">
-                        <option selected value="default">Default</option>
+                        <option selected value="default">Default (Displays if relevant for typical spells)</option>
                         <option value="neither">Display Neither</option>
                         <option value="attack">Display Attack Bonus</option>
                         <option value="dc">Display Save DC</option>
@@ -290,10 +300,10 @@
                   <label class="custom-control-label" for="nowallofcolor">No Wall of Prismatic Color <i>(Otherwise on for adults and older)</i></label>
                 </div>
 
-                <div class="custom-control custom-switch">
+                <!-- <div class="custom-control custom-switch">
                   <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="usealtvulnerability" name="usealtvulnerability">
                   <label class="custom-control-label" for="usealtvulnerability">Use Prismatic Weakness <i>(Replaces damage vulnerability)</i></label>
-                </div>
+                </div> -->
 
               </div>
             </div>
