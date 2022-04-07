@@ -896,8 +896,8 @@ function addGeneralDragonStatistics(dragon) {
     skill_key = normalizeHeader_("Skill " + global_skills[i].skill);
     skill_prof = dragon[skill_key];
     if (skill_prof > 0) {
-      skill_mod = dragon[global_skills[i].ability] +
-                  skill_prof*dragon.proficiencyBonus;
+      skill_mod = Math.floor(dragon[global_skills[i].ability] +
+                             skill_prof*dragon.proficiencyBonus);
       if (skill_mod < 0) {
         skill_sign = "-";
       } else {
@@ -1308,6 +1308,19 @@ function returnOverrideVals() {
     if (ability_override >= 1 && ability_override <= 30) {
       override_vals.charisma = Math.round(ability_override);
       document.getElementById("charisma").value = ability_override;
+    }
+  }
+
+  let skill_key = "";
+  let skill_level = 0.0;
+  for (let i = 0; i < global_skills.length; i++) {
+    skill_key = normalizeHeader_("Skill " + global_skills[i].skill);
+    if (urlParams.has(skill_key)) {
+      skill_level = parseFloat(urlParams.get(skill_key));
+      if (skill_level === 0.0 || skill_level === 0.5 || skill_level === 1.0 || skill_level === 2.0) {
+        override_vals[skill_key] = skill_level;
+        document.getElementById(skill_key).value = "" + skill_level.toFixed(1);
+      }
     }
   }
 
