@@ -350,10 +350,23 @@ function convertTagsToLinks_(strIn) {
 
 // start of challenge rating calculation
 function calculateDragonCr(dragon, verbose=false) {
+  if (verbose) {
+    let msg = "Calculating CR for ";
+    if (dragon.hasOverridevVals) {
+      msg += "dragon with customized values that might affect CR.";
+    } else {
+      msg += "dragon with typical CR-relevant values.";
+    }
+    msg = msg.toUpperCase();
+    console.log(msg);
+  }
   dragon.defensiveCr = calculateDragonDefensiveCr(dragon, verbose);
   dragon.offensiveCr = calculateDragonOffensiveCr(dragon, verbose);
   dragon.calculatedCr = averageCrs(dragon.defensiveCr, dragon.offensiveCr);
-  if (verbose) { console.log("Calculated CR = " + dragon.calculatedCr); }
+  if (verbose) {
+    console.log("Calculated CR = " + dragon.calculatedCr);
+    console.log("DONE CALCULATING CR");
+  }
   return dragon;
 }
 
@@ -372,7 +385,7 @@ function calculateDragonDefensiveCr(dragon, verbose=false) {
   effective_ac += 2; // 3-4 saving throw proficiencies (+4 if 5-6)
 
   if (effective_ac < 1) { effective_ac = 1; }
-  if (verbose) { console.log("effective_ac = " + effective_ac); }
+  if (verbose) { console.log("Effective AC = " + effective_ac); }
   //////////// Done calculating effective AC
 
   // Effective Hit Points
@@ -401,7 +414,7 @@ function calculateDragonDefensiveCr(dragon, verbose=false) {
   }
 
   if (effective_hp < 1) { effective_hp = 1; }
-  if (verbose) { console.log("effective_hp = " + effective_hp); }
+  if (verbose) { console.log("Effective HP = " + effective_hp); }
   //////////// Done calculating effective HP
 
   // Expected CR and AC from Effective HP
@@ -410,17 +423,24 @@ function calculateDragonDefensiveCr(dragon, verbose=false) {
   });
   if (index_from_hp >= 0 && index_from_hp <= index_of_max_cr) {
     const cr_from_hp = crs[index_from_hp].crNum;
+    if (verbose) { console.log("HP suggests a defensive CR of " + cr_from_hp); }
     const ac_from_hp = crs[index_from_hp].ac;
+    if (verbose) { console.log("Expected AC for that CR is " + ac_from_hp); }
     let cr_adjustment_from_ac = (effective_ac - ac_from_hp) / 2;
     if (cr_adjustment_from_ac > 0) {
       cr_adjustment_from_ac = Math.floor(cr_adjustment_from_ac);
     } else {
       cr_adjustment_from_ac = Math.ceil(cr_adjustment_from_ac);
     }
+    if (verbose) { 
+      if (cr_adjustment_from_ac != 0) {
+        console.log("Difference between expected and effective AC dictates a shift of " + cr_adjustment_from_ac);
+      }
+    }
     cr_out = shiftCr(cr_from_hp, cr_adjustment_from_ac);
   }
 
-  if (verbose) { console.log("defensive_cr = " + cr_out); }
+  if (verbose) { console.log("Final Defensive CR = " + cr_out); }
   return cr_out;
 }
 
@@ -461,7 +481,7 @@ function calculateDragonOffensiveCr(dragon, verbose=false) {
   let dmg_avg_round = (dmg_round1 + dmg_round2 + dmg_round3) / 3;
   dmg_avg_round += dmg_additional_atk + dmg_additional_dc;
   if (dmg_avg_round < 0) { dmg_avg_round = 0; }
-  if (verbose) { console.log("dmg_avg_round = " + dmg_avg_round); }
+  if (verbose) { console.log("Expected Damage per Round = " + dmg_avg_round.toFixed(2)); }
   //////////// Done calculating average damage per round
 
   // Expected CR, Atk Bonus, and DC from damage
@@ -472,6 +492,11 @@ function calculateDragonOffensiveCr(dragon, verbose=false) {
     const cr_from_dmg = crs[index_from_dmg].crNum;
     const atk_from_dmg = crs[index_from_dmg].atk;
     const dc_from_dmg = crs[index_from_dmg].dc;
+    if (verbose) {
+      console.log("Damage suggests an offensive CR of " + cr_from_dmg);
+      console.log("Expected attack bonus for that CR is " + atk_from_dmg);
+      console.log("Expected save DC for that CR is " + dc_from_dmg);
+    }
     
     let dmg_from_dc = (dmg_round1 / 3) + dmg_additional_dc;
     let dmg_from_atk = (dmg_round2 / 3) + (dmg_round3 / 3) + dmg_additional_atk;
@@ -482,10 +507,23 @@ function calculateDragonOffensiveCr(dragon, verbose=false) {
     let cr_adjustment_from_atk = (overall_atk - atk_from_dmg) / 2;
     let cr_adjustment = (cr_adjustment_from_dc * dmg_from_dc + cr_adjustment_from_atk * dmg_from_atk) / (dmg_avg_round);
     cr_adjustment = Math.round(cr_adjustment);
+    if (verbose) {
+      console.log("Weighted average of actual attack bonuses = " + overall_atk.toFixed(2));
+      console.log("Weighted average of actual save DCs = " + overall_dc.toFixed(2));
+      if (cr_adjustment_from_dc != 0 || cr_adjustment_from_atk != 0) {
+        console.log("Difference between expected and effective attack bonus dictates a shift of " + cr_adjustment_from_atk);
+        console.log("Difference between expected and effective save DCs dictates a shift of " + cr_adjustment_from_dc);
+        if (cr_adjustment == 0) {
+          console.log("The weighted average of those shifts cancelled out to 0.");
+        } else {
+          console.log("The weighted average of those shifts is " + cr_adjustment);
+        }
+      }
+    }
     cr_out = shiftCr(cr_from_dmg, cr_adjustment);
   }
 
-  if (verbose) { console.log("offensive_cr = " + cr_out); }
+  if (verbose) { console.log("Final Offensive CR = " + cr_out); }
   return cr_out;
 }
 
@@ -1254,8 +1292,13 @@ function returnDragon(dragon_color, dragon_age, override_vals={}) {
   }
 
   // override with provided values
-  for (const key in override_vals) {
-    dragon[key] = override_vals[key];
+  if (jQuery.isEmptyObject(override_vals)) {
+    dragon.hasOverridevVals = false;
+  } else {
+    dragon.hasOverridevVals = true;
+    for (const key in override_vals) {
+      dragon[key] = override_vals[key];
+    }
   }
 
   // add the other dragon values needed
@@ -1263,7 +1306,9 @@ function returnDragon(dragon_color, dragon_age, override_vals={}) {
   dragon = addBackendCalculatedValues(dragon);
   dragon = addGeneralDragonStatistics(dragon);
   dragon = addCaseVariants(dragon);
-  dragon = calculateDragonCr(dragon, false);
+  let verbose_cr_calc = false;
+  if (urlParams.has("custom-cr")) { verbose_cr_calc = true; }
+  dragon = calculateDragonCr(dragon, verbose_cr_calc);
   return dragon;
 }
 
@@ -1423,6 +1468,7 @@ function generateDragon() {
   document.getElementById("age").value = dragon_age.toLowerCase();
 
   // generate the dragon statblock
+  console.log("Generating the dragon!");
   var dragon = returnDragon(dragon_color, dragon_age);
   const default_dragon = dragon;
   populateCrTable("default", default_dragon);
@@ -1430,6 +1476,9 @@ function generateDragon() {
 
   const override_vals = returnOverrideVals();
   if (!jQuery.isEmptyObject(override_vals)) {
+    let override_msg = "Adding the following override value";
+    if (Object.keys(override_vals).length > 1) { override_msg += "s"; }
+    console.log(override_msg + ": " + JSON.stringify(override_vals));
     dragon = returnDragon(dragon_color, dragon_age, override_vals);
     populateCrTable("customized", dragon);
   }
