@@ -553,6 +553,8 @@ function shiftCr(cr, shift) {
   let cr_index = indexOfCr(cr);
   if (cr_index >= 0) {
     cr_index += shift;
+    if (cr_index < 0) { cr_index = 0; }
+    if (cr_index > index_of_max_cr) { cr_index = index_of_max_cr; }
     cr_out = crByIndex(cr_index);
   }
 
@@ -1641,6 +1643,9 @@ function importHome() {
 }
 
 function decideLoadPath() {
+  if (urlParams.has("ignorecache")) {
+    document.getElementById("ignorecache").value = "on";
+  }
   if (urlParams.has("color") || urlParams.has("age")) {
     importDragons(); // import then generate the dragon
   } else if (urlParams.has("loadendlessly")) {
