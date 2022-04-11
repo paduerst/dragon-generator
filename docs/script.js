@@ -478,10 +478,13 @@ function calculateDragonOffensiveCr(dragon, verbose=false) {
     dmg_additional_dc = dragon.wingAttackExpectedDamage; // 1 tgt failed save
   }
 
-  let dmg_avg_round = (dmg_round1 + dmg_round2 + dmg_round3) / 3;
-  dmg_avg_round += dmg_additional_atk + dmg_additional_dc;
+  let dmg_from_dc = (dmg_round1 / 3) + dmg_additional_dc;
+  let dmg_from_atk = (dmg_round2 / 3) + (dmg_round3 / 3) + dmg_additional_atk;
+  let dmg_avg_round = dmg_from_atk + dmg_from_dc;
   if (dmg_avg_round < 0) { dmg_avg_round = 0; }
   if (verbose) { console.log("Expected Damage per Round = " + dmg_avg_round.toFixed(2)); }
+  if (verbose) { console.log("(Damage from attacks = " + dmg_from_atk.toFixed(2) + ")"); }
+  if (verbose) { console.log("(Damage from DCs = " + dmg_from_dc.toFixed(2) + ")"); }
   //////////// Done calculating average damage per round
 
   // Expected CR, Atk Bonus, and DC from damage
@@ -497,9 +500,7 @@ function calculateDragonOffensiveCr(dragon, verbose=false) {
       console.log("Expected attack bonus for that CR is " + atk_from_dmg);
       console.log("Expected save DC for that CR is " + dc_from_dmg);
     }
-    
-    let dmg_from_dc = (dmg_round1 / 3) + dmg_additional_dc;
-    let dmg_from_atk = (dmg_round2 / 3) + (dmg_round3 / 3) + dmg_additional_atk;
+
     let overall_dc = ((dmg_round1 / 3) * dragon.saveDcCon + dmg_additional_dc * dragon.saveDcStr) / dmg_from_dc;
     let overall_atk = dragon.proficiencyStr;
 
@@ -852,6 +853,10 @@ function addBackendCalculatedValues(dragon) {
   // Hit Points
   dragon.expectedHitPoints = Math.floor(dragon.numberOfHitDice*(0.5 + dragon.hitDie/2 + dragon.con));
   dragon.expectedHitPoints = numberOrMin(dragon.expectedHitPoints, 1);
+  if (dragon.hasOwnProperty("hpOverride")) {
+    dragon.expectedHitPoints = dragon.hpOverride;
+    document.getElementById("hp-override").value = dragon.hpOverride;
+  }
   dragon.hpConMod = dragon.numberOfHitDice*dragon.con;
   if (dragon.hpConMod < 0) {
     dragon.hpConModSign = "-";
@@ -1314,6 +1319,29 @@ function returnDragon(dragon_color, dragon_age, override_vals={}) {
 
 function returnOverrideVals() {
   var override_vals = {};
+
+  if (urlParams.has("ac-override")) {
+    let ac_override = urlParams.get("ac-override");
+    if (ac_override >= 5 && ac_override <= 25) {
+      override_vals.ac = Math.round(ac_override);
+      document.getElementById("ac-override").value = ac_override;
+    }
+  }
+
+  if (urlParams.has("hp-override")) {
+    let hp_override = urlParams.get("hp-override");
+    if (hp_override >= 1 && hp_override <= 999) {
+      override_vals.hpOverride = Math.round(hp_override);
+      document.getElementById("hp-override").value = hp_override;
+    }
+  }
+  if (urlParams.has("numberOfHitDice")) {
+    let numberOfHitDice = urlParams.get("numberOfHitDice");
+    if (numberOfHitDice >= 1 && numberOfHitDice <= 50) {
+      override_vals.numberOfHitDice = Math.round(numberOfHitDice);
+      document.getElementById("numberOfHitDice").value = numberOfHitDice;
+    }
+  }
 
   if (urlParams.has("strength")) {
     let ability_override = urlParams.get("strength");
