@@ -1513,6 +1513,7 @@ function generateDragon() {
 
   // update the page title
   document.title = dragon.dragonTitleForScreen;
+  document.querySelector('meta[property="og:title"]').setAttribute("content", dragon.dragonTitleForScreen);
 
   // start constructing the output array of strings of HTML
   var out_arr = [];
