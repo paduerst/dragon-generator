@@ -746,7 +746,7 @@ function addUserSpecifiedValues(dragon) {
     }
   }
   if (pronouns == "neutral") {
-    // The default pronouns of most D&D 5e statblocks
+    // The default pronouns of most D&D 5e stat blocks
     dragon.itshe = "it"; // nominative
     dragon.ither = "it"; // objective
     dragon.itsher = "its"; // possessive determiner
@@ -898,13 +898,21 @@ function addGeneralDragonStatistics(dragon) {
     dragon_descriptive_title = "" + dragon.age + " " + dragon.color + " Dragon";
   }
   var title_for_screen_arr = [];
+  let use_descriptive_title = true;
+  if (urlParams.has("simpleTitle")) {
+    use_descriptive_title = false;
+    document.getElementById("simpleTitle").checked=true;
+  }
   if (dragon.usingDefaultName) {
     dragon.dragonTitle = dragon_descriptive_title;
   } else {
-    dragon.dragonTitle = dragon.theDragonNameUpper + " (" + dragon_descriptive_title + ")";
+    dragon.dragonTitle = dragon.theDragonNameUpper;
+    if (use_descriptive_title) { dragon.dragonTitle += " (" + dragon_descriptive_title + ")"; }
     title_for_screen_arr.push(dragon.theDragonNameUpper);
   }
-  title_for_screen_arr.push(dragon_descriptive_title);
+  if (dragon.usingDefaultName || use_descriptive_title) {
+    title_for_screen_arr.push(dragon_descriptive_title);
+  }
   title_for_screen_arr.push("Prismatic Dragon Generator");
   dragon.dragonTitleForScreen = title_for_screen_arr.join(" - ");
 
@@ -1495,7 +1503,7 @@ function generateDragon() {
   document.getElementById("color").value = dragon_color.toLowerCase();
   document.getElementById("age").value = dragon_age.toLowerCase();
 
-  // generate the dragon statblock
+  // generate the dragon stat block
   console.log("Generating the dragon!");
   var dragon = returnDragon(dragon_color, dragon_age);
   const default_dragon = dragon;
@@ -1591,7 +1599,7 @@ function generateDragon() {
   var output = out_arr.join("\n");
   output = convertTagsToLinks_(output);
   document.getElementById("dragon-destination").innerHTML = output;
-  // end of dragon statblock generation
+  // end of dragon stat block generation
 
   // change stat block colors to match dragon color (or custom input)
   let new_theme = css_color_themes[dragon_color];
@@ -1645,9 +1653,9 @@ function generateDragon() {
   }
   transitionFromLoadingToDragon(transition_mode);
 
-  // update style so it prints just the statblock
+  // update style so it prints just the stat block
   if (urlParams.has("printcropped")) {
-      document.getElementById("printcropped").checked=true;
+    document.getElementById("printcropped").value = "on";
     var print_style = '@page {size: 900px 1500px; margin: 0px;}';
     var print_element  = $('#print-cropped-style');
     print_element.text(print_style);
