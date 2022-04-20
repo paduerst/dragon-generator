@@ -88,7 +88,7 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row" style="margin-bottom: 0;">
               <label for="pronouns" class="col-md-2 col-form-label">Pronouns</label>
               <div class="col-md-10">
                   <select class="form-control toggles-others" id="pronouns" name="pronouns" onchange="toggleOthers('pronouns')">
@@ -97,19 +97,36 @@
                       <option value="masculine">He/Him</option>
                       <option value="singularthey">They/Them</option>
                       <option value="spivak">Ey/Em</option>
-                      <!-- <option value="custom-pronouns" class="pronouns-toggling-option">Custom</option> -->
+                      <!-- <option value="no-pronouns">No Pronouns</option>
+                      <option value="custom-pronouns" class="pronouns-toggling-option">Custom Pronouns</option> -->
                   </select>
               </div>
             </div>
 
             <!-- <div id="dropdown-for-pronouns-custom-pronouns" class="collapse">
+              <hr>
               <div class="form-group row">
-                <label for="pronoun-whatever" class="col-md-2 col-form-label">Pronouns Input</label>
+                <label for="pronoun-nominative" class="col-md-2 col-form-label">Nominative Pronoun</label>
                 <div class="col-md-10">
-                  <input class="form-control toggled-input-pronouns-custom-pronouns" type="text" placeholder='Whatever!' id="pronoun-whatever" name="pronoun-whatever">
+                  <input class="form-control toggled-input-pronouns-custom-pronouns" type="text" placeholder='e.g. he, she, they, ey' id="pronoun-nominative" name="pronoun-nominative">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="pronoun-objective" class="col-md-2 col-form-label">Objective Pronoun</label>
+                <div class="col-md-10">
+                  <input class="form-control toggled-input-pronouns-custom-pronouns" type="text" placeholder='e.g. him, her, them, em' id="pronoun-objective" name="pronoun-objective">
+                </div>
+              </div>
+
+              <div class="form-group row" style="margin-bottom: 0;">
+                <label for="pronoun-possessive-adj" class="col-md-2 col-form-label">Possessive Adjective</label>
+                <div class="col-md-10">
+                  <input class="form-control toggled-input-pronouns-custom-pronouns" type="text" placeholder='e.g. his, her, their, eir' id="pronoun-possessive-adj" name="pronoun-possessive-adj">
                 </div>
               </div>
             </div> -->
+            <hr>
 
               <div class="form-group row" style="margin-bottom: 0;">
                 <legend class="col-form-label col-md-2 float-sm-left pt-0">Other Customization</legend>

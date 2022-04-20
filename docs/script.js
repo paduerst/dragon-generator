@@ -86,22 +86,27 @@ function toggleOthersSelectOne(select_id, toggled_ids=[]) {
   // Get the toggler
   var toggler_el = document.getElementById(select_id);
   const input_base_class = ".toggled-input-" + select_id;
+  const dropdown_base_id = "dropdown-for-" + select_id;
   const toggle_option_class = select_id + "-toggling-option";
 
   // avoid an infinite loop by adding this id to list of checked ones
   toggled_ids.push(select_id);
 
   var input_class = input_base_class + "-";
+  var dropdown_el;
   for (let i = 0; i < toggler_el.options.length; i++) {
     let option_i = toggler_el.options[i]
     if (option_i.className.includes(toggle_option_class)) {
       // this option toggles other inputs/dropdowns
       input_class = input_base_class + "-" + option_i.value;
+      dropdown_el = $('#' + dropdown_base_id + "-" + option_i.value);
 
       if (toggler_el.disabled == true || toggler_el.value !== option_i.value) {
         $( "form" ).find(input_class).prop( "disabled", true );
+        dropdown_el.collapse('hide');
       } else {
         $( "form" ).find(input_class).prop( "disabled", false );
+        dropdown_el.collapse('show');
       }
 
       // now recurse on inputs which are themselves togglers
