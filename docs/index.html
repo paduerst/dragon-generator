@@ -91,15 +91,25 @@
             <div class="form-group row">
               <label for="pronouns" class="col-md-2 col-form-label">Pronouns</label>
               <div class="col-md-10">
-                  <select class="form-control" id="pronouns" name="pronouns">
+                  <select class="form-control toggles-others" id="pronouns" name="pronouns" onchange="toggleOthers('pronouns')">
                       <option value="neutral">It/Its</option>
-                      <option selected value="default">She/Her</option>
+                      <option value="default" selected>She/Her</option>
                       <option value="masculine">He/Him</option>
                       <option value="singularthey">They/Them</option>
                       <option value="spivak">Ey/Em</option>
+                      <!-- <option value="custom-pronouns" class="pronouns-toggling-option">Custom</option> -->
                   </select>
               </div>
             </div>
+
+            <!-- <div id="dropdown-for-pronouns-custom-pronouns" class="collapse">
+              <div class="form-group row">
+                <label for="pronoun-whatever" class="col-md-2 col-form-label">Pronouns Input</label>
+                <div class="col-md-10">
+                  <input class="form-control toggled-input-pronouns-custom-pronouns" type="text" placeholder='Whatever!' id="pronoun-whatever" name="pronoun-whatever">
+                </div>
+              </div>
+            </div> -->
 
               <div class="form-group row" style="margin-bottom: 0;">
                 <legend class="col-form-label col-md-2 float-sm-left pt-0">Other Customization</legend>

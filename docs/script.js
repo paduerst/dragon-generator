@@ -21,16 +21,47 @@ jQuery(document).ready(function($){
   for (let i = 0; i < togglers.length; i++) {
     toggler_id = togglers[i].id;
     if (urlParams.has(toggler_id)) {
-      document.getElementById(toggler_id).click();
+      if (togglers[i].type == "checkbox") {
+        // always click the checkbox
+        togglers[i].click();
+      } else if (togglers[i].type == "select-one") {
+        // only pass in given value if it's a valid option
+        if (selectHasValue(togglers[i], urlParams.get(toggler_id))) {
+          togglers[i].value = urlParams.get(toggler_id);
+        }
+      } else {
+        console.log("Uh-oh! Found an unrecognized toggles-others element.");
+      }
     }
     toggleOthers(toggler_id);
   }
 });
 
+function selectHasValue(select, value) {
+  if (select.type == "select-one" || select.type == "select-multiple") {
+    for (let i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === value) { return true; }
+    }
+  }
+  return false;
+}
+
 async function toggleOthers(toggler_id, toggled_ids=[]) {
+  // Get the toggler
+  var toggler_el = document.getElementById(toggler_id);
+  if (toggler_el.type == "checkbox") {
+    toggleOthersCheckbox(toggler_id, toggled_ids);
+  } else if (toggler_el.type == "select-one") {
+    toggleOthersSelectOne(toggler_id, toggled_ids);
+  } else {
+    console.log("Uh-oh! Unsupported type in toggleOthers()");
+  }
+}
+
+function toggleOthersCheckbox(checkbox_id, toggled_ids=[]) {
   // Get the checkbox
-  var checkBox = document.getElementById(toggler_id);
-  const input_class = ".toggled-input-" + toggler_id;
+  var checkBox = document.getElementById(checkbox_id);
+  const input_class = ".toggled-input-" + checkbox_id;
 
   if (checkBox.checked == true && checkBox.disabled == false){
     $( "form" ).find(input_class).prop( "disabled", false );
@@ -40,13 +71,48 @@ async function toggleOthers(toggler_id, toggled_ids=[]) {
 
   // now recurse on inputs which are themselves togglers
   // avoid an infinite loop by adding this id to list of checked ones
-  toggled_ids.push(toggler_id);
+  toggled_ids.push(checkbox_id);
   var togglers = document.querySelectorAll(input_class+'.toggles-others');
   var toggler_id;
   for (let i = 0; i < togglers.length; i++) {
     toggler_id = togglers[i].id;
     if (!toggled_ids.includes(toggler_id)) {
       toggleOthers(toggler_id, toggled_ids);
+    }
+  }
+}
+
+function toggleOthersSelectOne(select_id, toggled_ids=[]) {
+  // Get the toggler
+  var toggler_el = document.getElementById(select_id);
+  const input_base_class = ".toggled-input-" + select_id;
+  const toggle_option_class = select_id + "-toggling-option";
+
+  // avoid an infinite loop by adding this id to list of checked ones
+  toggled_ids.push(select_id);
+
+  var input_class = input_base_class + "-";
+  for (let i = 0; i < toggler_el.options.length; i++) {
+    let option_i = toggler_el.options[i]
+    if (option_i.className.includes(toggle_option_class)) {
+      // this option toggles other inputs/dropdowns
+      input_class = input_base_class + "-" + option_i.value;
+
+      if (toggler_el.disabled == true || toggler_el.value !== option_i.value) {
+        $( "form" ).find(input_class).prop( "disabled", true );
+      } else {
+        $( "form" ).find(input_class).prop( "disabled", false );
+      }
+
+      // now recurse on inputs which are themselves togglers
+      var togglers = document.querySelectorAll(input_class+'.toggles-others');
+      var toggler_id;
+      for (let i = 0; i < togglers.length; i++) {
+        toggler_id = togglers[i].id;
+        if (!toggled_ids.includes(toggler_id)) {
+          toggleOthers(toggler_id, toggled_ids);
+        }
+      }
     }
   }
 }
