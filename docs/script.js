@@ -1027,10 +1027,12 @@ function addGeneralDragonStatistics(dragon) {
     dragon_descriptive_title = "" + dragon.age + " " + dragon.color + " Dragon";
   }
   var title_for_screen_arr = [];
+  var include_descriptive_title = true;
   if (urlParams.has("dragonTitle")) {
     dragon.dragonTitle = urlParams.get("dragonTitle");
     document.getElementById("dragonTitle").value = dragon.dragonTitle;
     title_for_screen_arr.push(dragon.dragonTitle);
+    include_descriptive_title = false;
   } else if (dragon.usingDefaultName) {
     dragon.dragonTitle = dragon_descriptive_title;
   } else {
@@ -1038,7 +1040,7 @@ function addGeneralDragonStatistics(dragon) {
     dragon.dragonTitle += " (" + dragon_descriptive_title + ")";
     title_for_screen_arr.push(dragon.theDragonNameUpper);
   }
-  title_for_screen_arr.push(dragon_descriptive_title);
+  if (include_descriptive_title) { title_for_screen_arr.push(dragon_descriptive_title); }
   title_for_screen_arr.push("Prismatic Dragon Generator");
   dragon.dragonTitleForScreen = title_for_screen_arr.join(" - ");
 
