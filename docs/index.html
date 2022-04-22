@@ -634,6 +634,13 @@
 
               </div>
             </div>
+            
+              <div class="form-group row">
+                <label for="dragonTitle" class="col-md-2 col-form-label">Stat Block Title</label>
+                <div class="col-md-10">
+                    <input class="form-control toggled-input-advanced-options" type="text" placeholder='Defaults to name and a descriptive title' id="dragonTitle" name="dragonTitle">
+                </div>
+              </div>
 
               <div class="form-group row" style="margin-bottom: 0;">
                 <legend class="col-form-label col-md-2 float-sm-left pt-0">Formatting</legend>
@@ -642,11 +649,6 @@
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="forcesinglecolumn" name="forcesinglecolumn">
                     <label class="custom-control-label" for="forcesinglecolumn">Force Single-Column Stat Block</label>
-                  </div>
-
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="simpleTitle" name="simpleTitle">
-                    <label class="custom-control-label" for="simpleTitle">Just Use Name for Stat Block Title <i>(If provided)</i></label>
                   </div>
 
                   <div class="custom-control custom-switch">
@@ -663,8 +665,8 @@
 
               <div id="dropdown-for-usecustomtheme" class="collapse">
                 <div class="form-group row" style="margin-bottom: 0;">
-                  <label for="theme-color" class="col-md-2 col-form-label" style="text-align: right;">Color Override</label>
-                  <div class="col-md-1">
+                  <label for="theme-color" class="col-md-2 col-form-label">Custom Color</label>
+                  <div class="col-md-2">
                   <input id="theme-color" name="theme-color" type="color" class="form-control toggled-input-usecustomtheme" value="#9a1515">
                   </div>
                 </div>
