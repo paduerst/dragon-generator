@@ -810,6 +810,8 @@ function addUserSpecifiedValues(dragon) {
                                 "feminine",
                                 "masculine",
                                 "singularthey",
+                                "no-pronouns",
+                                "custom-pronouns",
                                 "spivak"
     ];
     if (supported_pronouns.includes(input_pronouns)) {
@@ -821,37 +823,60 @@ function addUserSpecifiedValues(dragon) {
     dragon.itshe = "it"; // nominative
     dragon.ither = "it"; // objective
     dragon.itsher = "its"; // possessive determiner
-    // populate form with pronouns
     document.getElementById("pronouns").value = "neutral";
   } else if (pronouns == "feminine") {
     // Most prismatic dragons use these pronouns
     dragon.itshe = "she";
     dragon.ither = "her";
     dragon.itsher = "her";
-    // populate form with pronouns
     document.getElementById("pronouns").value = "default";
   } else if (pronouns == "masculine") {
-    // No known prismatic dragons use these pronouns
+    // No known prismatic dragons use these pronouns, but don't let me stop you
     dragon.itshe = "he";
     dragon.ither = "him";
     dragon.itsher = "his";
-    // populate form with pronouns
     document.getElementById("pronouns").value = "masculine";
   } else if (pronouns == "singularthey") {
     // singular they
     dragon.itshe = "they";
     dragon.ither = "them";
     dragon.itsher = "their";
-    // populate form with pronouns
     document.getElementById("pronouns").value = "singularthey";
+  } else if (pronouns == "no-pronouns") {
+    // use name instead of pronouns
+    dragon.itshe = dragon.theDragonName;
+    dragon.ither = dragon.theDragonName;
+    dragon.itsher = dragon.theDragonName + "'s";
+    document.getElementById("pronouns").value = "no-pronouns";
+  } else if (pronouns == "custom-pronouns") {
+    // use whatever the user provided
+    if (urlParams.has("pronoun-nominative")) {
+      dragon.itshe = "" + urlParams.get("pronoun-nominative");
+      document.getElementById("pronoun-nominative").value = dragon.itshe;
+    } else {
+      dragon.itshe = dragon.theDragonName;
+    }
+    if (urlParams.has("pronoun-objective")) {
+      dragon.ither = "" + urlParams.get("pronoun-objective");
+      document.getElementById("pronoun-objective").value = dragon.ither;
+    } else {
+      dragon.ither = dragon.theDragonName;
+    }
+    if (urlParams.has("pronoun-possessive-adj")) {
+      dragon.itsher = "" + urlParams.get("pronoun-possessive-adj");
+      document.getElementById("pronoun-possessive-adj").value = dragon.itsher;
+    } else {
+      dragon.itsher = dragon.theDragonName + "'s";
+    }
+    document.getElementById("pronouns").value = "custom-pronouns";
   } else if (pronouns == "spivak") {
-    // An example of nonbinary pronouns
+    // Some nonbinary pronouns
     dragon.itshe = "ey";
     dragon.ither = "em";
     dragon.itsher = "eir";
-    // populate form with pronouns
     document.getElementById("pronouns").value = "spivak";
   }
+  toggleOthers("pronouns"); // update the pronouns dropdown if needed
   dragon.itsheUpper = capitalizeFirstLetter(dragon.itshe);
   dragon.itherUpper = capitalizeFirstLetter(dragon.ither);
   dragon.itsherUpper = capitalizeFirstLetter(dragon.itsher);
@@ -1540,10 +1565,12 @@ async function transitionFromLoadingToDragon(transition_mode=0) {
     if (transition_mode == 2) {
       menu_div.style.display = 'none';
     }
+    // $("#dragon-destination").collapse('show');
     document.getElementById("release-the-dragon").click();
     dragon_div.style.opacity = '1';
     if (transition_mode == 1) {
       dragon_div.addEventListener('transitionend', () => {
+        // $("#dragonMenu").collapse('show');
         document.getElementById("dragon-menu-btn").click();
       });
     }
