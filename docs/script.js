@@ -366,6 +366,39 @@ function isDigit_(char) {
   return char >= '0' && char <= '9';
 }
 
+function isValidColorHex(hexColor) {
+  // var reg = /^#([0-9a-f]{3}){1,2}$/i; // not supporting 3-digit variant
+  var reg = /^#([0-9a-f]{3}){2}$/i;
+  return reg.test(hexColor.toLowerCase());
+}
+
+function colorHexToTriplet(hexColor = "#000000") {
+  if (!isValidColorHex(hexColor)) { hexColor = "#000000"; }
+  hexColor = hexColor.substring(1); // remove the "#"
+  let tripletOut = [0, 0, 0];
+  for (let i = 0; i < 3; i++) {
+    tripletOut[i] = parseInt(hexColor.substring(i*2, i*2+2), 16);
+  }
+  return tripletOut;
+}
+
+function colorTripletToHex(triplet = [0, 0, 0]) {
+  if (triplet.length < 3) { triplet = [0, 0, 0]; }
+  let hexOut = "#";
+  for (let i = 0; i < 3; i++) {
+    if (isNaN(triplet[i])) {
+      triplet[i] = 0;
+    } else {
+      if (triplet[i] < 0) { triplet[i] = 0; }
+      if (triplet[i] > 255) { triplet[i] = 255; }
+    }
+    let hex_i = Math.round(triplet[i]).toString(16);
+    if (hex_i.length < 2) { hex_i = "0" + hex_i; }
+    hexOut += hex_i;
+  }
+  return hexOut;
+}
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -1703,23 +1736,16 @@ function generateDragon() {
   let new_theme = css_color_themes[dragon_color];
   if (urlParams.has("usecustomtheme")) {
     document.getElementById("usecustomtheme").checked=true;
-    if (urlParams.has("theme-r") && urlParams.has("theme-g") && urlParams.has("theme-b")) {
-      let thm_in_r = urlParams.get("theme-r");
-      let thm_in_g = urlParams.get("theme-g");
-      let thm_in_b = urlParams.get("theme-b");
-      if ((thm_in_r >= 0 && thm_in_r <= 255) &&
-          (thm_in_g >= 0 && thm_in_g <= 255) &&
-          (thm_in_b >= 0 && thm_in_b <= 255)) {
-        new_theme[0] = parseInt(thm_in_r);
-        new_theme[1] = parseInt(thm_in_g);
-        new_theme[2] = parseInt(thm_in_b);
+    if (urlParams.has("theme-color")) {
+      let thm_in_hex = urlParams.get("theme-color");
+      if (isValidColorHex(thm_in_hex)) {
+        let thm_in_arr = colorHexToTriplet(thm_in_hex);
+        new_theme = thm_in_arr;
       }
     }
   }
   setMonstersColor(new_theme[0], new_theme[1], new_theme[2]);
-  document.getElementById("theme-r").value = new_theme[0];
-  document.getElementById("theme-g").value = new_theme[1];
-  document.getElementById("theme-b").value = new_theme[2];
+  document.getElementById("theme-color").value = colorTripletToHex(new_theme);
 
   // modify grammatical tense for singular they
   if (dragon.itshe == "they") {
