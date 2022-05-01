@@ -1649,6 +1649,11 @@ function generateDragon() {
     populateCrTable("customized", dragon);
   }
 
+  // roll for max HP
+  console.log("Rolling Hit Dice: " + dragon.numberOfHitDice + "d" + dragon.hitDie + " " + dragon.hpConModSign + " " + dragon.absHpConMod);
+  const hd_result = rollDice(dragon.numberOfHitDice, dragon.hitDie, true);
+  console.log("Roll Result = " + (hd_result + dragon.hpConMod) + " (" + hd_result + " " + dragon.hpConModSign + " " + dragon.absHpConMod + ")");
+
   // update the page title
   document.title = dragon.dragonTitleForScreen;
   document.querySelector('meta[property="og:title"]').setAttribute("content", dragon.dragonTitleForScreen);
@@ -1872,9 +1877,27 @@ function rollDie(sides = 6) {
   return (1 + Math.floor(Math.random() * sides));
 }
 
+function rollDice(n = 1, sides = 6, verbose = false) {
+  n = Math.round(parseFloat(n));
+  sides = Math.round(parseFloat(sides));
+  let rolls = [];
+  let roll = 0;
+  let result = 0;
+  for (let i = 0; i < n; i++) {
+    roll = rollDie(sides);
+    rolls.push(roll);
+    result += roll;
+  }
+  if (verbose) {
+    console.log("" + n + "d" + sides + " = " + result + " (" + rolls.join(" + ") + ")");
+  }
+  return result;
+}
+
 async function delayLoad() {
+  console.log("Rolling 1d20 * 50 ms for artificial loading time");
   const d20_result = rollDie(20);
-  console.log(d20_result);
+  console.log("Rolled " + d20_result + " * 50 ms = " + (d20_result*0.05).toFixed(2) + " seconds");
   await sleep(d20_result * 50);
   decideLoadPath();
 }
