@@ -1462,7 +1462,7 @@ function returnOverrideVals() {
 
   if (urlParams.has("hp-override")) {
     let hp_override = urlParams.get("hp-override");
-    if (hp_override >= 1 && hp_override <= 999) {
+    if (hp_override >= 1 && hp_override <= 9999) {
       override_vals.hpOverride = Math.round(hp_override);
       document.getElementById("hp-override").value = hp_override;
     }
@@ -1475,46 +1475,25 @@ function returnOverrideVals() {
     }
   }
 
-  if (urlParams.has("strength")) {
-    let ability_override = urlParams.get("strength");
-    if (ability_override >= 1 && ability_override <= 30) {
-      override_vals.strength = Math.round(ability_override);
-      document.getElementById("strength").value = ability_override;
+  
+  for (let speed of ["walkingSpeed", "burrowSpeed", "climbSpeed", "flyingSpeed", "swimSpeed"]) {
+    if (urlParams.has(speed)) {
+      let speed_input = Math.round(parseFloat(urlParams.get(speed)));
+      if (speed_input >= 0 && speed_input <= 9000) {
+        override_vals[speed] = speed_input;
+        document.getElementById(speed).value = speed_input;
+      }
     }
   }
-  if (urlParams.has("dexterity")) {
-    let ability_override = urlParams.get("dexterity");
-    if (ability_override >= 1 && ability_override <= 30) {
-      override_vals.dexterity = Math.round(ability_override);
-      document.getElementById("dexterity").value = ability_override;
-    }
-  }
-  if (urlParams.has("constitution")) {
-    let ability_override = urlParams.get("constitution");
-    if (ability_override >= 1 && ability_override <= 30) {
-      override_vals.constitution = Math.round(ability_override);
-      document.getElementById("constitution").value = ability_override;
-    }
-  }
-  if (urlParams.has("intelligence")) {
-    let ability_override = urlParams.get("intelligence");
-    if (ability_override >= 1 && ability_override <= 30) {
-      override_vals.intelligence = Math.round(ability_override);
-      document.getElementById("intelligence").value = ability_override;
-    }
-  }
-  if (urlParams.has("wisdom")) {
-    let ability_override = urlParams.get("wisdom");
-    if (ability_override >= 1 && ability_override <= 30) {
-      override_vals.wisdom = Math.round(ability_override);
-      document.getElementById("wisdom").value = ability_override;
-    }
-  }
-  if (urlParams.has("charisma")) {
-    let ability_override = urlParams.get("charisma");
-    if (ability_override >= 1 && ability_override <= 30) {
-      override_vals.charisma = Math.round(ability_override);
-      document.getElementById("charisma").value = ability_override;
+
+  const ability_names = ["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"];
+  for (let ability_name of ability_names) {
+    if (urlParams.has(ability_name)) {
+      let ability_override = urlParams.get(ability_name);
+      if (ability_override >= 1 && ability_override <= 30) {
+        override_vals[ability_name] = Math.round(ability_override);
+        document.getElementById(ability_name).value = ability_override;
+      }
     }
   }
 

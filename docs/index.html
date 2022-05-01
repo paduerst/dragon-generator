@@ -143,26 +143,86 @@
               <div id="dropdown-for-advanced-options" class="collapse">
               <hr/>
               <div class="form-group row" style="margin-bottom: 0;">
-                <legend class="col-form-label col-md-2 float-sm-left pt-0">AC, Abilities, & HP</legend>
+                <legend class="col-form-label col-md-2 float-sm-left pt-0">AC, HP, & Speeds</legend>
                 <div class="col-md-10">
 
                   <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-abil-scores" name="custom-abil-scores" onclick="toggleOthers('custom-abil-scores')" data-toggle="collapse" data-target="#dropdown-for-custom-abil-scores" aria-expanded="false" aria-controls="dropdown-for-custom-abil-scores">
-                    <label class="custom-control-label" for="custom-abil-scores">Customize Armor Class, Ability Scores, and Hit Points</label>
+                    <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="ac-hp-speeds" name="ac-hp-speeds" onclick="toggleOthers('ac-hp-speeds')" data-toggle="collapse" data-target="#dropdown-for-ac-hp-speeds" aria-expanded="false" aria-controls="dropdown-for-ac-hp-speeds">
+                    <label class="custom-control-label" for="ac-hp-speeds">Customize Armor Class, Hit Points, and Speeds</label>
                   </div>
 
                 </div>
               </div>
 
-            <div id="dropdown-for-custom-abil-scores" class="collapse">
+            <div id="dropdown-for-ac-hp-speeds" class="collapse">
               <div class="form-group row">
                 <label for="ac-override" class="col-md-2 col-form-label">Override Armor Class</label>
                 <div class="col-md-10">
-                  <input id="ac-override" name="ac-override" type="number" class="form-control toggled-input-custom-abil-scores" min="5" max="25" step="1">
+                  <input id="ac-override" name="ac-override" type="number" class="form-control toggled-input-ac-hp-speeds" min="5" max="25" step="1">
                 </div>
               </div>
 
               <div class="form-group row">
+                <label for="hp-override" class="col-md-2 col-form-label">Override Max HP</label>
+                <div class="col-md-10">
+                  <input id="hp-override" name="hp-override" type="number" class="form-control toggled-input-ac-hp-speeds" min="1" max="9999" step="1">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="numberOfHitDice" class="col-md-2 col-form-label">Override # Hit Dice</label>
+                <div class="col-md-10">
+                  <input id="numberOfHitDice" name="numberOfHitDice" type="number" class="form-control toggled-input-ac-hp-speeds" min="1" max="50" step="1">
+                </div>
+              </div>
+
+              <div class="form-group row" style="margin-bottom: 0;">
+                <label for="walkingSpeed" class="col-md-2 col-form-label">Walking Speed</label>
+                <div class="col-md-10">
+                  <input id="walkingSpeed" name="walkingSpeed" type="number" class="form-control toggled-input-ac-hp-speeds" min="0" max="9000" step="5">
+                </div>
+              </div>
+              <div class="form-group row" style="margin-bottom: 0;">
+                <label for="burrowSpeed" class="col-md-2 col-form-label">Burrow Speed</label>
+                <div class="col-md-10">
+                  <input id="burrowSpeed" name="burrowSpeed" type="number" class="form-control toggled-input-ac-hp-speeds" min="0" max="9000" step="5">
+                </div>
+              </div>
+              <div class="form-group row" style="margin-bottom: 0;">
+                <label for="climbSpeed" class="col-md-2 col-form-label">Climb Speed</label>
+                <div class="col-md-10">
+                  <input id="climbSpeed" name="climbSpeed" type="number" class="form-control toggled-input-ac-hp-speeds" min="0" max="9000" step="5">
+                </div>
+              </div>
+              <div class="form-group row" style="margin-bottom: 0;">
+                <label for="flyingSpeed" class="col-md-2 col-form-label">Fly Speed</label>
+                <div class="col-md-10">
+                  <input id="flyingSpeed" name="flyingSpeed" type="number" class="form-control toggled-input-ac-hp-speeds" min="0" max="9000" step="5">
+                </div>
+              </div>
+              <div class="form-group row" style="margin-bottom: 0;">
+                <label for="swimSpeed" class="col-md-2 col-form-label">Swim Speed</label>
+                <div class="col-md-10">
+                  <input id="swimSpeed" name="swimSpeed" type="number" class="form-control toggled-input-ac-hp-speeds" min="0" max="9000" step="5">
+                </div>
+              </div>
+            </div>
+            <hr/>
+
+            <div class="form-group row" style="margin-bottom: 0;">
+              <legend class="col-form-label col-md-2 float-sm-left pt-0">Ability Scores</legend>
+              <div class="col-md-10">
+
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="custom-abil-scores" name="custom-abil-scores" onclick="toggleOthers('custom-abil-scores')" data-toggle="collapse" data-target="#dropdown-for-custom-abil-scores" aria-expanded="false" aria-controls="dropdown-for-custom-abil-scores">
+                  <label class="custom-control-label" for="custom-abil-scores">Customize Ability Scores</label>
+                </div>
+
+              </div>
+            </div>
+
+            <div id="dropdown-for-custom-abil-scores" class="collapse">
+              <div class="form-group row" style="margin-bottom: 0;">
                 <label for="strength" class="col-md-1 col-form-label" style="text-align: right;">STR</label>
                 <div class="col-md-1">
                 <input id="strength" name="strength" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="30" step="1">
@@ -186,20 +246,6 @@
                 <label for="charisma" class="col-md-1 col-form-label" style="text-align: right;">CHA</label>
                 <div class="col-md-1">
                 <input id="charisma" name="charisma" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="30" step="1">
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label for="hp-override" class="col-md-2 col-form-label">Override Max HP</label>
-                <div class="col-md-10">
-                  <input id="hp-override" name="hp-override" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="999" step="1">
-                </div>
-              </div>
-
-              <div class="form-group row" style="margin-bottom: 0;">
-                <label for="numberOfHitDice" class="col-md-2 col-form-label">Override # Hit Dice</label>
-                <div class="col-md-10">
-                  <input id="numberOfHitDice" name="numberOfHitDice" type="number" class="form-control toggled-input-custom-abil-scores" min="1" max="50" step="1">
                 </div>
               </div>
             </div>
