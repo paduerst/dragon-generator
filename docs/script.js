@@ -1361,10 +1361,6 @@ if (urlParams.has("secondbreath")) {
     document.getElementById("secondbreath").value = "off";
   }
 }
-// if (urlParams.has("nosecondbreath")) {
-//   has_second_breath = false;
-//   document.getElementById("nosecondbreath").checked=true;
-// }
 if (has_second_breath) {
   out_arr.push(insertVariablesToTemplate_(templates[breathColor + "1"], dragon));
   if (dragon.color != "Violet") {
@@ -1902,4 +1898,9 @@ async function delayLoad() {
   decideLoadPath();
 }
 
-delayLoad();
+if (urlParams.has("loadfaster")) {
+  document.getElementById("loadfaster").value = "on";
+  decideLoadPath();
+} else {
+  delayLoad();
+}
