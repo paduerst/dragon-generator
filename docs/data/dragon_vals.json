@@ -575,7 +575,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "one of the following effects at random. At the end of each of its turns, the creature can repeat the saving throw. On a successful save or after 1 minute has passed, the effect ends",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "blue layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -658,7 +658,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "one of the following effects at random. At the end of each of its turns, the creature can repeat the saving throw. On a successful save or after 1 minute has passed, the effect ends",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "blue layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -907,7 +907,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "for 1 minute",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "green layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -990,7 +990,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "for 1 hour",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "green layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -1239,7 +1239,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "for 1 minute or ",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "indigo layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -1322,7 +1322,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "for 1 hour or ",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "indigo layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -1571,7 +1571,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "10 minutes",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "red and violet layers",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -1654,7 +1654,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "30 minutes",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "red and violet layers",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -1903,7 +1903,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": 0,
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "orange layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -1986,7 +1986,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": 0,
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "orange layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -2235,7 +2235,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": " for 1 minute or",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "red layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -2318,7 +2318,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": " for 1 hour or",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "red layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -2567,7 +2567,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "1 minute",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "violet layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -2650,7 +2650,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": "1 hour",
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "violet layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -3231,7 +3231,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": 0,
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "yellow layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0
@@ -3314,7 +3314,7 @@
     "breath2DiceCount": 0,
     "breath2SpecialValue": 0,
     "prismaticRadianceRadius": 20,
-    "wallLayers": "n/a",
+    "wallLayers": "yellow layer",
     "wingAttackRadius": 0,
     "wingAttackDiceCount": 0,
     "wingAttackDiceType": 0

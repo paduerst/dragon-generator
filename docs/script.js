@@ -1013,6 +1013,32 @@ function addBackendCalculatedValues(dragon) {
   dragon.wingAttackExpectedDamage = Math.floor(dragon.wingAttackDiceCount*(0.5+dragon.wingAttackDiceType/2) + dragon.str);
   dragon.wingAttackExpectedDamage = numberOrMin(dragon.wingAttackExpectedDamage, 1);
 
+  // default Wall of Prismatic Color presence
+  if (dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") {
+    dragon.hasWall = true;
+  } else {
+    dragon.hasWall = false;
+  }
+  if (urlParams.has("nowallofcolor")) {
+    // no wall of color, overrides dropdown selection
+    dragon.hasWall = false;
+    // populate form to reflect no change shape without propagating this param
+    document.getElementById("wallofcolor").value = "off";
+  } else if (urlParams.has("wallofcolor")) {
+    if (urlParams.get("wallofcolor") == "on") {
+      dragon.hasWall = true;
+      document.getElementById("wallofcolor").value = "on";
+    } else if (urlParams.get("wallofcolor") == "off") {
+      dragon.hasWall = false;
+      document.getElementById("wallofcolor").value = "off";
+    }
+  }
+  if (dragon.color == "White" || dragon.color == "Black") {
+    // white dragons already have prismatic wall
+    // no idea what a wall should look like for black dragons
+    dragon.hasWall = false;
+  }
+
   return dragon;
 }
 
@@ -1292,14 +1318,14 @@ function generateFeaturesArray_(dragon) {
 
   if (urlParams.has("usealtvulnerability")) {
     let features_lost = "Innate Spellcasting, Magic Resistance, ";
-    if (urlParams.has("nowallofcolor") || !((dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") && dragon.color != "White" && dragon.color != "Black")) {
+    if (dragon.hasWall) {
+      features_lost = features_lost + "Variable Radiance, and Wall of Prismatic " + dragon.colorUpper;
+    } else {
       if (dragon.color == "Black") {
         features_lost = features_lost + "and Diminish Light";
       } else {
         features_lost = features_lost + "and Variable Radiance";
       }
-    } else {
-      features_lost = features_lost + "Variable Radiance, and Wall of Prismatic " + dragon.colorUpper;
     }
     dragon.altVulnerabilityFeaturesLost = features_lost;
     out_arr.push(insertVariablesToTemplate_(templates["altVulnerability" + dragon.color], dragon));
@@ -1380,11 +1406,7 @@ if (has_second_breath) {
 }
 
 // Wall of Prismatic Color
-if (urlParams.has("nowallofcolor")) {
-  // no wall of color
-  // populate form to reflect no wall of color
-  document.getElementById("nowallofcolor").checked=true;
-} else if ((dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") && dragon.color != "White" && dragon.color != "Black") {
+if (dragon.hasWall) {
   out_arr.push(insertVariablesToTemplate_(templates.wallOfPrismaticColorNew, dragon));
 }
 
@@ -1395,11 +1417,25 @@ function generateBonusActionsArray_(dragon) {
 var out_arr = [];
 
 // Change Shape
+var change_shape_available = false;
+if (dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") {
+  change_shape_available = true;
+}
 if (urlParams.has("nochangeshape")) {
-  // no change shape
-  // populate form to reflect no change shape
-  document.getElementById("nochangeshape").checked=true;
-} else if (dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") {
+  // no change shape, overrides dropdown selection
+  change_shape_available = false;
+  // populate form to reflect no change shape without propagating this param
+  document.getElementById("changeshape").value = "off";
+} else if (urlParams.has("changeshape")) {
+  if (urlParams.get("changeshape") == "on") {
+    change_shape_available = true;
+    document.getElementById("changeshape").value = "on";
+  } else if (urlParams.get("changeshape") == "off") {
+    change_shape_available = false;
+    document.getElementById("changeshape").value = "off";
+  }
+}
+if (change_shape_available) {
   out_arr.push(insertVariablesToTemplate_(templates.changeShape, dragon));
 }
 

@@ -635,7 +635,7 @@
                 </div>
                 <label for="breath1dType" class="col-md-1 col-form-label">Size</label>
                 <div class="col-md-2">
-                  <select class="form-control toggled-input-advanced-options toggled-input-custom-breaths" id="breath1dType" name="breath1dType">
+                  <select class="form-control toggled-input-custom-breaths" id="breath1dType" name="breath1dType">
                     <option value="4">d4</option>
                     <option selected value="default">d6</option>
                     <option value="8">d8</option>
@@ -649,7 +649,7 @@
               <div class="form-group row" style="margin-bottom: 0;">
                 <label for="secondbreath" class="col-md-2 col-form-label">Secondary Breath</label>
                 <div class="col-md-10">
-                  <select class="form-control toggled-input-advanced-options toggled-input-custom-breaths" id="secondbreath" name="secondbreath">
+                  <select class="form-control toggled-input-custom-breaths" id="secondbreath" name="secondbreath">
                     <option selected value="default">Default Secondary Breath (On for all but wyrmlings)</option>
                     <option value="on">Force Secondary Breath on for all ages</option>
                     <option value="off">No Secondary Breath</option>
@@ -660,18 +660,30 @@
             <hr/>
 
             <div class="form-group row">
+              <label for="changeshape" class="col-md-2 col-form-label">Change Shape</label>
+              <div class="col-md-10">
+                <select class="form-control toggled-input-advanced-options" id="changeshape" name="changeshape">
+                  <option selected value="default">Default Change Shape (On for adults and older)</option>
+                  <option value="on">Force Change Shape on for all ages</option>
+                  <option value="off">No Change Shape</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="wallofcolor" class="col-md-2 col-form-label">Wall of Prismatic Color</label>
+              <div class="col-md-10">
+                <select class="form-control toggled-input-advanced-options" id="wallofcolor" name="wallofcolor">
+                  <option selected value="default">Default Wall of Prismatic Color (On for adults and older, except black and white)</option>
+                  <option value="on">Force Wall of Prismatic Color on for all ages (Except black and white)</option>
+                  <option value="off">No Wall of Prismatic Color</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row" style="display: none;">
               <legend class="col-form-label col-md-2 float-sm-left pt-0">Misc Features</legend>
               <div class="col-md-10">
-
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="nochangeshape" name="nochangeshape">
-                  <label class="custom-control-label" for="nochangeshape">No Shape Change <i>(Otherwise on for adults and older)</i></label>
-                </div>
-
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="nowallofcolor" name="nowallofcolor">
-                  <label class="custom-control-label" for="nowallofcolor">No Wall of Prismatic Color <i>(Otherwise on for adults and older)</i></label>
-                </div>
 
                 <div class="custom-control custom-switch" style="display: none;">
                   <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="usealtvulnerability" name="usealtvulnerability">
