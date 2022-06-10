@@ -183,7 +183,7 @@ const css_color_themes = {
   "Violet": [118, 43, 158],
   "Magenta": [173, 12, 117],
   "White": [127, 128, 119],
-  "Black": [0, 0, 0]
+  "Black": [60, 60, 60]
 };
 
 const global_skills = [
@@ -1047,7 +1047,7 @@ function addBackendCalculatedValues(dragon) {
   }
   if (dragon.color == "White" || dragon.color == "Black") {
     // white dragons already have prismatic wall
-    // no idea what a wall should look like for black dragons
+    // black dragons have wall of shadow
     dragon.hasWall = false;
   }
 
@@ -1341,7 +1341,7 @@ function generateFeaturesArray_(dragon) {
       features_lost = features_lost + "Variable Radiance, and Wall of Prismatic " + dragon.colorUpper;
     } else {
       if (dragon.color == "Black") {
-        features_lost = features_lost + "and Diminish Light";
+        features_lost = features_lost + "and Variable Shadow";
       } else {
         features_lost = features_lost + "and Variable Radiance";
       }
