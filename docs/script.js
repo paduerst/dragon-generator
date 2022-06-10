@@ -207,6 +207,10 @@ const global_skills = [
   {"skill": "Survival", "ability": "wis"}
 ];
 
+const homebrew_spells = [
+  "wall-of-shadow"
+];
+
 const index_of_cr_1 = 4; // prior to 1 are: 0, 1/8, 1/4, 1/2
 const index_of_cr_30 = (30 - 1) + index_of_cr_1;
 const max_cr = 50; // cr_table.csv extrapolates up to this hypothetical CR
@@ -420,6 +424,7 @@ function convertTagsToLinks_(strIn) {
   if (tags === null) {
     return strIn; // If there are no tags, just return the input string.
   } else {
+    const homebrew_link_start = '<a target="_blank" href="https://www.palladiumturtle.com/';
     for (var i = 0; i < tags.length; ++i) {
       var tag = tags[i];
       var firstBrackArr = tag.match(/[\[][^\/\]]{1,50}[\]]/g); // matches the first bracketed portion
@@ -433,6 +438,9 @@ function convertTagsToLinks_(strIn) {
       var link = '<a target="_blank" href="https://www.dndbeyond.com/';
       if (firstBrack == "spell") {
         contentsInURL = contents.toLowerCase().replace(/[ \/]/g, "-").replace(/[’']/, "");
+        if (homebrew_spells.includes(contentsInURL)) {
+          link = homebrew_link_start;
+        }
         link = link + 'spells/';
       } else if (firstBrack == "monster") {
         contentsInURL = contents.toLowerCase();
@@ -443,6 +451,10 @@ function convertTagsToLinks_(strIn) {
       } else if (firstBrack == "condition") {
         contentsInURL = contents.charAt(0).toUpperCase() + contents.substring(1);
         link = link + 'sources/basic-rules/appendix-a-conditions#';
+      } else {
+        console.log("Didn't recognize firstBrack = " + firstBrack);
+        console.log("Skipping contents = " + contents);
+        continue;
       }
       link = link + contentsInURL + '">' + contents + '</a>';
       strIn = strIn.replace(tag, link); // Replace tag with the appropriate link
