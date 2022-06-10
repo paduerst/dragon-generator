@@ -1051,6 +1051,13 @@ function addBackendCalculatedValues(dragon) {
     dragon.hasWall = false;
   }
 
+  // Change Shape
+  if (dragon.legendaryResistances > 0) {
+    dragon.changeShapeRetainedFeatures = "proficiencies, Legendary Resistance, and Variable Radiance";
+  } else {
+    dragon.changeShapeRetainedFeatures = "proficiencies, and Variable Radiance";
+  }
+
   return dragon;
 }
 
