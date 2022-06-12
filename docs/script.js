@@ -976,6 +976,12 @@ function addBackendCalculatedValues(dragon) {
     dragon["saveDc"+Mod] = 8 + dragon.proficiencyBonus + dragon[mod];
   }
 
+  // Alt Vulnerability Save DC
+  if (!dragon.hasOwnProperty("altVulnerabilitySaveDc")) {
+    // don't redefine this if it was overwritten by the user
+    dragon.altVulnerabilitySaveDc = dragon.altVulnerabilitySaveDcBaseValue + dragon.proficiencyCon;
+  }
+
   // Hit Die
   var hitDie = 4;
   if (dragon.size == "Small") {
@@ -1024,6 +1030,8 @@ function addBackendCalculatedValues(dragon) {
   dragon.breath1ExpectedDamage = numberOrMin(dragon.breath1ExpectedDamage, 1);
   dragon.wingAttackExpectedDamage = Math.floor(dragon.wingAttackDiceCount*(0.5+dragon.wingAttackDiceType/2) + dragon.str);
   dragon.wingAttackExpectedDamage = numberOrMin(dragon.wingAttackExpectedDamage, 1);
+  dragon.altVulnerabilityExpectedHpLost = Math.floor(dragon.altVulnerabilityDiceCount*(0.5+dragon.altVulnerabilityDiceType/2));
+  dragon.altVulnerabilityExpectedHpLost = numberOrMin(dragon.altVulnerabilityExpectedHpLost, 1);
 
   // default Wall of Prismatic Color presence
   if (dragon.age == "Adult" || dragon.age == "Ancient" || dragon.age == "Greatwyrm") {
@@ -1603,6 +1611,33 @@ function returnOverrideVals() {
     if (spells_override.length > 0) {
       override_vals.rawSpells = spells_override;
       document.getElementById("spellsoverride").value = spells_override;
+    }
+  }
+
+  if (urlParams.has("altVulnerabilitySaveDc")) {
+    let altVulnerabilitySaveDc = urlParams.get("altVulnerabilitySaveDc");
+    if (altVulnerabilitySaveDc >= 1 && altVulnerabilitySaveDc <= 30) {
+      override_vals.altVulnerabilitySaveDc = Math.round(altVulnerabilitySaveDc);
+      document.getElementById("altVulnerabilitySaveDc").value = altVulnerabilitySaveDc;
+    }
+  }
+
+  if (urlParams.has("altVulnerabilityDiceCount")) {
+    let altVulnerabilityDiceCount = urlParams.get("altVulnerabilityDiceCount");
+    if (altVulnerabilityDiceCount >= 1 && altVulnerabilityDiceCount <= 64) {
+      override_vals.altVulnerabilityDiceCount = Math.round(altVulnerabilityDiceCount);
+      document.getElementById("altVulnerabilityDiceCount").value = altVulnerabilityDiceCount;
+    }
+  }
+
+  if (urlParams.has("altVulnerabilityDiceType")) {
+    let altVulnerabilityDiceType = urlParams.get("altVulnerabilityDiceType");
+    // default == 6
+    if (altVulnerabilityDiceType == 4 || altVulnerabilityDiceType == 8 ||
+        altVulnerabilityDiceType == 10 || altVulnerabilityDiceType == 12 ||
+        altVulnerabilityDiceType == 20) {
+      override_vals.altVulnerabilityDiceType = parseInt(altVulnerabilityDiceType);
+      document.getElementById("altVulnerabilityDiceType").value = altVulnerabilityDiceType;
     }
   }
 

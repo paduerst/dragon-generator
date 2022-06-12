@@ -659,6 +659,45 @@
             </div>
             <hr/>
 
+            <div class="form-group row" style="margin-bottom: 0;">
+              <legend class="col-form-label col-md-2 float-sm-left pt-0">Prismatic Weakness</legend>
+              <div class="col-md-10">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options toggles-others" id="usealtvulnerability" name="usealtvulnerability" onclick="toggleOthers('usealtvulnerability')" data-toggle="collapse" data-target="#dropdown-for-usealtvulnerability" aria-expanded="false" aria-controls="dropdown-for-usealtvulnerability">
+                  <label class="custom-control-label" for="usealtvulnerability">Use Prismatic Weakness <i>(Replaces damage vulnerability)</i></label>
+                </div>
+              </div>
+            </div>
+
+            <div id="dropdown-for-usealtvulnerability" class="collapse">
+              <div class="form-group row">
+                <label for="altVulnerabilitySaveDc" class="col-md-2 col-form-label">Override Save DC</label>
+                <div class="col-md-10">
+                  <input id="altVulnerabilitySaveDc" name="altVulnerabilitySaveDc" type="number" class="form-control toggled-input-usealtvulnerability" min="1" max="30" step="1">
+                </div>
+              </div>
+
+              <div class="form-group row" style="margin-bottom: 0;">
+                <label class="col-md-2 col-form-label">Override Dice for HP Lost</label>
+                <label for="altVulnerabilityDiceCount" class="col-md-1 col-form-label">Number</label>
+                <div class="col-md-2">
+                <input id="altVulnerabilityDiceCount" name="altVulnerabilityDiceCount" type="number" class="form-control toggled-input-usealtvulnerability" min="1" max="64" step="1">
+                </div>
+                <label for="altVulnerabilityDiceType" class="col-md-1 col-form-label">Size</label>
+                <div class="col-md-2">
+                  <select class="form-control toggled-input-usealtvulnerability" id="altVulnerabilityDiceType" name="altVulnerabilityDiceType">
+                    <option value="4">d4</option>
+                    <option selected value="default">d6</option>
+                    <option value="8">d8</option>
+                    <option value="10">d10</option>
+                    <option value="12">d12</option>
+                    <option value="20">d20</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <hr/>
+
             <div class="form-group row">
               <label for="changeshape" class="col-md-2 col-form-label">Change Shape</label>
               <div class="col-md-10">
@@ -678,18 +717,6 @@
                   <option value="on">Force Wall of Prismatic Color on for all ages (Except black and white)</option>
                   <option value="off">No Wall of Prismatic Color</option>
                 </select>
-              </div>
-            </div>
-
-            <div class="form-group row" style="display: none;">
-              <legend class="col-form-label col-md-2 float-sm-left pt-0">Misc Features</legend>
-              <div class="col-md-10">
-
-                <div class="custom-control custom-switch" style="display: none;">
-                  <input type="checkbox" class="custom-control-input toggled-input-advanced-options" id="usealtvulnerability" name="usealtvulnerability">
-                  <label class="custom-control-label" for="usealtvulnerability">Use Prismatic Weakness <i>(Replaces damage vulnerability)</i></label>
-                </div>
-
               </div>
             </div>
 
