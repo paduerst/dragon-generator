@@ -208,6 +208,7 @@ const global_skills = [
 ];
 
 const homebrew_spells = [
+  "heat-metal-peters-variant",
   "wall-of-shadow"
 ];
 
