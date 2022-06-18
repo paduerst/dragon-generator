@@ -209,6 +209,7 @@ const global_skills = [
 
 const homebrew_spells = [
   "peters-heat-metal",
+  "wall-of-color",
   "wall-of-shadow"
 ];
 
