@@ -673,11 +673,11 @@
               <div class="form-group row">
                 <label for="altVulnerabilitySaveDc" class="col-md-2 col-form-label">Override Save DC</label>
                 <div class="col-md-10">
-                  <input id="altVulnerabilitySaveDc" name="altVulnerabilitySaveDc" type="number" class="form-control toggled-input-usealtvulnerability" min="1" max="30" step="1">
+                  <input id="altVulnerabilitySaveDc" name="altVulnerabilitySaveDc" type="number" placeholder='Defaults to 8 + PB + CON (a 35% chance of failure)' class="form-control toggled-input-usealtvulnerability" min="1" max="30" step="1">
                 </div>
               </div>
 
-              <div class="form-group row" style="margin-bottom: 0;">
+              <div class="form-group row">
                 <label class="col-md-2 col-form-label">Override Dice for HP Lost</label>
                 <label for="altVulnerabilityDiceCount" class="col-md-1 col-form-label">Number</label>
                 <div class="col-md-2">
@@ -693,6 +693,13 @@
                     <option value="12">d12</option>
                     <option value="20">d20</option>
                   </select>
+                </div>
+              </div>
+
+              <div class="form-group row" style="margin-bottom: 0;">
+                <label for="altVulnerabilityRider" class="col-md-2 col-form-label">Override Rider Effect</label>
+                <div class="col-md-10">
+                    <input class="form-control toggled-input-usealtvulnerability" type="text" placeholder='Defaults to falling and being unable to move or cast spells' id="altVulnerabilityRider" name="altVulnerabilityRider">
                 </div>
               </div>
             </div>

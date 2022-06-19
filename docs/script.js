@@ -978,10 +978,17 @@ function addBackendCalculatedValues(dragon) {
     dragon["saveDc"+Mod] = 8 + dragon.proficiencyBonus + dragon[mod];
   }
 
-  // Alt Vulnerability Save DC
+  // Alt Vulnerability
   if (!dragon.hasOwnProperty("altVulnerabilitySaveDc")) {
     // don't redefine this if it was overwritten by the user
     dragon.altVulnerabilitySaveDc = dragon.altVulnerabilitySaveDcBaseValue + dragon.proficiencyCon;
+  }
+  if (!dragon.hasOwnProperty("altVulnerabilityRider")) {
+    // don't redefine this if it was overwritten by the user
+    dragon.altVulnerabilityRider = ", falls if flying, and can't move or cast spells until the end of " + dragon.itsher + " next turn";
+  }
+  if (dragon.altVulnerabilityRider == "blank") {
+    dragon.altVulnerabilityRider = ""; // allows user to eliminate all rider effects
   }
 
   // Hit Die
@@ -1641,6 +1648,12 @@ function returnOverrideVals() {
       override_vals.altVulnerabilityDiceType = parseInt(altVulnerabilityDiceType);
       document.getElementById("altVulnerabilityDiceType").value = altVulnerabilityDiceType;
     }
+  }
+
+  if (urlParams.has("altVulnerabilityRider")) {
+    let altVulnerabilityRider = urlParams.get("altVulnerabilityRider");
+    override_vals.altVulnerabilityRider = altVulnerabilityRider;
+    document.getElementById("altVulnerabilityRider").value = altVulnerabilityRider;
   }
 
   return override_vals;
