@@ -1977,3 +1977,5 @@ function rollDice(n = 1, sides = 6, verbose = false) {
 function main() {
   decideLoadPath();
 }
+
+main()
