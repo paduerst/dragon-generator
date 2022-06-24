@@ -1974,17 +1974,6 @@ function rollDice(n = 1, sides = 6, verbose = false) {
   return result;
 }
 
-async function delayLoad() {
-  console.log("Rolling 1d20 * 50 ms for artificial loading time");
-  const d20_result = rollDie(20);
-  console.log("Rolled " + d20_result + " * 50 ms = " + (d20_result*0.05).toFixed(2) + " seconds");
-  await sleep(d20_result * 50);
+function main() {
   decideLoadPath();
-}
-
-if (urlParams.has("loadfaster")) {
-  document.getElementById("loadfaster").value = "on";
-  decideLoadPath();
-} else {
-  delayLoad();
 }
