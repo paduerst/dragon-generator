@@ -95,7 +95,7 @@ function toggleOthersSelectOne(select_id, toggled_ids=[]) {
   var input_class = input_base_class + "-";
   var dropdown_el;
   for (let i = 0; i < toggler_el.options.length; i++) {
-    let option_i = toggler_el.options[i]
+    let option_i = toggler_el.options[i];
     if (option_i.className.includes(toggle_option_class)) {
       // this option toggles other inputs/dropdowns
       input_class = input_base_class + "-" + option_i.value;
@@ -104,9 +104,11 @@ function toggleOthersSelectOne(select_id, toggled_ids=[]) {
       if (toggler_el.disabled == true || toggler_el.value !== option_i.value) {
         $( "form" ).find(input_class).prop( "disabled", true );
         dropdown_el.collapse('hide');
+        option_i.setAttribute("aria-expanded", false);
       } else {
         $( "form" ).find(input_class).prop( "disabled", false );
         dropdown_el.collapse('show');
+        option_i.setAttribute("aria-expanded", true);
       }
 
       // now recurse on inputs which are themselves togglers
@@ -1062,18 +1064,15 @@ function addBackendCalculatedValues(dragon) {
       document.getElementById("wallofcolor").value = "off";
     }
   }
-  if (dragon.color == "White" || dragon.color == "Black") {
-    // white dragons already have prismatic wall
-    // black dragons have wall of shadow
-    dragon.hasWall = false;
-  }
 
   // Change Shape
+  dragon.changeShapeRetainedFeaturesArray = [];
+  dragon.changeShapeRetainedFeaturesArray.push("Magic Resistance");
   if (dragon.legendaryResistances > 0) {
-    dragon.changeShapeRetainedFeatures = "proficiencies, Legendary Resistance, and Variable Radiance";
-  } else {
-    dragon.changeShapeRetainedFeatures = "proficiencies, and Variable Radiance";
+    dragon.changeShapeRetainedFeaturesArray.push("Legendary Resistance");
   }
+  const variableTrait = (dragon.color == "Black") ? "Shadow" : "Radiance";
+  dragon.changeShapeRetainedFeaturesArray.push(`Variable ${variableTrait}`);
 
   return dragon;
 }
@@ -1298,7 +1297,7 @@ function generateFeaturesArray_(dragon) {
       desc_string = desc_string + " (";
     }
     if (include_dc) {
-      desc_string = desc_string + "spell save DC " + dragon.saveDcCha;
+      desc_string = desc_string + "spell save <span class=\"nowrap\">DC " + dragon.saveDcCha + "</span>";
     }
     if (include_atk && include_dc) {
       desc_string = desc_string + ", ";
@@ -1336,6 +1335,7 @@ function generateFeaturesArray_(dragon) {
     if (!disable_leveled_spells) {
       out_arr.push(insertVariablesToTemplate_(templates.innateSpellcastingSpells, dragon));
     }
+    dragon.changeShapeRetainedFeaturesArray.push("Innate Spellcasting");
   }
 
   if (dragon.legendaryResistances > 0) {
@@ -1443,7 +1443,13 @@ if (has_second_breath) {
 
 // Wall of Prismatic Color
 if (dragon.hasWall) {
-  out_arr.push(insertVariablesToTemplate_(templates.wallOfPrismaticColorNew, dragon));
+  if (dragon.color == "White") {
+    out_arr.push(insertVariablesToTemplate_(templates.wallOfPrismaticColorWhite, dragon));
+  } else if (dragon.color == "Black") {
+    out_arr.push(insertVariablesToTemplate_(templates.wallOfShadow, dragon));
+  } else {
+    out_arr.push(insertVariablesToTemplate_(templates.wallOfPrismaticColorNew, dragon));
+  }
 }
 
 return out_arr;
@@ -1472,6 +1478,10 @@ if (urlParams.has("nochangeshape")) {
   }
 }
 if (change_shape_available) {
+  dragon.changeShapeRetainedFeaturesArray.sort();
+  let retained_features = dragon.changeShapeRetainedFeaturesArray.slice(0, -1).join(', ');
+  retained_features = retained_features + ", and " + dragon.changeShapeRetainedFeaturesArray.slice(-1);
+  dragon.changeShapeRetainedFeatures = retained_features;
   out_arr.push(insertVariablesToTemplate_(templates.changeShape, dragon));
 }
 

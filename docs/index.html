@@ -25,13 +25,13 @@
   <div class='customization-menu' id="dragon-options-menu-div">
     <div class="accordion" id="accordionExample">
 
-      <h2 class="mb-0">
+      <div class="mb-0">
         <button class="btn btn-link btn-block" type="button" data-toggle="collapse" data-target="#dragonMenu" aria-expanded="false" aria-controls="dragonMenu" id="dragon-menu-btn">
           <div class="btn dropdown-toggle text-light" style="background-color:rgb(64, 64, 64);">
             <b>Dragon Options Menu</b>
           </div>
         </button>
-      </h2>
+      </div>
 
       <div id="dragonMenu" class="collapse bg-light"  data-parent="#accordionExample">
         <div class="card-body">
@@ -98,7 +98,10 @@
                       <option value="singularthey">They/Them</option>
                       <option value="spivak" hidden>Ey/Em</option>
                       <option value="no-pronouns">No Pronouns</option>
-                      <option value="custom-pronouns" class="pronouns-toggling-option">Custom Pronouns</option>
+                      <option value="custom-pronouns"
+                        class="pronouns-toggling-option"
+                        aria-expanded="false"
+                        aria-controls="dropdown-for-pronouns-custom-pronouns">Custom Pronouns</option>
                   </select>
               </div>
             </div>
