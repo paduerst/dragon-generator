@@ -36,7 +36,7 @@
       <div id="dragonMenu" class="collapse bg-light"  data-parent="#accordionExample">
         <div class="card-body">
           <p>
-            <em>Adjust the dragon traits using the options below, then press Update to view the new stat block. You can save stat blocks by copying the link or by printing the page to a PDF.</em>
+            <em>Adjust the dragon traits using the options below, then press <span id="form-intro-generate-mention">Generate Dragon</span> to view the new stat block. You can save stat blocks by copying the link or by printing the page to a PDF.</em>
             <br>
             <em>Learn what makes each color unique at <a target="_blank" href="https://www.palladiumturtle.com/dragons/colors">www.palladiumturtle.com/dragons/colors</a></em>
           </p>
@@ -77,7 +77,7 @@
             <div class="form-group row">
                 <label for="name" class="col-md-2 col-form-label">Name</label>
                 <div class="col-md-10">
-                    <input class="form-control" type="text" placeholder='Referred to as "the dragon" or "the greatwyrm" by default' id="name" name="name">
+                    <input class="form-control" type="text" placeholder='Referred to as "the dragon" by default' id="name" name="name">
                 </div>
             </div>
 
@@ -723,8 +723,8 @@
               <label for="wallofcolor" class="col-md-2 col-form-label">Wall of Prismatic Color</label>
               <div class="col-md-10">
                 <select class="form-control toggled-input-advanced-options" id="wallofcolor" name="wallofcolor">
-                  <option selected value="default">Default Wall of Prismatic Color (On for adults and older, except black and white)</option>
-                  <option value="on">Force Wall of Prismatic Color on for all ages (Except black and white)</option>
+                  <option selected value="default">Default Wall of Prismatic Color</option>
+                  <option value="on">Force Wall of Prismatic Color on for all ages</option>
                   <option value="off">No Wall of Prismatic Color</option>
                 </select>
               </div>
@@ -770,7 +770,7 @@
 
             <div class="form-group row" style="margin-top: 10px;">
                 <div class="col-md-10">
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary" id="form-submit-btn">Generate Dragon</button>
                 </div>
             </div>
 

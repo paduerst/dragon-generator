@@ -1951,6 +1951,9 @@ function decideLoadPath() {
     document.getElementById("ignorecache").value = "on";
   }
   if (urlParams.has("color") || urlParams.has("age")) {
+    const new_submit_btn_name = "Update Dragon";
+    document.getElementById("form-intro-generate-mention").innerText = new_submit_btn_name;
+    document.getElementById("form-submit-btn").innerText = new_submit_btn_name;
     importDragons(); // import then generate the dragon
   } else if (urlParams.has("loadendlessly")) {
     // pass, just load endlessly
