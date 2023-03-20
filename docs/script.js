@@ -842,7 +842,13 @@ function addUserSpecifiedValues(dragon) {
     document.getElementById("name").value = dragon_name;
   }
   dragon.theDragonName = dragon_name;
-  dragon.theDragonNameUpper = capitalizeFirstLetter(dragon_name);
+  if (urlParams.has("forcelowercasename")) {
+    dragon.theDragonNameUpper = dragon_name;
+    document.getElementById("forcelowercasename").checked = true;
+  } else {
+    dragon.theDragonNameUpper = capitalizeFirstLetter(dragon_name);
+  }
+  document.getElementById("capitalizationLabel").innerText = `Never capitalize "${dragon_name}"`;
 
   // Alignment
   if (urlParams.has("alignment") && urlParams.get("alignment")!="") {
@@ -985,7 +991,7 @@ function addBackendCalculatedValues(dragon) {
     // don't redefine this if it was overwritten by the user
     dragon.altVulnerabilitySaveDc = dragon.altVulnerabilitySaveDcBaseValue + dragon.proficiencyCon;
   }
-  const defaultAltVulnerabilityRider = " and can't cast spells until the end of " + dragon.itsher + " next turn";
+  const defaultAltVulnerabilityRider = ` and can't cast spells until the end of ${dragon.itsher} next turn`;
   if (!dragon.hasOwnProperty("altVulnerabilityRider")) {
     // don't redefine this if it was overwritten by the user
     dragon.altVulnerabilityRider = defaultAltVulnerabilityRider;
