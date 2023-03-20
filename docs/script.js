@@ -985,13 +985,15 @@ function addBackendCalculatedValues(dragon) {
     // don't redefine this if it was overwritten by the user
     dragon.altVulnerabilitySaveDc = dragon.altVulnerabilitySaveDcBaseValue + dragon.proficiencyCon;
   }
+  const defaultAltVulnerabilityRider = " and can't cast spells until the end of " + dragon.itsher + " next turn";
   if (!dragon.hasOwnProperty("altVulnerabilityRider")) {
     // don't redefine this if it was overwritten by the user
-    dragon.altVulnerabilityRider = ", falls if flying, and can't move or cast spells until the end of " + dragon.itsher + " next turn";
+    dragon.altVulnerabilityRider = defaultAltVulnerabilityRider;
   }
   if (dragon.altVulnerabilityRider == "blank") {
     dragon.altVulnerabilityRider = ""; // allows user to eliminate all rider effects
   }
+  document.getElementById("altVulnerabilityRider").placeholder = `Defaults to "${defaultAltVulnerabilityRider}"`;
 
   // Hit Die
   var hitDie = 4;
