@@ -801,7 +801,7 @@ function updateAncientToGreatwyrm(dragon) {
 
 function addUserSpecifiedValues(dragon) {
   // DM vs GM
-  let dmgm = "DM";
+  let dmgm = "GM";
   // not sure what the name of this urlParam should be. TODO: add this?
   dragon.dmgm = dmgm;
 
@@ -848,7 +848,9 @@ function addUserSpecifiedValues(dragon) {
   } else {
     dragon.theDragonNameUpper = capitalizeFirstLetter(dragon_name);
   }
-  document.getElementById("capitalizationLabel").innerText = `Never capitalize "${dragon_name}"`;
+
+  // Descriptive Color
+  dragon.descriptiveColor = dragon.color;
 
   // Alignment
   if (urlParams.has("alignment") && urlParams.get("alignment")!="") {
@@ -1061,7 +1063,7 @@ function addBackendCalculatedValues(dragon) {
   if (urlParams.has("nowallofcolor")) {
     // no wall of color, overrides dropdown selection
     dragon.hasWall = false;
-    // populate form to reflect no change shape without propagating this param
+    // populate form to reflect no wall without propagating this legacy param
     document.getElementById("wallofcolor").value = "off";
   } else if (urlParams.has("wallofcolor")) {
     if (urlParams.get("wallofcolor") == "on") {
@@ -1085,15 +1087,15 @@ function addBackendCalculatedValues(dragon) {
   return dragon;
 }
 
-function addGeneralDragonStatistics(dragon) {
+function addDragonTitle(dragon) {
   // Dragon Title
   let dragon_descriptive_title = "";
   if (dragon.age == "Wyrmling") {
-    dragon_descriptive_title = "" + dragon.color + " Dragon " + dragon.age;
+    dragon_descriptive_title = "" + dragon.descriptiveColorUpper + " Dragon " + dragon.age;
   } else if (dragon.age == "Greatwyrm") {
-    dragon_descriptive_title = "" + dragon.color + " " + dragon.age;
+    dragon_descriptive_title = "" + dragon.descriptiveColorUpper + " " + dragon.age;
   } else {
-    dragon_descriptive_title = "" + dragon.age + " " + dragon.color + " Dragon";
+    dragon_descriptive_title = "" + dragon.age + " " + dragon.descriptiveColorUpper + " Dragon";
   }
   var title_for_screen_arr = [];
   var include_descriptive_title = true;
@@ -1113,6 +1115,10 @@ function addGeneralDragonStatistics(dragon) {
   title_for_screen_arr.push("Prismatic Dragon Generator");
   dragon.dragonTitleForScreen = title_for_screen_arr.join(" - ");
 
+  return dragon;
+}
+
+function addGeneralDragonStatistics(dragon) {
   // Speeds
   let speeds = "" + dragon.walkingSpeed + " ft.";
   if (dragon.burrowSpeed > 0) {
@@ -1219,6 +1225,7 @@ function addCaseVariants(dragon) {
     "resistances",
     "vulnerability",
     "color",
+    "descriptiveColor",
     "age"
   ];
   for (let val of vals_to_vary) {
@@ -1361,18 +1368,7 @@ function generateFeaturesArray_(dragon) {
   }
 
   if (urlParams.has("usealtvulnerability")) {
-    let features_lost = "Innate Spellcasting, Magic Resistance, ";
-    if (dragon.hasWall) {
-      features_lost = features_lost + "Variable Radiance, and Wall of Prismatic " + dragon.colorUpper;
-    } else {
-      if (dragon.color == "Black") {
-        features_lost = features_lost + "and Variable Shadow";
-      } else {
-        features_lost = features_lost + "and Variable Radiance";
-      }
-    }
-    dragon.altVulnerabilityFeaturesLost = features_lost;
-    out_arr.push(insertVariablesToTemplate_(templates["altVulnerability" + dragon.color], dragon));
+    out_arr.push(insertVariablesToTemplate_(templates[`altVulnerability${dragon.color}`], dragon));
     // populate form
     document.getElementById("usealtvulnerability").checked = true;
   }
@@ -1496,6 +1492,7 @@ if (change_shape_available) {
 if (dragon.color == "Black") {
   out_arr.push(insertVariablesToTemplate_(templates.diminishLight, dragon));
 } else {
+  dragon.radianceColor = dragon.descriptiveColorLower;
   out_arr.push(insertVariablesToTemplate_(templates.prismaticRadiance, dragon));
 }
 
@@ -1533,6 +1530,7 @@ function returnDragon(dragon_color, dragon_age, override_vals={}) {
   dragon = addBackendCalculatedValues(dragon);
   dragon = addGeneralDragonStatistics(dragon);
   dragon = addCaseVariants(dragon);
+  dragon = addDragonTitle(dragon);
   let verbose_cr_calc = false;
   if (urlParams.has("custom-cr")) { verbose_cr_calc = true; }
   dragon = calculateDragonCr(dragon, verbose_cr_calc);
@@ -1960,7 +1958,10 @@ function decideLoadPath() {
   }
   if (urlParams.has("color") || urlParams.has("age")) {
     const new_submit_btn_name = "Update Dragon";
-    document.getElementById("form-intro-generate-mention").innerText = new_submit_btn_name;
+    let btn_mention_spans = document.getElementsByClassName("generate-dragon-span");
+    for (let btn_mention_span of btn_mention_spans) {
+      btn_mention_span.innerText = new_submit_btn_name;
+    }
     document.getElementById("form-submit-btn").innerText = new_submit_btn_name;
     importDragons(); // import then generate the dragon
   } else if (urlParams.has("loadendlessly")) {
