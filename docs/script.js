@@ -1112,7 +1112,7 @@ function addDragonTitle(dragon) {
     title_for_screen_arr.push(dragon.theDragonNameUpper);
   }
   if (include_descriptive_title) { title_for_screen_arr.push(dragon_descriptive_title); }
-  title_for_screen_arr.push("Prismatic Dragon Generator");
+  title_for_screen_arr.push("Prismatic Dragon Builder");
   dragon.dragonTitleForScreen = title_for_screen_arr.join(" - ");
 
   return dragon;
