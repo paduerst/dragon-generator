@@ -1729,8 +1729,8 @@ function generateDragon() {
   document.getElementById("color").value = dragon_color.toLowerCase();
   document.getElementById("age").value = dragon_age.toLowerCase();
 
-  // generate the dragon stat block
-  console.log("Generating the dragon!");
+  // build the dragon stat block
+  console.log("Building the dragon!");
   var dragon = returnDragon(dragon_color, dragon_age);
   const default_dragon = dragon;
   populateCrTable("default", default_dragon);
@@ -1958,12 +1958,12 @@ function decideLoadPath() {
   }
   if (urlParams.has("color") || urlParams.has("age")) {
     const new_submit_btn_name = "Update Dragon";
-    let btn_mention_spans = document.getElementsByClassName("generate-dragon-span");
+    let btn_mention_spans = document.getElementsByClassName("build-dragon-span");
     for (let btn_mention_span of btn_mention_spans) {
       btn_mention_span.innerText = new_submit_btn_name;
     }
     document.getElementById("form-submit-btn").innerText = new_submit_btn_name;
-    importDragons(); // import then generate the dragon
+    importDragons(); // import then build the dragon
   } else if (urlParams.has("loadendlessly")) {
     // pass, just load endlessly
   } else {
