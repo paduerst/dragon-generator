@@ -1519,9 +1519,7 @@ function generateFeaturesArray_(dragon) {
     );
   }
 
-  if (dragon.legendaryResistances > 0) {
-    out_arr.push(insertVariablesToTemplate_(templates.magicWeapons, dragon));
-  }
+  out_arr.push(insertVariablesToTemplate_(templates.magicWeapons, dragon));
 
   if (dragon.age == "Greatwyrm") {
     out_arr.push(
