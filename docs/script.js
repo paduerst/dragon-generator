@@ -535,6 +535,18 @@ function calculateDragonDefensiveCr(dragon, verbose = false) {
   // Assume the dragon has 4 saving throw proficiencies
   effective_ac += 2; // 3-4 saving throw proficiencies (+4 if 5-6)
 
+  // Frightful Flare
+  // Assume that all Adult, Ancient, and Greatwyrm dragons have Frightful Flare.
+  // Approximate the frightened effect as a +5 bonus to AC.
+  // Assume 5 rounds total of combat. +5 AC for 1/5 rounds = +1 AC
+  if (
+    dragon.age == "Adult" ||
+    dragon.age == "Ancient" ||
+    dragon.age == "Greatwyrm"
+  ) {
+    effective_ac += 1;
+  }
+
   if (effective_ac < 1) {
     effective_ac = 1;
   }
@@ -545,14 +557,6 @@ function calculateDragonDefensiveCr(dragon, verbose = false) {
 
   // Effective Hit Points
   let effective_hp = dragon.expectedHitPoints;
-
-  // Frightful Presence: Increase the monster’s effective hit points by 25% if
-  // the monster is meant to face characters of 10th level or lower.
-  // Assume Nominal CR 17 is the max CR for characters of 10th level or lower.
-  // Assume having Legendary Resistances means having Frightful Presence
-  if (dragon.legendaryResistances > 0 && dragon.cr <= 17) {
-    effective_hp += 0.25 * dragon.expectedHitPoints;
-  }
 
   // Legendary Resistances
   // Each per-day use of this trait increases the monster’s effective
@@ -566,6 +570,12 @@ function calculateDragonDefensiveCr(dragon, verbose = false) {
       hp_per_leg_resist = 20;
     }
     effective_hp += hp_per_leg_resist * dragon.legendaryResistances;
+  }
+
+  // Significant Damage Resistances/Immunities
+  // This only applies for greatwyrms.
+  if (dragon.age == "Greatwyrm") {
+    effective_hp += dragon.expectedHitPoints * 1.25;
   }
 
   if (effective_hp < 1) {
@@ -1583,15 +1593,6 @@ function generateActionsArray_(dragon) {
     }
     out_arr.push(insertVariablesToTemplate_(templates.tail, dragon));
   }
-  if (
-    dragon.age == "Adult" ||
-    dragon.age == "Ancient" ||
-    dragon.age == "Greatwyrm"
-  ) {
-    out_arr.push(
-      insertVariablesToTemplate_(templates.frightfulPresence, dragon)
-    );
-  }
 
   // Breath Weapons
   let breathColor = "breath" + dragon.colorUpper;
@@ -1645,27 +1646,6 @@ function generateActionsArray_(dragon) {
     );
   }
 
-  // Wall of Prismatic Color
-  if (dragon.hasWall) {
-    if (dragon.color == "White") {
-      out_arr.push(
-        insertVariablesToTemplate_(templates.wallOfPrismaticColorWhite, dragon)
-      );
-    } else if (dragon.color == "Black") {
-      out_arr.push(insertVariablesToTemplate_(templates.wallOfShadow, dragon));
-    } else {
-      out_arr.push(
-        insertVariablesToTemplate_(templates.wallOfPrismaticColorNew, dragon)
-      );
-    }
-  }
-
-  return out_arr;
-}
-
-function generateBonusActionsArray_(dragon) {
-  var out_arr = [];
-
   // Change Shape
   var change_shape_available = false;
   if (
@@ -1700,6 +1680,43 @@ function generateBonusActionsArray_(dragon) {
       dragon.changeShapeRetainedFeaturesArray.slice(-1);
     dragon.changeShapeRetainedFeatures = retained_features;
     out_arr.push(insertVariablesToTemplate_(templates.changeShape, dragon));
+  }
+
+  // Wall of Prismatic Color
+  if (dragon.hasWall) {
+    if (dragon.color == "White") {
+      out_arr.push(
+        insertVariablesToTemplate_(templates.wallOfPrismaticColorWhite, dragon)
+      );
+    } else if (dragon.color == "Black") {
+      out_arr.push(insertVariablesToTemplate_(templates.wallOfShadow, dragon));
+    } else {
+      out_arr.push(
+        insertVariablesToTemplate_(templates.wallOfPrismaticColorNew, dragon)
+      );
+    }
+  }
+
+  return out_arr;
+}
+
+function generateBonusActionsArray_(dragon) {
+  var out_arr = [];
+
+  if (
+    dragon.age == "Adult" ||
+    dragon.age == "Ancient" ||
+    dragon.age == "Greatwyrm"
+  ) {
+    if (dragon.color == "Black") {
+      out_arr.push(
+        insertVariablesToTemplate_(templates.frightfulFlareBlack, dragon)
+      );
+    } else {
+      out_arr.push(
+        insertVariablesToTemplate_(templates.frightfulFlare, dragon)
+      );
+    }
   }
 
   if (dragon.color == "Black") {
@@ -2052,7 +2069,7 @@ function generateDragon() {
       )
     );
   }
-  if (dragon.age == "Adult") {
+  if (dragon.resistances.length > 0) {
     out_arr.push(
       insertVariablesToTemplate_(templates.htmlMonsterStatResistances, dragon)
     );
@@ -2117,7 +2134,6 @@ function generateDragon() {
     out_arr.push(
       insertVariablesToTemplate_(templates.legendaryDescription, dragon)
     );
-    out_arr.push(insertVariablesToTemplate_(templates.legendaryDetect, dragon));
     if (dragon.age == "Greatwyrm") {
       out_arr.push(
         insertVariablesToTemplate_(templates.legendaryGreatwyrmAttack, dragon)
@@ -2130,6 +2146,15 @@ function generateDragon() {
     out_arr.push(
       insertVariablesToTemplate_(templates.legendaryWingAttack, dragon)
     );
+    if (dragon.color == "Black") {
+      out_arr.push(
+        insertVariablesToTemplate_(templates.legendaryBreathBeamBlack, dragon)
+      );
+    } else {
+      out_arr.push(
+        insertVariablesToTemplate_(templates.legendaryBreathBeam, dragon)
+      );
+    }
   }
 
   if (dragon.age == "Greatwyrm") {
