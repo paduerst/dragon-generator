@@ -1219,6 +1219,8 @@ function addBackendCalculatedValues(dragon) {
   const variableTrait = dragon.color == "Black" ? "Shadow" : "Radiance";
   dragon.changeShapeRetainedFeaturesArray.push(`Variable ${variableTrait}`);
 
+  dragon.doublePrismaticRadianceRadius = 2 * dragon.prismaticRadianceRadius;
+
   return dragon;
 }
 
