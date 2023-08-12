@@ -1219,7 +1219,16 @@ function addBackendCalculatedValues(dragon) {
   const variableTrait = dragon.color == "Black" ? "Shadow" : "Radiance";
   dragon.changeShapeRetainedFeaturesArray.push(`Variable ${variableTrait}`);
 
+  // Frightful Flare
   dragon.doublePrismaticRadianceRadius = 2 * dragon.prismaticRadianceRadius;
+
+  // Breath Beam
+  // "A vs An Color Upper" is hard-coded
+  if (dragon.color == "Orange" || dragon.color == "Indigo") {
+    dragon.aVsAnColorUpper = "An";
+  } else {
+    dragon.aVsAnColorUpper = "A";
+  }
 
   return dragon;
 }
