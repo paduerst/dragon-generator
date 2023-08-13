@@ -1216,8 +1216,6 @@ function addBackendCalculatedValues(dragon) {
   if (dragon.legendaryResistances > 0) {
     dragon.changeShapeRetainedFeaturesArray.push("Legendary Resistance");
   }
-  const variableTrait = dragon.color == "Black" ? "Shadow" : "Radiance";
-  dragon.changeShapeRetainedFeaturesArray.push(`Variable ${variableTrait}`);
 
   // Frightful Flare
   dragon.doublePrismaticRadianceRadius = 2 * dragon.prismaticRadianceRadius;
@@ -1681,15 +1679,20 @@ function generateActionsArray_(dragon) {
     }
   }
   if (change_shape_available) {
-    dragon.changeShapeRetainedFeaturesArray.sort();
-    let retained_features = dragon.changeShapeRetainedFeaturesArray
-      .slice(0, -1)
-      .join(", ");
-    retained_features =
-      retained_features +
-      ", and " +
-      dragon.changeShapeRetainedFeaturesArray.slice(-1);
-    dragon.changeShapeRetainedFeatures = retained_features;
+    if (dragon.changeShapeRetainedFeaturesArray.length < 1) {
+      // no features to retain beyond proficiencies
+      dragon.changeShapeRetainedFeatures = "and proficiencies";
+    } else {
+      dragon.changeShapeRetainedFeatures = "proficiencies, ";
+      dragon.changeShapeRetainedFeaturesArray.sort();
+      const i_last_feature = dragon.changeShapeRetainedFeaturesArray.length - 1;
+      for (let i = 0; i < i_last_feature; i++) {
+        dragon.changeShapeRetainedFeatures +=
+          dragon.changeShapeRetainedFeaturesArray[i] + ", ";
+      }
+      dragon.changeShapeRetainedFeatures +=
+        "and " + dragon.changeShapeRetainedFeaturesArray[i_last_feature];
+    }
     out_arr.push(insertVariablesToTemplate_(templates.changeShape, dragon));
   }
 
